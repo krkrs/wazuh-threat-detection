@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 FEATURE_DIR = ROOT / "data" / "features"
 ARTIFACT_DIR = ROOT / "artifacts"
 SCENARIOS = ["fox", "harrison", "russellmitchell", "santos", "shaw", "wardbeck", "wheeler", "wilson"]
-COLUMNS = ["label", "phase", "source", "sig_key", "rule_desc", "rule_level", "is_training_mode"]
+COLUMNS = ["label", "phase", "source", "sig_key", "rule_desc", "rule_level"]
 
 
 def log(message: str) -> None:
@@ -54,7 +54,6 @@ def main() -> None:
         sig_keys = [str(item) for item in frame["sig_key"].to_numpy()]
         rule_descs = [str(item) for item in frame["rule_desc"].to_numpy()]
         rule_levels = [int(item) if pd.notna(item) else -1 for item in frame["rule_level"].to_numpy()]
-        training_flags = [int(item) if pd.notna(item) else 0 for item in frame["is_training_mode"].to_numpy()]
         y_flags = [1 if label == "attack" else 0 for label in labels]
 
         label_counts: dict[str, int] = defaultdict(int)
@@ -81,12 +80,8 @@ def main() -> None:
                 detector_meta[key] = {
                     "detector": rule_descs[index],
                     "rule_level": rule_levels[index],
-                    "signature_id": key.split("|", maxsplit=1)[1],
+                    "signature_id": key.split("|", maxsplit=1)[1] if "|" in key else key,
                 }
-            if training_flags[index] == 1:
-                training_mode_total += 1
-                training_mode_attack += attack_flag
-                scenario_training += 1
 
         novel = [key for key in detector_counts if len(detector_scenarios[key]) == 1]
         novel_rows = sum(detector_counts[key] for key in novel)

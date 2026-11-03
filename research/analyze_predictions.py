@@ -42,10 +42,10 @@ def load_json(path: Path) -> Any:
 
 
 def fine_detector_key(frame: Any) -> list[str]:
+    """Fine detector key: Wazuh rule identity (source + rule description)."""
     sources = [str(item) for item in frame["source"].to_numpy()]
-    sig_ids = [str(item) for item in frame["sig_id"].to_numpy()]
     descs = [str(item) for item in frame["rule_desc"].to_numpy()]
-    return [f"{source}|{sig_id}|{desc}" for source, sig_id, desc in zip(sources, sig_ids, descs, strict=True)]
+    return [f"{source}|{desc}" for source, desc in zip(sources, descs, strict=True)]
 
 
 def load_features_with_keys() -> tuple[Any, Any]:
@@ -136,9 +136,7 @@ def novel_metrics(
     mask_coarse = np.asarray([key not in seen_coarse for key in keys_coarse], dtype=bool)
     blocks = {
         "novel_model": confusion_counts(y_array[mask_fine], np.asarray(pred_model)[mask_fine]),
-        "novel_prior_fine_majority": confusion_counts(
-            y_array[mask_fine], np.full(int(mask_fine.sum()), majority)
-        ),
+        "novel_prior_fine_majority": confusion_counts(y_array[mask_fine], np.full(int(mask_fine.sum()), majority)),
         "novel_prior_coarse": confusion_counts(y_array[mask_coarse], np.asarray(pred_coarse)[mask_coarse]),
     }
     return mask_fine, mask_coarse, blocks

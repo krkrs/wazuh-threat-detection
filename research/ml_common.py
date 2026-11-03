@@ -27,26 +27,99 @@ SCENARIOS = ["fox", "harrison", "russellmitchell", "santos", "shaw", "wardbeck",
 SEED = 42
 
 CATEGORICAL_CANDIDATES = [
-    "sig_key", "rule_desc", "rule_groups", "decoder", "decoder_parent", "location", "agent_name",
-    "program_name", "sig_category", "sig_id", "sig_action", "sid_rev", "mitre_tactic",
-    "mitre_technique", "http_method", "status_code", "dst_port", "src_ip_ctx", "dst_ip_ctx",
-    "srcuser", "dstuser", "db_name", "audit_type", "syscall", "rule_md5", "log_resource_class",
-    "ac_type", "ac_id", "ac_message", "persistence", "miner_id_ctx", "url_ext", "hostname_ctx",
+    "sig_key",
+    "rule_desc",
+    "rule_groups",
+    "decoder",
+    "decoder_parent",
+    "location",
+    "agent_name",
+    "program_name",
+    "sig_category",
+    "sig_id",
+    "sig_action",
+    "sid_rev",
+    "mitre_tactic",
+    "mitre_technique",
+    "http_method",
+    "status_code",
+    "dst_port",
+    "src_ip_ctx",
+    "dst_ip_ctx",
+    "srcuser",
+    "dstuser",
+    "db_name",
+    "audit_type",
+    "syscall",
+    "rule_md5",
+    "log_resource_class",
+    "ac_type",
+    "ac_id",
+    "ac_message",
+    "persistence",
+    "miner_id_ctx",
+    "url_ext",
+    "hostname_ctx",
     "agent_id",
 ]
 NUMERIC_EXTRA = [
-    "rule_level", "sig_severity", "src_port", "firedtimes", "log_lines_count", "is_training_mode",
-    "attr_value_count", "attr_value_max_len", "attr_value_max_entropy", "attr_path_depth",
-    "missing_char_count", "missing_char_special", "anomaly_score_max", "anomaly_score_mean",
-    "critical_value", "probability_threshold", "count_confidence", "count_confidence_factor",
-    "freq_actual", "freq_expected", "freq_window", "freq_range_lo", "freq_range_hi",
-    "freq_confidence_factor", "range_lo", "range_hi", "range_width", "url_len", "url_parts",
-    "url_query", "url_tokens", "url_encoded_chars", "url_semicolon", "url_traversal",
-    "url_entropy", "url_max_token_len", "dns_len", "dns_labels", "dns_max_label_len",
-    "dns_avg_label_len", "dns_digits", "dns_letters", "dns_digit_ratio", "dns_entropy", "hour",
-    "sig_count_prev_60s", "sig_count_prev_600s", "group_ids", "group_suricata", "group_web",
-    "group_accesslog", "group_syslog", "group_audit", "group_mitre", "is_aggregated",
-    "sha256_present", "id_attr_numeric",
+    "rule_level",
+    "sig_severity",
+    "src_port",
+    "firedtimes",
+    "log_lines_count",
+    "is_training_mode",
+    "attr_value_count",
+    "attr_value_max_len",
+    "attr_value_max_entropy",
+    "attr_path_depth",
+    "missing_char_count",
+    "missing_char_special",
+    "anomaly_score_max",
+    "anomaly_score_mean",
+    "critical_value",
+    "probability_threshold",
+    "count_confidence",
+    "count_confidence_factor",
+    "freq_actual",
+    "freq_expected",
+    "freq_window",
+    "freq_range_lo",
+    "freq_range_hi",
+    "freq_confidence_factor",
+    "range_lo",
+    "range_hi",
+    "range_width",
+    "url_len",
+    "url_parts",
+    "url_query",
+    "url_tokens",
+    "url_encoded_chars",
+    "url_semicolon",
+    "url_traversal",
+    "url_entropy",
+    "url_max_token_len",
+    "dns_len",
+    "dns_labels",
+    "dns_max_label_len",
+    "dns_avg_label_len",
+    "dns_digits",
+    "dns_letters",
+    "dns_digit_ratio",
+    "dns_entropy",
+    "hour",
+    "sig_count_prev_60s",
+    "sig_count_prev_600s",
+    "group_ids",
+    "group_suricata",
+    "group_web",
+    "group_accesslog",
+    "group_syslog",
+    "group_audit",
+    "group_mitre",
+    "is_aggregated",
+    "sha256_present",
+    "id_attr_numeric",
 ]
 META_KEEP = ["scenario", "ts", "ts_id", "label", "phase", "sig_key", "source", "rule_desc", "y"]
 CARDINALITY_MAX = 400
@@ -184,7 +257,7 @@ def fit_text_transform(
         ngram_range=tuple(TEXT_PARAMS["ngram_range"]),
         min_df=int(TEXT_PARAMS["min_df"]),
         sublinear_tf=bool(TEXT_PARAMS["sublinear_tf"]),
-        dtype=np.float32,
+        dtype=np.float64,
     )
     train_matrix = vectorizer.fit_transform([str(item) for item in train_df["rule_desc"].to_numpy()])
     reducer = TruncatedSVD(n_components=TEXT_SVD_DIM, random_state=SEED)
@@ -325,7 +398,7 @@ def detector_error_table(test_df: Any, y_pred: Any, limit: int = 40) -> list[dic
                 "tp": int(tp[index]),
                 "fp": int(fp[index]),
                 "fn": int(fn[index]),
-                "precision": round(float(tp[index]) / max(predicted[index], 1), 4),
+                "precision": round(float(tp[index]) / max(int(float(predicted[index])), 1), 4),
                 "recall": round(float(tp[index]) / max(attack_true, 1), 4),
                 "true_background": int(total[index] - attack_true),
             }
@@ -356,8 +429,9 @@ def phase_error_table(test_df: Any, y_pred: Any) -> dict[str, dict[str, int]]:
     return out
 
 
-def evaluate_fold(model_cfg: dict[str, Any], prepared: dict[str, Any], train_df: Any,
-                  cal_df: Any, test_df: Any, fold_name: str) -> dict[str, Any]:
+def evaluate_fold(
+    model_cfg: dict[str, Any], prepared: dict[str, Any], train_df: Any, cal_df: Any, test_df: Any, fold_name: str
+) -> dict[str, Any]:
     y_train = np.asarray(train_df["y"].to_numpy())
     y_cal = np.asarray(cal_df["y"].to_numpy())
     y_test = np.asarray(test_df["y"].to_numpy())
@@ -377,7 +451,8 @@ def evaluate_fold(model_cfg: dict[str, Any], prepared: dict[str, Any], train_df:
     model.fit(
         x_train,
         y_train,
-        eval_set=[(x_cal, y_cal)],
+        eval_X=x_cal,
+        eval_y=y_cal,
         eval_metric=["binary_logloss", "binary_error"],
         callbacks=[lgb.callback.early_stopping(EARLY_STOP_ROUNDS, verbose=False)],  # type: ignore[attr-defined]
     )
@@ -409,7 +484,7 @@ def evaluate_fold(model_cfg: dict[str, Any], prepared: dict[str, Any], train_df:
     )
     importance = {
         "gain": [{"feature": name, "importance": round(value, 2)} for name, value in gain_pairs[:40]],
-        "split": [{"feature": name, "importance": value} for name, value in split_pairs[:40]]
+        "split": [{"feature": name, "importance": value} for name, value in split_pairs[:40]],
     }
     test_predictions = test_df[["ts", "ts_id", "scenario", "phase", "sig_key", "label", "y"]].copy()
     test_predictions["prob_model"] = prob_test

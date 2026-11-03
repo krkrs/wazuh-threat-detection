@@ -51,7 +51,11 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--features", required=True, help="feature table (Parquet) to score")
     parser.add_argument("--out", default="scores.csv", help="output CSV/Parquet path")
-    parser.add_argument("--bundle", default=str(Path(__file__).resolve().parent), help="unzipped bundle root")
+    parser.add_argument(
+        "--bundle",
+        default=str(Path(__file__).resolve().parent.parent),
+        help="unzipped bundle root (katalog z plikami modelu)",
+    )
     parser.add_argument("--threshold", type=float, default=None, help="override the recorded decision threshold")
     parser.add_argument("--evaluate", action="store_true", help="report metrics if `label` is present")
     parser.add_argument("--limit", type=int, default=0, help="score only the first N rows (smoke test)")

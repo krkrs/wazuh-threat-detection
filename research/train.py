@@ -208,11 +208,15 @@ def deploy_model(df: Any, prepared: dict[str, Any], cfg_name: str, threshold: fl
     interim = lgb.LGBMClassifier(**cfg["params"])
     began_interim = time.time()
     interim.fit(
-        x_fit,
-        y_fit,
-        eval_set=[(x_hold, y_hold)],
+        x_fit, y_fit,
+        eval_X=x_hold, eval_y=y_hold,
         eval_metric=["binary_logloss", "binary_error"],
-        callbacks=[lgb.callback.early_stopping(mc.EARLY_STOP_ROUNDS, verbose=False)],  # type: ignore[attr-defined]
+        callbacks=[
+            lgb.callback.early_stopping(
+                mc.EARLY_STOP_ROUNDS,
+                verbose=False,
+            )
+        ],
     )
     interim_seconds = time.time() - began_interim
     best_iteration_value: Any = getattr(interim, "best_iteration_", None)

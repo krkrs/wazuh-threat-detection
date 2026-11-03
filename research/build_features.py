@@ -186,7 +186,7 @@ def iter_rows(path: Path, scenario: str) -> Iterator[dict[str, object]]:
                     continue
                 if not isinstance(obj, dict):
                     continue
-                row = wazuh_row(obj, scenario)  # if kind == "wazuh" else aminer_row(obj, scenario)
+                row = wazuh_row(obj, scenario)
                 if row is not None:
                     yield row
     except OSError as exc:
@@ -259,6 +259,7 @@ def url_features(url: object, scan_text: str) -> dict[str, float]:
 
 
 def dns_features(text: str) -> dict[str, float]:
+    """DNS entropy features; unused in the Wazuh-only stream (kept for AMiner/Suricata re-add)."""
     low = text.lower()
     labels = [label for label in low.split(".") if label]
     total_len = sum(len(label) for label in labels)
@@ -325,8 +326,6 @@ def wazuh_row(obj: dict, scenario: str) -> dict | None:
     data = dict_of(obj.get("data"))
     http_block = dict_of(data.get("http"))
     decoder = dict_of(obj.get("decoder"))
-    agent = dict_of(obj.get("agent"))
-    predecoder = dict_of(obj.get("predecoder"))
 
     full_log = as_str(obj.get("full_log"))
     raw_id = data.get("id")
@@ -343,17 +342,14 @@ def wazuh_row(obj: dict, scenario: str) -> dict | None:
     if not status_code:
         status_code = auto_status
     http_method = as_str(data.get("protocol") or http_block.get("http_method")) or auto_method
-    dns_block = dict_of(data.get("dns"))
-    dns_query = as_str(dns_block.get("query") or dns_block.get("question") or data.get("dns_query"))
-    audit_type = as_str(data.get("audit_type") or data.get("action"))
-    audit_match = AUDIT_TYPE_RX.search(full_log)
 
     row: dict[str, object] = {
-#        "scenario": scenario, # scenariusz nie wystąpi IRL
-#        "ts": ts, # nie ma co uczyć czasu ataku
+        "source": "wazuh",  # only Wazuh stream is used in this pipeline
+        "scenario": scenario,  # scenariusz nie wystąpi IRL
+        "ts": ts,  # nie ma co uczyć czasu ataku
         "rule_id": as_str(to_num(rule.get("id")) or rule.get("id")),
         "rule_level": to_num(rule.get("level")),
-        "rule_desc": description.removeprefix("Suricata: Alert - "),
+        "rule_desc": description,
         "rule_groups": ",".join(groups),
         "group_ids": float("ids" in groups),
         "group_web": float("web" in groups),
@@ -365,11 +361,11 @@ def wazuh_row(obj: dict, scenario: str) -> dict | None:
         "decoder": as_str(decoder.get("name")),
         "decoder_parent": as_str(decoder.get("parent")),
         "location": norm_path(obj.get("location")),
-#        "agent_id": as_str(agent.get("id")),  # host leakage
-#        "agent_name": as_str(agent.get("name")),  # host leakage
-#        "agent_ip": as_str(agent.get("ip")),  # host leakage
-#        "program_name": as_str(predecoder.get("program_name")),
-#        "hostname_ctx": as_str(predecoder.get("hostname")),  # host leakage
+        #        "agent_id": as_str(agent.get("id")),  # host leakage
+        #        "agent_name": as_str(agent.get("name")),  # host leakage
+        #        "agent_ip": as_str(agent.get("ip")),  # host leakage
+        #        "program_name": as_str(predecoder.get("program_name")),
+        #        "hostname_ctx": as_str(predecoder.get("hostname")),  # host leakage
         "mitre_tactic": as_str(rule.get("mitre_tactic")),
         "mitre_technique": as_str(rule.get("mitre_technique_id")),
         "http_method": http_method,
@@ -389,13 +385,13 @@ def wazuh_row(obj: dict, scenario: str) -> dict | None:
         "firedtimes": to_num(rule.get("firedtimes")),
     }
     row.update(url_features(url, user_agent or full_log))
-    row.update(dns_features(dns_query or auto_dns(full_log)))
     return row
 
 
 def auto_dns(full_log: str) -> str:
     match = DNS_QUERY_RX.search(full_log)
     return match.group(1) if match else ""
+
 
 COLS_STR = [
     "scenario",
@@ -409,15 +405,7 @@ COLS_STR = [
     "decoder",
     "decoder_parent",
     "location",
-    "agent_id",
-    "agent_name",
-    "agent_ip",
     "program_name",
-    "hostname_ctx",
-    "sig_category",
-    "sig_id",
-    "sig_action",
-    "sid_rev",
     "mitre_tactic",
     "mitre_technique",
     "http_method",
@@ -428,48 +416,17 @@ COLS_STR = [
     "srcuser",
     "dstuser",
     "db_name",
-    "audit_type",
     "syscall",
     "rule_md5",
-    "user_agent",
     "log_resource_class",
     "log_head",
-    "ac_type",
-    "ac_id",
-    "ac_message",
-    "persistence",
-    "miner_id_ctx",
-    "url_ext",
 ]
 COLS_NUM = (
     [
         "ts",
         "rule_level",
-        "sig_severity",
         "src_port",
         "firedtimes",
-        "log_lines_count",
-        "attr_value_count",
-        "attr_value_max_len",
-        "attr_value_max_entropy",
-        "attr_path_depth",
-        "missing_char_count",
-        "missing_char_special",
-        "anomaly_score_max",
-        "anomaly_score_mean",
-        "critical_value",
-        "probability_threshold",
-        "count_confidence",
-        "count_confidence_factor",
-        "freq_actual",
-        "freq_expected",
-        "freq_window",
-        "freq_range_lo",
-        "freq_range_hi",
-        "freq_confidence_factor",
-        "range_lo",
-        "range_hi",
-        "range_width",
         "url_len",
         "url_parts",
         "url_query",
@@ -479,14 +436,6 @@ COLS_NUM = (
         "url_traversal",
         "url_entropy",
         "url_max_token_len",
-        "dns_len",
-        "dns_labels",
-        "dns_max_label_len",
-        "dns_avg_label_len",
-        "dns_digits",
-        "dns_letters",
-        "dns_digit_ratio",
-        "dns_entropy",
         "hour",
         "weekday",
         "seconds_from_start",
@@ -500,7 +449,6 @@ COLS_NUM = (
         "group_mitre",
         "is_aggregated",
         "sha256_present",
-        "id_attr_numeric",
     ]
     + list(URL_FLAGS)
     + list(UA_PATTERNS)
