@@ -2,7 +2,7 @@
 *.pptx
 *.zip
 data/ait_ads/*
-
+artifacts/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

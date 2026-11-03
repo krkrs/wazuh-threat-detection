@@ -173,7 +173,7 @@ def list_of(value: object) -> list:
     return value if isinstance(value, list) else []
 
 
-def iter_rows(path: Path, kind: str, scenario: str) -> Iterator[dict[str, object]]:
+def iter_rows(path: Path, scenario: str) -> Iterator[dict[str, object]]:
     try:
         with open(path, encoding="utf-8") as handle:
             for line in handle:
@@ -186,7 +186,7 @@ def iter_rows(path: Path, kind: str, scenario: str) -> Iterator[dict[str, object
                     continue
                 if not isinstance(obj, dict):
                     continue
-                row = wazuh_row(obj, scenario) if kind == "wazuh" else aminer_row(obj, scenario)
+                row = wazuh_row(obj, scenario)  # if kind == "wazuh" else aminer_row(obj, scenario)
                 if row is not None:
                     yield row
     except OSError as exc:
@@ -203,13 +203,8 @@ def row_ts(row: dict[str, object]) -> float:
 
 def merged_rows(data_dir: Path, scenario: str) -> Iterator[dict[str, object]]:
     heap: list[tuple[float, int, dict[str, object], Iterator[dict[str, object]]]] = []
-    for idx, (path, kind) in enumerate(
-        (
-            (data_dir / f"{scenario}_wazuh.json", "wazuh")
-#            (data_dir / f"{scenario}_aminer.json", "aminer"), # commented by user
-        )
-    ):
-        stream = iter(iter_rows(path, kind, scenario))
+    for idx, (path) in enumerate((data_dir / f"{scenario}_wazuh.json",)):
+        stream = iter(iter_rows(path, scenario))
         head = next(stream, None)
         if head is not None:
             heapq.heappush(heap, (row_ts(head), idx, head, stream))
@@ -317,19 +312,22 @@ def flatten(values: object) -> list[str]:
 
 
 def wazuh_row(obj: dict, scenario: str) -> dict | None:
+    rule = dict_of(obj.get("rule"))
+    description = as_str(rule.get("description"))
+    groups = sorted({as_str(item) for item in list_of(rule.get("groups"))})
+    if "suricata" in groups or description.startswith("Suricata:"):
+        return None
+
     ts = parse_iso(obj.get("@timestamp"))
     if ts is None:
         return None
-    rule = dict_of(obj.get("rule"))
+
     data = dict_of(obj.get("data"))
-    alert_block = dict_of(data.get("alert"))
     http_block = dict_of(data.get("http"))
     decoder = dict_of(obj.get("decoder"))
     agent = dict_of(obj.get("agent"))
     predecoder = dict_of(obj.get("predecoder"))
-    description = as_str(rule.get("description"))
-    groups = sorted({as_str(item) for item in list_of(rule.get("groups"))})
-    is_suricata = "suricata" in groups or description.startswith("Suricata:")
+
     full_log = as_str(obj.get("full_log"))
     raw_id = data.get("id")
     status_raw = raw_id if raw_id is not None else http_block.get("status")
@@ -349,19 +347,15 @@ def wazuh_row(obj: dict, scenario: str) -> dict | None:
     dns_query = as_str(dns_block.get("query") or dns_block.get("question") or data.get("dns_query"))
     audit_type = as_str(data.get("audit_type") or data.get("action"))
     audit_match = AUDIT_TYPE_RX.search(full_log)
-    if audit_match:
-        audit_type = audit_type or audit_match.group(1)
 
     row: dict[str, object] = {
-        "scenario": scenario,
-        "source": "suricata" if is_suricata else "wazuh",
-        "ts": ts,
+#        "scenario": scenario, # scenariusz nie wystąpi IRL
+#        "ts": ts, # nie ma co uczyć czasu ataku
         "rule_id": as_str(to_num(rule.get("id")) or rule.get("id")),
         "rule_level": to_num(rule.get("level")),
         "rule_desc": description.removeprefix("Suricata: Alert - "),
         "rule_groups": ",".join(groups),
         "group_ids": float("ids" in groups),
-        "group_suricata": float(is_suricata),
         "group_web": float("web" in groups),
         "group_accesslog": float("accesslog" in groups),
         "group_syslog": float("syslog" in groups),
@@ -371,16 +365,11 @@ def wazuh_row(obj: dict, scenario: str) -> dict | None:
         "decoder": as_str(decoder.get("name")),
         "decoder_parent": as_str(decoder.get("parent")),
         "location": norm_path(obj.get("location")),
-        "agent_id": as_str(agent.get("id")),
-        "agent_name": as_str(agent.get("name")),
-        "agent_ip": as_str(agent.get("ip")),
-        "program_name": as_str(predecoder.get("program_name")),
-        "hostname_ctx": as_str(predecoder.get("hostname")),
-        "sig_category": as_str(alert_block.get("category")),
-        "sig_id": as_str(to_num(alert_block.get("signature_id")) or alert_block.get("signature_id")),
-        "sig_severity": to_num(alert_block.get("severity")),
-        "sig_action": as_str(alert_block.get("action")),
-        "sid_rev": as_str(alert_block.get("rev")),
+#        "agent_id": as_str(agent.get("id")),  # host leakage
+#        "agent_name": as_str(agent.get("name")),  # host leakage
+#        "agent_ip": as_str(agent.get("ip")),  # host leakage
+#        "program_name": as_str(predecoder.get("program_name")),
+#        "hostname_ctx": as_str(predecoder.get("hostname")),  # host leakage
         "mitre_tactic": as_str(rule.get("mitre_tactic")),
         "mitre_technique": as_str(rule.get("mitre_technique_id")),
         "http_method": http_method,
@@ -392,46 +381,15 @@ def wazuh_row(obj: dict, scenario: str) -> dict | None:
         "srcuser": as_str(data.get("srcuser")),
         "dstuser": as_str(data.get("dstuser")),
         "db_name": as_str(data.get("database_name") or data.get("schema")),
-        "audit_type": audit_type,
         "syscall": as_str(data.get("syscall")),
         "rule_md5": as_str(data.get("rule_md5")),
         "sha256_present": float(bool(data.get("sha256") or data.get("md5"))),
-        "user_agent": user_agent,
         "log_resource_class": log_resource_class([obj.get("location")]),
         "log_head": full_log[:400],
         "firedtimes": to_num(rule.get("firedtimes")),
-        "is_training_mode": 0.0,
-        "ac_type": "",
-        "ac_id": "",
-        "ac_message": "",
-        "persistence": "",
-        "log_lines_count": None,
-        "attr_value_count": 0.0,
-        "attr_value_max_len": 0.0,
-        "attr_value_max_entropy": 0.0,
-        "attr_path_depth": 0.0,
-        "missing_char_count": 0.0,
-        "missing_char_special": 0.0,
-        "anomaly_score_max": None,
-        "anomaly_score_mean": None,
-        "critical_value": None,
-        "probability_threshold": None,
-        "count_confidence": None,
-        "count_confidence_factor": None,
-        "freq_actual": None,
-        "freq_expected": None,
-        "freq_window": None,
-        "freq_confidence_factor": None,
-        "miner_id_ctx": "",
     }
-    row["range_lo"] = None
-    row["range_hi"] = None
-    row["range_width"] = None
-    row["freq_range_lo"] = None
-    row["freq_range_hi"] = None
     row.update(url_features(url, user_agent or full_log))
     row.update(dns_features(dns_query or auto_dns(full_log)))
-    row["id_attr_numeric"] = 0.0
     return row
 
 
@@ -439,150 +397,114 @@ def auto_dns(full_log: str) -> str:
     match = DNS_QUERY_RX.search(full_log)
     return match.group(1) if match else ""
 
-
-def aminer_row(obj: dict, scenario: str) -> dict | None:
-    log_data = dict_of(obj.get("LogData"))
-    component = dict_of(obj.get("AnalysisComponent"))
-    stamps = log_data.get("DetectionTimestamp")
-    ts = to_num(stamps[-1]) if isinstance(stamps, list) and stamps else None
-    if ts is None:
-        return None
-    name = as_str(component.get("AnalysisComponentName"))
-    paths = [as_str(p) for p in list_of(component.get("AffectedLogAtomPaths"))]
-    values = flatten(component.get("AffectedLogAtomValues"))
-    resources = [as_str(r) for r in list_of(log_data.get("LogResources"))]
-    raw_lines = [as_str(r) for r in list_of(log_data.get("RawLogData"))]
-    raw_head = " | ".join(raw_lines)
-    frequency = dict_of(obj.get("FrequencyData"))
-    count_data = dict_of(obj.get("CountData"))
-    ranges = list_of(component.get("Range"))
-    anomaly_scores = [to_num(v) for v in list_of(component.get("AnomalyScores"))]
-    missing_chars = flatten(component.get("MissingCharacters"))
-    path_segments = [p for p in paths if p]
-    value_lengths = [len(v) for v in values]
-    dns_candidate = ""
-    for value in values:
-        if "." in value and " " not in value:
-            dns_candidate = value
-            break
-    if not dns_candidate:
-        dns_candidate = auto_dns(raw_head)
-    url_candidate, method, status = scan_text_for_url(raw_head)
-    audit_match = AUDIT_TYPE_RX.search(raw_head)
-    freq_range = list_of(frequency.get("ExpectedLogAtomValuesFrequencyRange"))
-    freq_lo = to_num(freq_range[0]) if len(freq_range) > 0 else None
-    freq_hi = to_num(freq_range[1]) if len(freq_range) > 1 else None
-
-    row: dict[str, object] = {
-        "scenario": scenario,
-        "source": "aminer",
-        "ts": ts,
-        "rule_id": name.replace("AMiner: ", "A-"),
-        "rule_level": None,
-        "rule_desc": name.replace("AMiner: ", ""),
-        "rule_groups": "aminer," + as_str(component.get("AnalysisComponentType")),
-        "group_ids": 0.0,
-        "group_suricata": 0.0,
-        "group_web": 0.0,
-        "group_accesslog": 0.0,
-        "group_syslog": 0.0,
-        "group_audit": 0.0,
-        "group_mitre": 0.0,
-        "is_aggregated": 0.0,
-        "decoder": "aminer",
-        "decoder_parent": "",
-        "location": norm_path(resources[0]) if resources else "",
-        "agent_id": "",
-        "agent_name": "",
-        "agent_ip": "",
-        "program_name": "",
-        "hostname_ctx": "",
-        "sig_category": "",
-        "sig_id": as_str(component.get("AnalysisComponentIdentifier")),
-        "sig_severity": None,
-        "sig_action": "",
-        "sid_rev": "",
-        "mitre_tactic": "",
-        "mitre_technique": "",
-        "http_method": method,
-        "status_code": status,
-        "dst_port": "",
-        "src_port": None,
-        "src_ip_ctx": "",
-        "dst_ip_ctx": "",
-        "srcuser": "",
-        "dstuser": "",
-        "db_name": "",
-        "audit_type": audit_match.group(1) if audit_match else "",
-        "syscall": "",
-        "rule_md5": "",
-        "sha256_present": 0.0,
-        "user_agent": "",
-        "log_resource_class": log_resource_class(resources),
-        "log_head": raw_head[:400],
-        "firedtimes": None,
-        "is_training_mode": float(bool(component.get("TrainingMode"))),
-        "ac_type": as_str(component.get("AnalysisComponentType")),
-        "ac_id": as_str(component.get("AnalysisComponentIdentifier")),
-        "ac_message": as_str(component.get("Message")),
-        "persistence": as_str(component.get("PersistenceFileName")),
-        "log_lines_count": to_num(log_data.get("LogLinesCount")),
-        "attr_value_count": float(len(values)),
-        "attr_value_max_len": float(max(value_lengths, default=0)),
-        "attr_value_max_entropy": float(max((entropy_of(v) for v in values), default=0.0)),
-        "attr_path_depth": float(max((len(p.split("/")) for p in path_segments), default=0)),
-        "missing_char_count": float(len(missing_chars)),
-        "missing_char_special": float(sum(1 for c in "".join(missing_chars) if not c.isalnum())),
-        "anomaly_score_max": max([s for s in anomaly_scores if s is not None], default=None),
-        "anomaly_score_mean": None,
-        "critical_value": to_num(component.get("CriticalValue")),
-        "probability_threshold": to_num(component.get("ProbabilityThreshold")),
-        "count_confidence": to_num(count_data.get("Confidence")),
-        "count_confidence_factor": to_num(count_data.get("ConfidenceFactor")),
-        "freq_actual": to_num(frequency.get("LogAtomValuesFrequency")),
-        "freq_expected": to_num(frequency.get("ExpectedLogAtomValuesFrequency")),
-        "freq_window": to_num(frequency.get("WindowSize")),
-        "freq_confidence_factor": to_num(frequency.get("ConfidenceFactor")),
-        "freq_range_lo": freq_lo,
-        "freq_range_hi": freq_hi,
-        "miner_id_ctx": as_str(dict_of(obj.get("AMiner")).get("ID")),
-    }
-    scores = [s for s in anomaly_scores if s is not None]
-    if scores:
-        row["anomaly_score_mean"] = sum(scores) / len(scores)
-    if len(ranges) >= 2:
-        lo_value = to_num(ranges[0])
-        hi_value = to_num(ranges[1])
-        row["range_lo"], row["range_hi"] = lo_value, hi_value
-        if lo_value is not None and hi_value is not None:
-            row["range_width"] = hi_value - lo_value
-    row.update(url_features(url_candidate, raw_head))
-    row.update(dns_features(dns_candidate))
-    row["id_attr_numeric"] = float(any(re.fullmatch(r"-?[0-9]+", v) for v in values))
-    return row
-
-
 COLS_STR = [
-    "scenario", "source", "label", "phase", "sig_key", "rule_id", "rule_desc", "rule_groups", "decoder",
-    "decoder_parent", "location", "agent_id", "agent_name", "agent_ip", "program_name", "hostname_ctx",
-    "sig_category", "sig_id", "sig_action", "sid_rev", "mitre_tactic", "mitre_technique", "http_method",
-    "status_code", "dst_port", "src_ip_ctx", "dst_ip_ctx", "srcuser", "dstuser", "db_name", "audit_type",
-    "syscall", "rule_md5", "user_agent", "log_resource_class", "log_head", "ac_type", "ac_id", "ac_message",
-    "persistence", "miner_id_ctx", "url_ext",
+    "scenario",
+    "source",
+    "label",
+    "phase",
+    "sig_key",
+    "rule_id",
+    "rule_desc",
+    "rule_groups",
+    "decoder",
+    "decoder_parent",
+    "location",
+    "agent_id",
+    "agent_name",
+    "agent_ip",
+    "program_name",
+    "hostname_ctx",
+    "sig_category",
+    "sig_id",
+    "sig_action",
+    "sid_rev",
+    "mitre_tactic",
+    "mitre_technique",
+    "http_method",
+    "status_code",
+    "dst_port",
+    "src_ip_ctx",
+    "dst_ip_ctx",
+    "srcuser",
+    "dstuser",
+    "db_name",
+    "audit_type",
+    "syscall",
+    "rule_md5",
+    "user_agent",
+    "log_resource_class",
+    "log_head",
+    "ac_type",
+    "ac_id",
+    "ac_message",
+    "persistence",
+    "miner_id_ctx",
+    "url_ext",
 ]
-COLS_NUM = [
-    "ts", "rule_level", "sig_severity", "src_port", "firedtimes", "log_lines_count", "is_training_mode",
-    "attr_value_count", "attr_value_max_len", "attr_value_max_entropy", "attr_path_depth", "missing_char_count",
-    "missing_char_special", "anomaly_score_max", "anomaly_score_mean", "critical_value", "probability_threshold",
-    "count_confidence", "count_confidence_factor", "freq_actual", "freq_expected", "freq_window",
-    "freq_range_lo", "freq_range_hi",
-    "freq_confidence_factor", "range_lo", "range_hi", "range_width", "url_len", "url_parts", "url_query",
-    "url_tokens", "url_encoded_chars", "url_semicolon", "url_traversal", "url_entropy", "url_max_token_len",
-    "dns_len", "dns_labels", "dns_max_label_len", "dns_avg_label_len", "dns_digits", "dns_letters",
-    "dns_digit_ratio", "dns_entropy", "hour", "weekday", "seconds_from_start", "sig_count_prev_60s",
-    "sig_count_prev_600s", "group_ids", "group_suricata", "group_web", "group_accesslog", "group_syslog",
-    "group_audit", "group_mitre", "is_aggregated", "sha256_present", "id_attr_numeric",
-] + list(URL_FLAGS) + list(UA_PATTERNS)
+COLS_NUM = (
+    [
+        "ts",
+        "rule_level",
+        "sig_severity",
+        "src_port",
+        "firedtimes",
+        "log_lines_count",
+        "attr_value_count",
+        "attr_value_max_len",
+        "attr_value_max_entropy",
+        "attr_path_depth",
+        "missing_char_count",
+        "missing_char_special",
+        "anomaly_score_max",
+        "anomaly_score_mean",
+        "critical_value",
+        "probability_threshold",
+        "count_confidence",
+        "count_confidence_factor",
+        "freq_actual",
+        "freq_expected",
+        "freq_window",
+        "freq_range_lo",
+        "freq_range_hi",
+        "freq_confidence_factor",
+        "range_lo",
+        "range_hi",
+        "range_width",
+        "url_len",
+        "url_parts",
+        "url_query",
+        "url_tokens",
+        "url_encoded_chars",
+        "url_semicolon",
+        "url_traversal",
+        "url_entropy",
+        "url_max_token_len",
+        "dns_len",
+        "dns_labels",
+        "dns_max_label_len",
+        "dns_avg_label_len",
+        "dns_digits",
+        "dns_letters",
+        "dns_digit_ratio",
+        "dns_entropy",
+        "hour",
+        "weekday",
+        "seconds_from_start",
+        "sig_count_prev_60s",
+        "sig_count_prev_600s",
+        "group_ids",
+        "group_web",
+        "group_accesslog",
+        "group_syslog",
+        "group_audit",
+        "group_mitre",
+        "is_aggregated",
+        "sha256_present",
+        "id_attr_numeric",
+    ]
+    + list(URL_FLAGS)
+    + list(UA_PATTERNS)
+)
 NUMERIC_SET = set(COLS_NUM)
 
 
@@ -631,7 +553,8 @@ def enrich(row: dict, scenario: str, phases: dict, windows: dict, start_ts: floa
     phase = phase_of(phases[scenario], ts)
     row["label"] = LABEL_BACKGROUND if phase == "background" else LABEL_ATTACK
     row["phase"] = phase
-    key = f"{row['source']}|{row['rule_desc']}"
+    #    key = f"{row['source']}|{row['rule_desc']}"
+    key = f"{row['rule_desc']}"
     row["sig_key"] = key
     entry = windows.get(key)
     if entry is None:
