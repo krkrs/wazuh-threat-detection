@@ -1,0 +1,304 @@
+{
+  "task": "alert triage attack vs background (AIT-ADS)",
+  "created_utc": "2026-11-01T20:58:15Z",
+  "config": "lgb_structured",
+  "uses_text": false,
+  "trained_on": "all 8 AIT-ADS scenarios",
+  "dataset": "AIT Alert Data Set, DOI 10.5281/zenodo.8263181",
+  "split": "random 90/10 row split (seed 42); early stopping evaluated on the same 10% holdout, so the holdout metrics below are optimistic; unbiased estimates are the LOS/chrono metrics in artifacts/",
+  "n_rows_trained": 2390239,
+  "n_rows_holdout": 265582,
+  "deployment_threshold": 0.836376,
+  "thresholds": {
+    "los_deployment_threshold": 0.836376,
+    "los": {
+      "thresholds": [
+        {
+          "fold": "los_fox",
+          "threshold_model": 0.546327,
+          "threshold_prior_baseline": 0.99705,
+          "best_iteration": 36
+        },
+        {
+          "fold": "los_harrison",
+          "threshold_model": 0.898849,
+          "threshold_prior_baseline": 0.805527,
+          "best_iteration": 95
+        },
+        {
+          "fold": "los_russellmitchell",
+          "threshold_model": 0.520537,
+          "threshold_prior_baseline": 0.672727,
+          "best_iteration": 73
+        },
+        {
+          "fold": "los_santos",
+          "threshold_model": 0.616918,
+          "threshold_prior_baseline": 0.978206,
+          "best_iteration": 45
+        },
+        {
+          "fold": "los_shaw",
+          "threshold_model": 0.611716,
+          "threshold_prior_baseline": 0.973877,
+          "best_iteration": 22
+        },
+        {
+          "fold": "los_wardbeck",
+          "threshold_model": 0.502254,
+          "threshold_prior_baseline": 0.807467,
+          "best_iteration": 46
+        },
+        {
+          "fold": "los_wheeler",
+          "threshold_model": 0.514602,
+          "threshold_prior_baseline": 0.181818,
+          "best_iteration": 62
+        },
+        {
+          "fold": "los_wilson",
+          "threshold_model": 0.883788,
+          "threshold_prior_baseline": 0.47619,
+          "best_iteration": 81
+        },
+        {
+          "fold": "deployment_los_lgb_structured",
+          "threshold_model": 0.836376,
+          "threshold_prior_baseline": 0.672727,
+          "best_iteration": null
+        }
+      ]
+    },
+    "chrono": {
+      "thresholds": [
+        {
+          "fold": "chrono_walk50",
+          "threshold_model": 0.494361,
+          "threshold_prior_baseline": 0.1,
+          "best_iteration": 1
+        },
+        {
+          "fold": "chrono_walk70",
+          "threshold_model": 0.454029,
+          "threshold_prior_baseline": 0.786312,
+          "best_iteration": 21
+        },
+        {
+          "fold": "chrono_walk90",
+          "threshold_model": 0.495415,
+          "threshold_prior_baseline": 0.153846,
+          "best_iteration": 7
+        },
+        {
+          "fold": "deployment_chrono_lgb_structured",
+          "threshold_model": 0.495415,
+          "threshold_prior_baseline": null,
+          "best_iteration": null
+        }
+      ]
+    }
+  },
+  "best_iteration_full_data": 500,
+  "interim_fit_seconds": 636.16,
+  "final_fit_seconds": 611.3,
+  "deploy_seconds": 1363.9,
+  "features": {
+    "numeric": 82,
+    "categorical": 25,
+    "text_svd": 0
+  },
+  "feature_columns": {
+    "numeric": [
+      "rule_level",
+      "sig_severity",
+      "src_port",
+      "firedtimes",
+      "is_training_mode",
+      "attr_value_count",
+      "attr_value_max_len",
+      "attr_value_max_entropy",
+      "attr_path_depth",
+      "missing_char_count",
+      "missing_char_special",
+      "critical_value",
+      "count_confidence",
+      "freq_actual",
+      "freq_expected",
+      "freq_range_lo",
+      "freq_range_hi",
+      "range_lo",
+      "range_hi",
+      "range_width",
+      "url_len",
+      "url_parts",
+      "url_query",
+      "url_tokens",
+      "url_encoded_chars",
+      "url_entropy",
+      "url_max_token_len",
+      "dns_len",
+      "dns_labels",
+      "dns_max_label_len",
+      "dns_avg_label_len",
+      "dns_digits",
+      "dns_letters",
+      "dns_digit_ratio",
+      "dns_entropy",
+      "hour",
+      "sig_count_prev_60s",
+      "sig_count_prev_600s",
+      "group_ids",
+      "group_suricata",
+      "group_web",
+      "group_accesslog",
+      "group_syslog",
+      "group_audit",
+      "group_mitre",
+      "is_aggregated",
+      "id_attr_numeric",
+      "urlflag_wpadmin",
+      "urlflag_wpcontent",
+      "urlflag_wpjson",
+      "urlflag_wplogin",
+      "urlflag_xmlrpc",
+      "urlflag_wpconfig",
+      "urlflag_phpmyadmin",
+      "urlflag_backup",
+      "urlflag_dump",
+      "urlflag_config",
+      "urlflag_git",
+      "urlflag_sql",
+      "urlflag_readme",
+      "urlflag_license",
+      "urlflag_test",
+      "urlflag_dev",
+      "urlflag_secret",
+      "urlflag_admin",
+      "urlflag_pass",
+      "urlflag_user",
+      "urlflag_include",
+      "urlflag_proc",
+      "urlflag_ocs",
+      "urlflag_remote",
+      "urlflag_shell",
+      "urlflag_cmd",
+      "urlflag_php",
+      "urlflag_txt",
+      "urlflag_zip",
+      "ua_dirb",
+      "ua_wpscan",
+      "ua_nmap",
+      "ua_ncat",
+      "ua_python",
+      "ua_wget"
+    ],
+    "categorical": [
+      "sig_key",
+      "rule_desc",
+      "rule_groups",
+      "decoder",
+      "decoder_parent",
+      "location",
+      "agent_name",
+      "program_name",
+      "sig_category",
+      "sig_id",
+      "sig_action",
+      "sid_rev",
+      "http_method",
+      "status_code",
+      "srcuser",
+      "dstuser",
+      "audit_type",
+      "log_resource_class",
+      "ac_type",
+      "ac_id",
+      "ac_message",
+      "persistence",
+      "miner_id_ctx",
+      "hostname_ctx",
+      "agent_id"
+    ]
+  },
+  "holdout_metrics_same_distribution": {
+    "n": 265582,
+    "n_attack": 176658,
+    "n_background": 88924,
+    "n_predicted_attack": 175029,
+    "tn": 88923,
+    "fp": 1,
+    "fn": 1630,
+    "tp": 175028,
+    "threshold": 0.836376,
+    "accuracy": 0.9939,
+    "base_rate_attack": 0.6652,
+    "predicted_attack_share": 0.659,
+    "precision_attack": 1.0,
+    "recall_attack": 0.9908,
+    "f1_attack": 0.9954,
+    "macro_f1": 0.9931,
+    "background_filtered_share": 1.0,
+    "background_filtered_pct": 100.0,
+    "false_positive_rate": 0.0,
+    "false_positives_per_million_alerts": 3.8,
+    "false_positives_per_million_background": 11.2,
+    "alert_reduction_rate": 0.9939,
+    "noise_reduction_rate": 1.0,
+    "alerts_kept_for_review": 175029,
+    "pr_auc_attack": 1.0,
+    "roc_auc": 0.9999,
+    "budget_fp_per_m_5000": {
+      "recall_at_budget": 0.999,
+      "threshold": 0.154596,
+      "false_positives": 1327,
+      "true_positives": 176487,
+      "predicted_positives": 177814
+    },
+    "budget_fp_per_m_20000": {
+      "recall_at_budget": 0.9999,
+      "threshold": 0.033115,
+      "false_positives": 5311,
+      "true_positives": 176634,
+      "predicted_positives": 181945
+    },
+    "budget_fp_per_m_50000": {
+      "recall_at_budget": 0.9999,
+      "threshold": 0.007559,
+      "false_positives": 13279,
+      "true_positives": 176649,
+      "predicted_positives": 189928
+    }
+  },
+  "budgets": {
+    "budget_fp_per_m_5000": {
+      "recall_at_budget": 0.999,
+      "threshold": 0.154596,
+      "false_positives": 1327,
+      "true_positives": 176487,
+      "predicted_positives": 177814
+    },
+    "budget_fp_per_m_20000": {
+      "recall_at_budget": 0.9999,
+      "threshold": 0.033115,
+      "false_positives": 5311,
+      "true_positives": 176634,
+      "predicted_positives": 181945
+    },
+    "budget_fp_per_m_50000": {
+      "recall_at_budget": 0.9999,
+      "threshold": 0.007559,
+      "false_positives": 13279,
+      "true_positives": 176649,
+      "predicted_positives": 189928
+    }
+  },
+  "environment": {
+    "python": "3.12.14",
+    "lightgbm": "4.7.0",
+    "scikit_learn": "1.9.1",
+    "pandas": "3.1.0",
+    "numpy": "2.5.4",
+    "joblib": "1.6.0"
+  },
+  "seed": 42
+}

@@ -1,0 +1,2446 @@
+{
+  "total_rows": 2655821,
+  "total_attack": 1764581,
+  "total_background": 891240,
+  "scenarios": {
+    "fox": {
+      "rows": 473104,
+      "attack": 421653,
+      "background": 51451,
+      "attack_share": 0.8912,
+      "sources": {
+        "aminer": {
+          "background": 1168,
+          "attack": 9413
+        },
+        "wazuh": {
+          "background": 39542,
+          "attack": 411897
+        },
+        "suricata": {
+          "background": 10741,
+          "attack": 343
+        }
+      },
+      "phases": {
+        "background|background": 51451,
+        "attack|service_stop": 2,
+        "attack|dnsteal": 388,
+        "attack|network_scans": 323,
+        "attack|service_scans": 270,
+        "attack|wpscan": 9789,
+        "attack|dirb": 410302,
+        "attack|webshell": 2,
+        "attack|cracking": 559,
+        "attack|reverse_shell": 1,
+        "attack|privilege_escalation": 17
+      },
+      "detectors": 77,
+      "novel_detectors": 77,
+      "novel_rows": 473104,
+      "novel_attack_rows": 421653,
+      "training_mode_rows": 824
+    },
+    "harrison": {
+      "rows": 593948,
+      "attack": 431492,
+      "background": 162456,
+      "attack_share": 0.7265,
+      "sources": {
+        "aminer": {
+          "background": 682,
+          "attack": 9512
+        },
+        "suricata": {
+          "background": 65132,
+          "attack": 2252
+        },
+        "wazuh": {
+          "background": 96642,
+          "attack": 419728
+        }
+      },
+      "phases": {
+        "background|background": 162456,
+        "attack|network_scans": 296,
+        "attack|service_scans": 829,
+        "attack|wpscan": 9709,
+        "attack|dirb": 416011,
+        "attack|webshell": 33,
+        "attack|cracking": 1255,
+        "attack|reverse_shell": 20,
+        "attack|privilege_escalation": 94,
+        "attack|service_stop": 6,
+        "attack|dnsteal": 3239
+      },
+      "detectors": 78,
+      "novel_detectors": 3,
+      "novel_rows": 5,
+      "novel_attack_rows": 1,
+      "training_mode_rows": 539
+    },
+    "russellmitchell": {
+      "rows": 45544,
+      "attack": 12015,
+      "background": 33529,
+      "attack_share": 0.2638,
+      "sources": {
+        "aminer": {
+          "background": 578,
+          "attack": 3478
+        },
+        "wazuh": {
+          "background": 23978,
+          "attack": 8324
+        },
+        "suricata": {
+          "background": 8973,
+          "attack": 213
+        }
+      },
+      "phases": {
+        "background|background": 33529,
+        "attack|network_scans": 8,
+        "attack|service_scans": 367,
+        "attack|dirb": 4522,
+        "attack|wpscan": 6359,
+        "attack|webshell": 6,
+        "attack|cracking": 13,
+        "attack|reverse_shell": 3,
+        "attack|privilege_escalation": 24,
+        "attack|service_stop": 2,
+        "attack|dnsteal": 711
+      },
+      "detectors": 72,
+      "novel_detectors": 0,
+      "novel_rows": 0,
+      "novel_attack_rows": 0,
+      "training_mode_rows": 400
+    },
+    "santos": {
+      "rows": 130779,
+      "attack": 13004,
+      "background": 117775,
+      "attack_share": 0.0994,
+      "sources": {
+        "aminer": {
+          "background": 831,
+          "attack": 3435
+        },
+        "suricata": {
+          "background": 43697,
+          "attack": 415
+        },
+        "wazuh": {
+          "background": 73247,
+          "attack": 9154
+        }
+      },
+      "phases": {
+        "background|background": 117775,
+        "attack|service_stop": 3,
+        "attack|dnsteal": 832,
+        "attack|network_scans": 104,
+        "attack|service_scans": 123,
+        "attack|dirb": 4522,
+        "attack|wpscan": 6567,
+        "attack|webshell": 16,
+        "attack|cracking": 776,
+        "attack|reverse_shell": 12,
+        "attack|privilege_escalation": 49
+      },
+      "detectors": 84,
+      "novel_detectors": 5,
+      "novel_rows": 117,
+      "novel_attack_rows": 0,
+      "training_mode_rows": 524
+    },
+    "shaw": {
+      "rows": 70782,
+      "attack": 6935,
+      "background": 63847,
+      "attack_share": 0.098,
+      "sources": {
+        "aminer": {
+          "background": 1274,
+          "attack": 969
+        },
+        "wazuh": {
+          "background": 46085,
+          "attack": 5762
+        },
+        "suricata": {
+          "background": 16488,
+          "attack": 204
+        }
+      },
+      "phases": {
+        "background|background": 63847,
+        "attack|service_stop": 2,
+        "attack|dnsteal": 105,
+        "attack|network_scans": 12,
+        "attack|service_scans": 3,
+        "attack|wpscan": 1708,
+        "attack|dirb": 4292,
+        "attack|webshell": 2,
+        "attack|cracking": 752,
+        "attack|reverse_shell": 5,
+        "attack|privilege_escalation": 54
+      },
+      "detectors": 73,
+      "novel_detectors": 1,
+      "novel_rows": 2,
+      "novel_attack_rows": 0,
+      "training_mode_rows": 408
+    },
+    "wardbeck": {
+      "rows": 91257,
+      "attack": 7040,
+      "background": 84217,
+      "attack_share": 0.0771,
+      "sources": {
+        "aminer": {
+          "background": 2082,
+          "attack": 971
+        },
+        "wazuh": {
+          "background": 57832,
+          "attack": 5862
+        },
+        "suricata": {
+          "background": 24303,
+          "attack": 207
+        }
+      },
+      "phases": {
+        "background|background": 84217,
+        "attack|service_stop": 2,
+        "attack|dnsteal": 23,
+        "attack|network_scans": 3,
+        "attack|service_scans": 163,
+        "attack|wpscan": 1695,
+        "attack|dirb": 4336,
+        "attack|webshell": 16,
+        "attack|cracking": 755,
+        "attack|reverse_shell": 6,
+        "attack|privilege_escalation": 41
+      },
+      "detectors": 80,
+      "novel_detectors": 5,
+      "novel_rows": 17,
+      "novel_attack_rows": 1,
+      "training_mode_rows": 750
+    },
+    "wheeler": {
+      "rows": 616161,
+      "attack": 432334,
+      "background": 183827,
+      "attack_share": 0.7017,
+      "sources": {
+        "aminer": {
+          "background": 869,
+          "attack": 11353
+        },
+        "wazuh": {
+          "background": 115018,
+          "attack": 420292
+        },
+        "suricata": {
+          "background": 67940,
+          "attack": 689
+        }
+      },
+      "phases": {
+        "background|background": 183827,
+        "attack|service_stop": 2,
+        "attack|dnsteal": 466,
+        "attack|network_scans": 663,
+        "attack|service_scans": 276,
+        "attack|dirb": 417516,
+        "attack|wpscan": 13323,
+        "attack|webshell": 10,
+        "attack|reverse_shell": 30,
+        "attack|privilege_escalation": 48
+      },
+      "detectors": 78,
+      "novel_detectors": 0,
+      "novel_rows": 0,
+      "novel_attack_rows": 0,
+      "training_mode_rows": 563
+    },
+    "wilson": {
+      "rows": 634246,
+      "attack": 440108,
+      "background": 194138,
+      "attack_share": 0.6939,
+      "sources": {
+        "aminer": {
+          "background": 1017,
+          "attack": 7926
+        },
+        "wazuh": {
+          "background": 129778,
+          "attack": 430487
+        },
+        "suricata": {
+          "background": 63343,
+          "attack": 1695
+        }
+      },
+      "phases": {
+        "background|background": 194138,
+        "attack|service_stop": 2,
+        "attack|dnsteal": 2866,
+        "attack|network_scans": 215,
+        "attack|service_scans": 549,
+        "attack|dirb": 428643,
+        "attack|wpscan": 6456,
+        "attack|webshell": 42,
+        "attack|cracking": 1286,
+        "attack|reverse_shell": 24,
+        "attack|privilege_escalation": 25
+      },
+      "detectors": 86,
+      "novel_detectors": 2,
+      "novel_rows": 6,
+      "novel_attack_rows": 0,
+      "training_mode_rows": 731
+    }
+  },
+  "phase_totals": {
+    "background|background": 891240,
+    "attack|service_stop": 21,
+    "attack|dnsteal": 8630,
+    "attack|network_scans": 1624,
+    "attack|service_scans": 2580,
+    "attack|wpscan": 55606,
+    "attack|dirb": 1690144,
+    "attack|webshell": 127,
+    "attack|cracking": 5396,
+    "attack|reverse_shell": 101,
+    "attack|privilege_escalation": 352
+  },
+  "training_mode_rows": 4739,
+  "training_mode_attack_rows": 13,
+  "detectors": [
+    {
+      "sig_key": "wazuh|Web server 400 error code.",
+      "signature_id": "Web server 400 error code.",
+      "detector": "Web server 400 error code.",
+      "rule_level": 5,
+      "sources": [
+        "wazuh"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 1571313,
+      "attack": 1571057,
+      "background": 256,
+      "precision": 0.9998
+    },
+    {
+      "sig_key": "wazuh|IDS event.",
+      "signature_id": "IDS event.",
+      "detector": "IDS event.",
+      "rule_level": 6,
+      "sources": [
+        "wazuh"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 295032,
+      "attack": 5766,
+      "background": 289266,
+      "precision": 0.0195
+    },
+    {
+      "sig_key": "wazuh|Dovecot Authentication Success.",
+      "signature_id": "Dovecot Authentication Success.",
+      "detector": "Dovecot Authentication Success.",
+      "rule_level": 3,
+      "sources": [
+        "wazuh"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 276855,
+      "attack": 6951,
+      "background": 269904,
+      "precision": 0.0251
+    },
+    {
+      "sig_key": "wazuh|Multiple web server 400 error codes from same source ip.",
+      "signature_id": "Multiple web server 400 error codes from same source ip.",
+      "detector": "Multiple web server 400 error codes from same source ip.",
+      "rule_level": 10,
+      "sources": [
+        "wazuh"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 121794,
+      "attack": 121794,
+      "background": 0,
+      "precision": 1.0
+    },
+    {
+      "sig_key": "suricata|SURICATA TLS invalid record/traffic",
+      "signature_id": "SURICATA TLS invalid record/traffic",
+      "detector": "SURICATA TLS invalid record/traffic",
+      "rule_level": 3,
+      "sources": [
+        "suricata"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 105043,
+      "attack": 2383,
+      "background": 102660,
+      "precision": 0.0227
+    },
+    {
+      "sig_key": "suricata|SURICATA TLS invalid handshake message",
+      "signature_id": "SURICATA TLS invalid handshake message",
+      "detector": "SURICATA TLS invalid handshake message",
+      "rule_level": 3,
+      "sources": [
+        "suricata"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 105016,
+      "attack": 2356,
+      "background": 102660,
+      "precision": 0.0224
+    },
+    {
+      "sig_key": "suricata|ET INFO Observed DNS Query to .biz TLD",
+      "signature_id": "ET INFO Observed DNS Query to .biz TLD",
+      "detector": "ET INFO Observed DNS Query to .biz TLD",
+      "rule_level": 3,
+      "sources": [
+        "suricata"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 7,
+      "total": 91761,
+      "attack": 1017,
+      "background": 90744,
+      "precision": 0.0111
+    },
+    {
+      "sig_key": "aminer|New request method in Apache Access log.",
+      "signature_id": "New request method in Apache Access log.",
+      "detector": "New request method in Apache Access log.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 27342,
+      "attack": 27269,
+      "background": 73,
+      "precision": 0.9973
+    },
+    {
+      "sig_key": "aminer|New characters in Apache Access request.",
+      "signature_id": "New characters in Apache Access request.",
+      "detector": "New characters in Apache Access request.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 10366,
+      "attack": 10051,
+      "background": 315,
+      "precision": 0.9696
+    },
+    {
+      "sig_key": "wazuh|ClamAV database update",
+      "signature_id": "ClamAV database update",
+      "detector": "ClamAV database update",
+      "rule_level": 3,
+      "sources": [
+        "wazuh"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 8407,
+      "attack": 142,
+      "background": 8265,
+      "precision": 0.0169
+    },
+    {
+      "sig_key": "aminer|New event type.",
+      "signature_id": "New event type.",
+      "detector": "New event type.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 7660,
+      "attack": 6286,
+      "background": 1374,
+      "precision": 0.8206
+    },
+    {
+      "sig_key": "wazuh|Multiple IDS alerts for same id.",
+      "signature_id": "Multiple IDS alerts for same id.",
+      "detector": "Multiple IDS alerts for same id.",
+      "rule_level": 10,
+      "sources": [
+        "wazuh"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 7036,
+      "attack": 98,
+      "background": 6938,
+      "precision": 0.0139
+    },
+    {
+      "sig_key": "suricata|ET POLICY GNU/Linux APT User-Agent Outbound likely related to package management",
+      "signature_id": "ET POLICY GNU/Linux APT User-Agent Outbound likely related to package management",
+      "detector": "ET POLICY GNU/Linux APT User-Agent Outbound likely related to package management",
+      "rule_level": 3,
+      "sources": [
+        "suricata"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 3422,
+      "attack": 37,
+      "background": 3385,
+      "precision": 0.0108
+    },
+    {
+      "sig_key": "aminer|New status code in Apache Access log.",
+      "signature_id": "New status code in Apache Access log.",
+      "detector": "New status code in Apache Access log.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 3220,
+      "attack": 3129,
+      "background": 91,
+      "precision": 0.9717
+    },
+    {
+      "sig_key": "wazuh|Multiple IDS events from same source ip.",
+      "signature_id": "Multiple IDS events from same source ip.",
+      "detector": "Multiple IDS events from same source ip.",
+      "rule_level": 10,
+      "sources": [
+        "wazuh"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 2362,
+      "attack": 56,
+      "background": 2306,
+      "precision": 0.0237
+    },
+    {
+      "sig_key": "wazuh|Apache: Attempt to access forbidden file or directory.",
+      "signature_id": "Apache: Attempt to access forbidden file or directory.",
+      "detector": "Apache: Attempt to access forbidden file or directory.",
+      "rule_level": 5,
+      "sources": [
+        "wazuh"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 2353,
+      "attack": 2353,
+      "background": 0,
+      "precision": 1.0
+    },
+    {
+      "sig_key": "wazuh|Suspicious URL access.",
+      "signature_id": "Suspicious URL access.",
+      "detector": "Suspicious URL access.",
+      "rule_level": 6,
+      "sources": [
+        "wazuh"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 1876,
+      "attack": 1876,
+      "background": 0,
+      "precision": 1.0
+    },
+    {
+      "sig_key": "aminer|High entropy in DNS domain.",
+      "signature_id": "High entropy in DNS domain.",
+      "detector": "High entropy in DNS domain.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 1781,
+      "attack": 6,
+      "background": 1775,
+      "precision": 0.0034
+    },
+    {
+      "sig_key": "aminer|New ip address in DNS logs.",
+      "signature_id": "New ip address in DNS logs.",
+      "detector": "New ip address in DNS logs.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 1569,
+      "attack": 93,
+      "background": 1476,
+      "precision": 0.0593
+    },
+    {
+      "sig_key": "wazuh|Multiple IDS alerts for same id (ignoring now this id).",
+      "signature_id": "Multiple IDS alerts for same id (ignoring now this id).",
+      "detector": "Multiple IDS alerts for same id (ignoring now this id).",
+      "rule_level": 11,
+      "sources": [
+        "wazuh"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 1465,
+      "attack": 17,
+      "background": 1448,
+      "precision": 0.0116
+    },
+    {
+      "sig_key": "wazuh|Dovecot Invalid User Login Attempt.",
+      "signature_id": "Dovecot Invalid User Login Attempt.",
+      "detector": "Dovecot Invalid User Login Attempt.",
+      "rule_level": 5,
+      "sources": [
+        "wazuh"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 1103,
+      "attack": 15,
+      "background": 1088,
+      "precision": 0.0136
+    },
+    {
+      "sig_key": "wazuh|Common web attack.",
+      "signature_id": "Common web attack.",
+      "detector": "Common web attack.",
+      "rule_level": 6,
+      "sources": [
+        "wazuh"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 730,
+      "attack": 730,
+      "background": 0,
+      "precision": 1.0
+    },
+    {
+      "sig_key": "wazuh|PAM: User login failed.",
+      "signature_id": "PAM: User login failed.",
+      "detector": "PAM: User login failed.",
+      "rule_level": 5,
+      "sources": [
+        "wazuh"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 678,
+      "attack": 5,
+      "background": 673,
+      "precision": 0.0074
+    },
+    {
+      "sig_key": "wazuh|First time this IDS alert is generated.",
+      "signature_id": "First time this IDS alert is generated.",
+      "detector": "First time this IDS alert is generated.",
+      "rule_level": 8,
+      "sources": [
+        "wazuh"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 626,
+      "attack": 81,
+      "background": 545,
+      "precision": 0.1294
+    },
+    {
+      "sig_key": "suricata|ET INFO Observed DNS Query to .cloud TLD",
+      "signature_id": "ET INFO Observed DNS Query to .cloud TLD",
+      "detector": "ET INFO Observed DNS Query to .cloud TLD",
+      "rule_level": 3,
+      "sources": [
+        "suricata"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 464,
+      "attack": 11,
+      "background": 453,
+      "precision": 0.0237
+    },
+    {
+      "sig_key": "wazuh|syslog: User authentication failure.",
+      "signature_id": "syslog: User authentication failure.",
+      "detector": "syslog: User authentication failure.",
+      "rule_level": 5,
+      "sources": [
+        "wazuh"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 426,
+      "attack": 10,
+      "background": 416,
+      "precision": 0.0235
+    },
+    {
+      "sig_key": "aminer|Unusual occurrence frequencies of DNS log events.",
+      "signature_id": "Unusual occurrence frequencies of DNS log events.",
+      "detector": "Unusual occurrence frequencies of DNS log events.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 421,
+      "attack": 6,
+      "background": 415,
+      "precision": 0.0143
+    },
+    {
+      "sig_key": "wazuh|CMS (WordPress or Joomla) login attempt.",
+      "signature_id": "CMS (WordPress or Joomla) login attempt.",
+      "detector": "CMS (WordPress or Joomla) login attempt.",
+      "rule_level": 3,
+      "sources": [
+        "wazuh"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 7,
+      "total": 408,
+      "attack": 39,
+      "background": 369,
+      "precision": 0.0956
+    },
+    {
+      "sig_key": "suricata|SURICATA HTTP unable to match response to request",
+      "signature_id": "SURICATA HTTP unable to match response to request",
+      "detector": "SURICATA HTTP unable to match response to request",
+      "rule_level": 3,
+      "sources": [
+        "suricata"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 7,
+      "total": 379,
+      "attack": 11,
+      "background": 368,
+      "precision": 0.029
+    },
+    {
+      "sig_key": "aminer|New user_acct parameter combination in Audit logs.",
+      "signature_id": "New user_acct parameter combination in Audit logs.",
+      "detector": "New user_acct parameter combination in Audit logs.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 363,
+      "attack": 15,
+      "background": 348,
+      "precision": 0.0413
+    },
+    {
+      "sig_key": "wazuh|Apache: Attempt to access forbidden directory index.",
+      "signature_id": "Apache: Attempt to access forbidden directory index.",
+      "detector": "Apache: Attempt to access forbidden directory index.",
+      "rule_level": 5,
+      "sources": [
+        "wazuh"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 338,
+      "attack": 338,
+      "background": 0,
+      "precision": 1.0
+    },
+    {
+      "sig_key": "aminer|Unusual occurrence frequencies of DNS query IPs.",
+      "signature_id": "Unusual occurrence frequencies of DNS query IPs.",
+      "detector": "Unusual occurrence frequencies of DNS query IPs.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 334,
+      "attack": 5,
+      "background": 329,
+      "precision": 0.015
+    },
+    {
+      "sig_key": "aminer|New user_auth parameter combination in Audit logs.",
+      "signature_id": "New user_auth parameter combination in Audit logs.",
+      "detector": "New user_auth parameter combination in Audit logs.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 309,
+      "attack": 12,
+      "background": 297,
+      "precision": 0.0388
+    },
+    {
+      "sig_key": "aminer|Unusual occurrence frequencies of query records in DNS logs.",
+      "signature_id": "Unusual occurrence frequencies of query records in DNS logs.",
+      "detector": "Unusual occurrence frequencies of query records in DNS logs.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 297,
+      "attack": 4,
+      "background": 293,
+      "precision": 0.0135
+    },
+    {
+      "sig_key": "wazuh|Multiple IDS events from same source ip (ignoring now this srcip and id).",
+      "signature_id": "Multiple IDS events from same source ip (ignoring now this srcip and id).",
+      "detector": "Multiple IDS events from same source ip (ignoring now this srcip and id).",
+      "rule_level": 11,
+      "sources": [
+        "wazuh"
+      ],
+      "scenarios": [
+        "harrison",
+        "santos",
+        "shaw",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 5,
+      "total": 202,
+      "attack": 4,
+      "background": 198,
+      "precision": 0.0198
+    },
+    {
+      "sig_key": "aminer|New service_start parameter combination in Audit logs.",
+      "signature_id": "New service_start parameter combination in Audit logs.",
+      "detector": "New service_start parameter combination in Audit logs.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 196,
+      "attack": 11,
+      "background": 185,
+      "precision": 0.0561
+    },
+    {
+      "sig_key": "aminer|New service_stop parameter combination in Audit logs.",
+      "signature_id": "New service_stop parameter combination in Audit logs.",
+      "detector": "New service_stop parameter combination in Audit logs.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 194,
+      "attack": 8,
+      "background": 186,
+      "precision": 0.0412
+    },
+    {
+      "sig_key": "aminer|CPU value deviates from average in monitoring logs.",
+      "signature_id": "CPU value deviates from average in monitoring logs.",
+      "detector": "CPU value deviates from average in monitoring logs.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 176,
+      "attack": 9,
+      "background": 167,
+      "precision": 0.0511
+    },
+    {
+      "sig_key": "aminer|CPU value out of expected range in monitoring logs.",
+      "signature_id": "CPU value out of expected range in monitoring logs.",
+      "detector": "CPU value out of expected range in monitoring logs.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 166,
+      "attack": 5,
+      "background": 161,
+      "precision": 0.0301
+    },
+    {
+      "sig_key": "aminer|Unusual occurrence frequencies of Apache Access request methods.",
+      "signature_id": "Unusual occurrence frequencies of Apache Access request methods.",
+      "detector": "Unusual occurrence frequencies of Apache Access request methods.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 162,
+      "attack": 17,
+      "background": 145,
+      "precision": 0.1049
+    },
+    {
+      "sig_key": "suricata|ET SCAN Possible Nmap User-Agent Observed",
+      "signature_id": "ET SCAN Possible Nmap User-Agent Observed",
+      "detector": "ET SCAN Possible Nmap User-Agent Observed",
+      "rule_level": 3,
+      "sources": [
+        "suricata"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 7,
+      "total": 138,
+      "attack": 138,
+      "background": 0,
+      "precision": 1.0
+    },
+    {
+      "sig_key": "aminer|New characters in DNS domain.",
+      "signature_id": "New characters in DNS domain.",
+      "detector": "New characters in DNS domain.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 136,
+      "attack": 9,
+      "background": 127,
+      "precision": 0.0662
+    },
+    {
+      "sig_key": "wazuh|PAM: Login session opened.",
+      "signature_id": "PAM: Login session opened.",
+      "detector": "PAM: Login session opened.",
+      "rule_level": 3,
+      "sources": [
+        "wazuh"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 131,
+      "attack": 30,
+      "background": 101,
+      "precision": 0.229
+    },
+    {
+      "sig_key": "aminer|Unusual occurrence frequencies of DNS query records.",
+      "signature_id": "Unusual occurrence frequencies of DNS query records.",
+      "detector": "Unusual occurrence frequencies of DNS query records.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 126,
+      "attack": 0,
+      "background": 126,
+      "precision": 0.0
+    },
+    {
+      "sig_key": "wazuh|Auditd: SELinux permission check.",
+      "signature_id": "Auditd: SELinux permission check.",
+      "detector": "Auditd: SELinux permission check.",
+      "rule_level": 3,
+      "sources": [
+        "wazuh"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 112,
+      "attack": 0,
+      "background": 112,
+      "precision": 0.0
+    },
+    {
+      "sig_key": "aminer|New characters in Apache Access referer.",
+      "signature_id": "New characters in Apache Access referer.",
+      "detector": "New characters in Apache Access referer.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 110,
+      "attack": 0,
+      "background": 110,
+      "precision": 0.0
+    },
+    {
+      "sig_key": "wazuh|PAM: Login session closed.",
+      "signature_id": "PAM: Login session closed.",
+      "detector": "PAM: Login session closed.",
+      "rule_level": 3,
+      "sources": [
+        "wazuh"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 98,
+      "attack": 16,
+      "background": 82,
+      "precision": 0.1633
+    },
+    {
+      "sig_key": "aminer|New user_start parameter combination in Audit logs.",
+      "signature_id": "New user_start parameter combination in Audit logs.",
+      "detector": "New user_start parameter combination in Audit logs.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 88,
+      "attack": 23,
+      "background": 65,
+      "precision": 0.2614
+    },
+    {
+      "sig_key": "suricata|ET DNS Query for .to TLD",
+      "signature_id": "ET DNS Query for .to TLD",
+      "detector": "ET DNS Query for .to TLD",
+      "rule_level": 3,
+      "sources": [
+        "suricata"
+      ],
+      "scenarios": [
+        "fox",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 6,
+      "total": 85,
+      "attack": 0,
+      "background": 85,
+      "precision": 0.0
+    },
+    {
+      "sig_key": "aminer|High entropy in Apache Access request.",
+      "signature_id": "High entropy in Apache Access request.",
+      "detector": "High entropy in Apache Access request.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 78,
+      "attack": 30,
+      "background": 48,
+      "precision": 0.3846
+    },
+    {
+      "sig_key": "aminer|New cred_acq parameter combination in Audit logs.",
+      "signature_id": "New cred_acq parameter combination in Audit logs.",
+      "detector": "New cred_acq parameter combination in Audit logs.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 77,
+      "attack": 12,
+      "background": 65,
+      "precision": 0.1558
+    },
+    {
+      "sig_key": "wazuh|Web server 500 error code (Internal Error).",
+      "signature_id": "Web server 500 error code (Internal Error).",
+      "detector": "Web server 500 error code (Internal Error).",
+      "rule_level": 5,
+      "sources": [
+        "wazuh"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 67,
+      "attack": 49,
+      "background": 18,
+      "precision": 0.7313
+    },
+    {
+      "sig_key": "aminer|New cred_disp parameter combination in Audit logs.",
+      "signature_id": "New cred_disp parameter combination in Audit logs.",
+      "detector": "New cred_disp parameter combination in Audit logs.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 63,
+      "attack": 12,
+      "background": 51,
+      "precision": 0.1905
+    },
+    {
+      "sig_key": "aminer|New user_end parameter combination in Audit logs.",
+      "signature_id": "New user_end parameter combination in Audit logs.",
+      "detector": "New user_end parameter combination in Audit logs.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 63,
+      "attack": 12,
+      "background": 51,
+      "precision": 0.1905
+    },
+    {
+      "sig_key": "aminer|New login parameter combination in Audit logs.",
+      "signature_id": "New login parameter combination in Audit logs.",
+      "detector": "New login parameter combination in Audit logs.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 60,
+      "attack": 3,
+      "background": 57,
+      "precision": 0.05
+    },
+    {
+      "sig_key": "wazuh|PAM: Multiple failed logins in a small period of time.",
+      "signature_id": "PAM: Multiple failed logins in a small period of time.",
+      "detector": "PAM: Multiple failed logins in a small period of time.",
+      "rule_level": 10,
+      "sources": [
+        "wazuh"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "santos",
+        "shaw",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 6,
+      "total": 49,
+      "attack": 0,
+      "background": 49,
+      "precision": 0.0
+    },
+    {
+      "sig_key": "aminer|New query record in DNS logs.",
+      "signature_id": "New query record in DNS logs.",
+      "detector": "New query record in DNS logs.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 48,
+      "attack": 0,
+      "background": 48,
+      "precision": 0.0
+    },
+    {
+      "sig_key": "suricata|ET DNS Query for .cc TLD",
+      "signature_id": "ET DNS Query for .cc TLD",
+      "detector": "ET DNS Query for .cc TLD",
+      "rule_level": 3,
+      "sources": [
+        "suricata"
+      ],
+      "scenarios": [
+        "santos",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 3,
+      "total": 48,
+      "attack": 0,
+      "background": 48,
+      "precision": 0.0
+    },
+    {
+      "sig_key": "suricata|ET HUNTING Possible COVID-19 Domain in SSL Certificate M2",
+      "signature_id": "ET HUNTING Possible COVID-19 Domain in SSL Certificate M2",
+      "detector": "ET HUNTING Possible COVID-19 Domain in SSL Certificate M2",
+      "rule_level": 3,
+      "sources": [
+        "suricata"
+      ],
+      "scenarios": [
+        "santos"
+      ],
+      "n_scenarios": 1,
+      "total": 47,
+      "attack": 0,
+      "background": 47,
+      "precision": 0.0
+    },
+    {
+      "sig_key": "wazuh|sshd: authentication success.",
+      "signature_id": "sshd: authentication success.",
+      "detector": "sshd: authentication success.",
+      "rule_level": 3,
+      "sources": [
+        "wazuh"
+      ],
+      "scenarios": [
+        "fox",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 7,
+      "total": 46,
+      "attack": 0,
+      "background": 46,
+      "precision": 0.0
+    },
+    {
+      "sig_key": "wazuh|sshd: insecure connection attempt (scan).",
+      "signature_id": "sshd: insecure connection attempt (scan).",
+      "detector": "sshd: insecure connection attempt (scan).",
+      "rule_level": 6,
+      "sources": [
+        "wazuh"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 44,
+      "attack": 44,
+      "background": 0,
+      "precision": 1.0
+    },
+    {
+      "sig_key": "wazuh|Dovecot brute force attack (multiple auth failures).",
+      "signature_id": "Dovecot brute force attack (multiple auth failures).",
+      "detector": "Dovecot brute force attack (multiple auth failures).",
+      "rule_level": 10,
+      "sources": [
+        "wazuh"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "shaw",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 6,
+      "total": 31,
+      "attack": 0,
+      "background": 31,
+      "precision": 0.0
+    },
+    {
+      "sig_key": "aminer|New user_cmd parameter combination in Audit logs.",
+      "signature_id": "New user_cmd parameter combination in Audit logs.",
+      "detector": "New user_cmd parameter combination in Audit logs.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 28,
+      "attack": 12,
+      "background": 16,
+      "precision": 0.4286
+    },
+    {
+      "sig_key": "suricata|SURICATA HTTP gzip decompression failed",
+      "signature_id": "SURICATA HTTP gzip decompression failed",
+      "detector": "SURICATA HTTP gzip decompression failed",
+      "rule_level": 3,
+      "sources": [
+        "suricata"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 27,
+      "attack": 0,
+      "background": 27,
+      "precision": 0.0
+    },
+    {
+      "sig_key": "suricata|ET HUNTING Suspicious Domain Request for Possible COVID-19 Domain M1",
+      "signature_id": "ET HUNTING Suspicious Domain Request for Possible COVID-19 Domain M1",
+      "detector": "ET HUNTING Suspicious Domain Request for Possible COVID-19 Domain M1",
+      "rule_level": 3,
+      "sources": [
+        "suricata"
+      ],
+      "scenarios": [
+        "santos"
+      ],
+      "n_scenarios": 1,
+      "total": 27,
+      "attack": 0,
+      "background": 27,
+      "precision": 0.0
+    },
+    {
+      "sig_key": "aminer|New cred_refr parameter combination in Audit logs.",
+      "signature_id": "New cred_refr parameter combination in Audit logs.",
+      "detector": "New cred_refr parameter combination in Audit logs.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 25,
+      "attack": 12,
+      "background": 13,
+      "precision": 0.48
+    },
+    {
+      "sig_key": "aminer|Unusual occurrence frequencies of Apache Access logs.",
+      "signature_id": "Unusual occurrence frequencies of Apache Access logs.",
+      "detector": "Unusual occurrence frequencies of Apache Access logs.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 25,
+      "attack": 5,
+      "background": 20,
+      "precision": 0.2
+    },
+    {
+      "sig_key": "wazuh|Successful sudo to ROOT executed.",
+      "signature_id": "Successful sudo to ROOT executed.",
+      "detector": "Successful sudo to ROOT executed.",
+      "rule_level": 3,
+      "sources": [
+        "wazuh"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 22,
+      "attack": 18,
+      "background": 4,
+      "precision": 0.8182
+    },
+    {
+      "sig_key": "suricata|ET HUNTING Suspicious TLS SNI Request for Possible COVID-19 Domain M1",
+      "signature_id": "ET HUNTING Suspicious TLS SNI Request for Possible COVID-19 Domain M1",
+      "detector": "ET HUNTING Suspicious TLS SNI Request for Possible COVID-19 Domain M1",
+      "rule_level": 3,
+      "sources": [
+        "suricata"
+      ],
+      "scenarios": [
+        "santos"
+      ],
+      "n_scenarios": 1,
+      "total": 21,
+      "attack": 0,
+      "background": 21,
+      "precision": 0.0
+    },
+    {
+      "sig_key": "suricata|ET INFO DNS Query for Suspicious .ga Domain",
+      "signature_id": "ET INFO DNS Query for Suspicious .ga Domain",
+      "detector": "ET INFO DNS Query for Suspicious .ga Domain",
+      "rule_level": 3,
+      "sources": [
+        "suricata"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wilson"
+      ],
+      "n_scenarios": 6,
+      "total": 20,
+      "attack": 0,
+      "background": 20,
+      "precision": 0.0
+    },
+    {
+      "sig_key": "suricata|ET INFO Suspicious Domain (*.ga) in TLS SNI",
+      "signature_id": "ET INFO Suspicious Domain (*.ga) in TLS SNI",
+      "detector": "ET INFO Suspicious Domain (*.ga) in TLS SNI",
+      "rule_level": 3,
+      "sources": [
+        "suricata"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wilson"
+      ],
+      "n_scenarios": 6,
+      "total": 19,
+      "attack": 0,
+      "background": 19,
+      "precision": 0.0
+    },
+    {
+      "sig_key": "aminer|New user_login parameter combination in Audit logs.",
+      "signature_id": "New user_login parameter combination in Audit logs.",
+      "detector": "New user_login parameter combination in Audit logs.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 18,
+      "attack": 0,
+      "background": 18,
+      "precision": 0.0
+    },
+    {
+      "sig_key": "suricata|SURICATA SMTP no server welcome message",
+      "signature_id": "SURICATA SMTP no server welcome message",
+      "detector": "SURICATA SMTP no server welcome message",
+      "rule_level": 3,
+      "sources": [
+        "suricata"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 7,
+      "total": 18,
+      "attack": 18,
+      "background": 0,
+      "precision": 1.0
+    },
+    {
+      "sig_key": "suricata|SURICATA SMTP invalid reply",
+      "signature_id": "SURICATA SMTP invalid reply",
+      "detector": "SURICATA SMTP invalid reply",
+      "rule_level": 3,
+      "sources": [
+        "suricata"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 7,
+      "total": 18,
+      "attack": 18,
+      "background": 0,
+      "precision": 1.0
+    },
+    {
+      "sig_key": "suricata|SURICATA TLS invalid SSLv2 header",
+      "signature_id": "SURICATA TLS invalid SSLv2 header",
+      "detector": "SURICATA TLS invalid SSLv2 header",
+      "rule_level": 3,
+      "sources": [
+        "suricata"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 7,
+      "total": 18,
+      "attack": 18,
+      "background": 0,
+      "precision": 1.0
+    },
+    {
+      "sig_key": "aminer|New apparmor parameter combination in Audit logs.",
+      "signature_id": "New apparmor parameter combination in Audit logs.",
+      "detector": "New apparmor parameter combination in Audit logs.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 16,
+      "attack": 0,
+      "background": 16,
+      "precision": 0.0
+    },
+    {
+      "sig_key": "aminer|High entropy in Apache Access referer.",
+      "signature_id": "High entropy in Apache Access referer.",
+      "detector": "High entropy in Apache Access referer.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 16,
+      "attack": 0,
+      "background": 16,
+      "precision": 0.0
+    },
+    {
+      "sig_key": "aminer|High entropy in Apache Access user agent.",
+      "signature_id": "High entropy in Apache Access user agent.",
+      "detector": "High entropy in Apache Access user agent.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 16,
+      "attack": 0,
+      "background": 16,
+      "precision": 0.0
+    },
+    {
+      "sig_key": "wazuh|First time user executed sudo.",
+      "signature_id": "First time user executed sudo.",
+      "detector": "First time user executed sudo.",
+      "rule_level": 4,
+      "sources": [
+        "wazuh"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 7,
+      "total": 13,
+      "attack": 6,
+      "background": 7,
+      "precision": 0.4615
+    },
+    {
+      "sig_key": "suricata|SURICATA HTTP invalid response chunk len",
+      "signature_id": "SURICATA HTTP invalid response chunk len",
+      "detector": "SURICATA HTTP invalid response chunk len",
+      "rule_level": 3,
+      "sources": [
+        "suricata"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wilson"
+      ],
+      "n_scenarios": 6,
+      "total": 12,
+      "attack": 2,
+      "background": 10,
+      "precision": 0.1667
+    },
+    {
+      "sig_key": "suricata|ET INFO TLS Handshake Failure",
+      "signature_id": "ET INFO TLS Handshake Failure",
+      "detector": "ET INFO TLS Handshake Failure",
+      "rule_level": 3,
+      "sources": [
+        "suricata"
+      ],
+      "scenarios": [
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 3,
+      "total": 12,
+      "attack": 0,
+      "background": 12,
+      "precision": 0.0
+    },
+    {
+      "sig_key": "suricata|ET INFO Session Traversal Utilities for NAT (STUN Binding Request)",
+      "signature_id": "ET INFO Session Traversal Utilities for NAT (STUN Binding Request)",
+      "detector": "ET INFO Session Traversal Utilities for NAT (STUN Binding Request)",
+      "rule_level": 3,
+      "sources": [
+        "suricata"
+      ],
+      "scenarios": [
+        "wardbeck",
+        "wilson"
+      ],
+      "n_scenarios": 2,
+      "total": 10,
+      "attack": 0,
+      "background": 10,
+      "precision": 0.0
+    },
+    {
+      "sig_key": "aminer|New syscall parameter combination in Audit logs.",
+      "signature_id": "New syscall parameter combination in Audit logs.",
+      "detector": "New syscall parameter combination in Audit logs.",
+      "rule_level": -1,
+      "sources": [
+        "aminer"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 9,
+      "attack": 1,
+      "background": 8,
+      "precision": 0.1111
+    },
+    {
+      "sig_key": "suricata|SURICATA TLS invalid record type",
+      "signature_id": "SURICATA TLS invalid record type",
+      "detector": "SURICATA TLS invalid record type",
+      "rule_level": 3,
+      "sources": [
+        "suricata"
+      ],
+      "scenarios": [
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "wardbeck",
+        "wilson"
+      ],
+      "n_scenarios": 5,
+      "total": 9,
+      "attack": 9,
+      "background": 0,
+      "precision": 1.0
+    },
+    {
+      "sig_key": "wazuh|User successfully changed UID.",
+      "signature_id": "User successfully changed UID.",
+      "detector": "User successfully changed UID.",
+      "rule_level": 3,
+      "sources": [
+        "wazuh"
+      ],
+      "scenarios": [
+        "fox",
+        "harrison",
+        "russellmitchell",
+        "santos",
+        "shaw",
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 8,
+      "total": 8,
+      "attack": 8,
+      "background": 0,
+      "precision": 1.0
+    },
+    {
+      "sig_key": "suricata|SURICATA TLS certificate invalid der",
+      "signature_id": "SURICATA TLS certificate invalid der",
+      "detector": "SURICATA TLS certificate invalid der",
+      "rule_level": 3,
+      "sources": [
+        "suricata"
+      ],
+      "scenarios": [
+        "santos"
+      ],
+      "n_scenarios": 1,
+      "total": 4,
+      "attack": 0,
+      "background": 4,
+      "precision": 0.0
+    },
+    {
+      "sig_key": "suricata|ET DNS DNS Lookup for localhost.DOMAIN.TLD",
+      "signature_id": "ET DNS DNS Lookup for localhost.DOMAIN.TLD",
+      "detector": "ET DNS DNS Lookup for localhost.DOMAIN.TLD",
+      "rule_level": 3,
+      "sources": [
+        "suricata"
+      ],
+      "scenarios": [
+        "wardbeck"
+      ],
+      "n_scenarios": 1,
+      "total": 4,
+      "attack": 0,
+      "background": 4,
+      "precision": 0.0
+    },
+    {
+      "sig_key": "suricata|ET DNS Query to a *.pw domain - Likely Hostile",
+      "signature_id": "ET DNS Query to a *.pw domain - Likely Hostile",
+      "detector": "ET DNS Query to a *.pw domain - Likely Hostile",
+      "rule_level": 3,
+      "sources": [
+        "suricata"
+      ],
+      "scenarios": [
+        "wilson"
+      ],
+      "n_scenarios": 1,
+      "total": 4,
+      "attack": 0,
+      "background": 4,
+      "precision": 0.0
+    },
+    {
+      "sig_key": "suricata|SURICATA DNS Unsolicited response",
+      "signature_id": "SURICATA DNS Unsolicited response",
+      "detector": "SURICATA DNS Unsolicited response",
+      "rule_level": 3,
+      "sources": [
+        "suricata"
+      ],
+      "scenarios": [
+        "harrison",
+        "santos",
+        "wilson"
+      ],
+      "n_scenarios": 3,
+      "total": 3,
+      "attack": 0,
+      "background": 3,
+      "precision": 0.0
+    },
+    {
+      "sig_key": "wazuh|CMS (WordPress or Joomla) brute force attempt.",
+      "signature_id": "CMS (WordPress or Joomla) brute force attempt.",
+      "detector": "CMS (WordPress or Joomla) brute force attempt.",
+      "rule_level": 8,
+      "sources": [
+        "wazuh"
+      ],
+      "scenarios": [
+        "wardbeck",
+        "wheeler",
+        "wilson"
+      ],
+      "n_scenarios": 3,
+      "total": 3,
+      "attack": 3,
+      "background": 0,
+      "precision": 1.0
+    },
+    {
+      "sig_key": "suricata|ET SCAN Behavioral Unusual Port 445 traffic Potential Scan or Infection",
+      "signature_id": "ET SCAN Behavioral Unusual Port 445 traffic Potential Scan or Infection",
+      "detector": "ET SCAN Behavioral Unusual Port 445 traffic Potential Scan or Infection",
+      "rule_level": 3,
+      "sources": [
+        "suricata"
+      ],
+      "scenarios": [
+        "shaw"
+      ],
+      "n_scenarios": 1,
+      "total": 2,
+      "attack": 0,
+      "background": 2,
+      "precision": 0.0
+    },
+    {
+      "sig_key": "suricata|ET DNS Query for .su TLD (Soviet Union) Often Malware Related",
+      "signature_id": "ET DNS Query for .su TLD (Soviet Union) Often Malware Related",
+      "detector": "ET DNS Query for .su TLD (Soviet Union) Often Malware Related",
+      "rule_level": 3,
+      "sources": [
+        "suricata"
+      ],
+      "scenarios": [
+        "wardbeck"
+      ],
+      "n_scenarios": 1,
+      "total": 2,
+      "attack": 0,
+      "background": 2,
+      "precision": 0.0
+    },
+    {
+      "sig_key": "suricata|ET INFO Session Traversal Utilities for NAT (STUN Binding Response)",
+      "signature_id": "ET INFO Session Traversal Utilities for NAT (STUN Binding Response)",
+      "detector": "ET INFO Session Traversal Utilities for NAT (STUN Binding Response)",
+      "rule_level": 3,
+      "sources": [
+        "suricata"
+      ],
+      "scenarios": [
+        "wilson"
+      ],
+      "n_scenarios": 1,
+      "total": 2,
+      "attack": 0,
+      "background": 2,
+      "precision": 0.0
+    }
+  ],
+  "detector_count": 93,
+  "novel_detectors_total": 9,
+  "novel_rows_total": 113
+}

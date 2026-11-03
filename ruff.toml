@@ -1,0 +1,13 @@
+# Ruff configuration for this project's analysis scripts.
+line-length = 120
+target-version = "py312"
+src = ["research", "report", "."]
+
+[lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[lint.per-file-ignores]
+"report/build_report.py" = ["E501"]
+
+[lint.isort]
+known-first-party = ["ml_common", "build_features", "compute_stats", "train", "report_stats", "analyze_predictions", "figures", "finalize_bundle", "check_report", "predict"]

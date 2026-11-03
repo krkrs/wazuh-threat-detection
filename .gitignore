@@ -1,3 +1,9 @@
+# user added
+*.pptx
+*.zip
+data/ait_ads/*
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

@@ -1,0 +1,28 @@
+{
+  "thresholds": [
+    {
+      "fold": "chrono_walk50",
+      "threshold_model": 0.494361,
+      "threshold_prior_baseline": 0.1,
+      "best_iteration": 1
+    },
+    {
+      "fold": "chrono_walk70",
+      "threshold_model": 0.454029,
+      "threshold_prior_baseline": 0.786312,
+      "best_iteration": 21
+    },
+    {
+      "fold": "chrono_walk90",
+      "threshold_model": 0.495415,
+      "threshold_prior_baseline": 0.153846,
+      "best_iteration": 7
+    },
+    {
+      "fold": "deployment_chrono_lgb_structured",
+      "threshold_model": 0.495415,
+      "threshold_prior_baseline": null,
+      "best_iteration": null
+    }
+  ]
+}

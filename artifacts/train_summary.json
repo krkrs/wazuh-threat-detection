@@ -1,0 +1,108 @@
+{
+  "created_utc": "2026-11-02T11:07:29Z",
+  "deploy_config": "lgb_structured",
+  "runs": [
+    {
+      "protocol": "los",
+      "config": "lgb_structured",
+      "kind": "model",
+      "f1": 0.0,
+      "pr_auc": 0.0,
+      "alert_reduction_rate": 0.9924,
+      "background_filtered_pct": 100.0,
+      "false_positives": 0,
+      "false_negatives": 20136,
+      "fp_per_million_alerts": 0.0
+    },
+    {
+      "protocol": "los",
+      "config": "lgb_structured",
+      "kind": "baseline_detector_prior",
+      "f1": 0.0,
+      "pr_auc": 0.0,
+      "alert_reduction_rate": 0.9919,
+      "background_filtered_pct": 99.75,
+      "false_positives": 2232,
+      "false_negatives": 19403,
+      "fp_per_million_alerts": 0.0
+    },
+    {
+      "protocol": "los",
+      "config": "lgb_text",
+      "kind": "model",
+      "f1": 0.0,
+      "pr_auc": 0.0,
+      "alert_reduction_rate": 0.9924,
+      "background_filtered_pct": 100.0,
+      "false_positives": 6,
+      "false_negatives": 20101,
+      "fp_per_million_alerts": 0.0
+    },
+    {
+      "protocol": "los",
+      "config": "lgb_text",
+      "kind": "baseline_detector_prior",
+      "f1": 0.0,
+      "pr_auc": 0.0,
+      "alert_reduction_rate": 0.9919,
+      "background_filtered_pct": 99.75,
+      "false_positives": 2232,
+      "false_negatives": 19403,
+      "fp_per_million_alerts": 0.0
+    },
+    {
+      "protocol": "chrono",
+      "config": "lgb_structured",
+      "kind": "model",
+      "f1": 0.0,
+      "pr_auc": 0.0,
+      "alert_reduction_rate": 0.9851,
+      "background_filtered_pct": 98.05,
+      "false_positives": 2868,
+      "false_negatives": 7044,
+      "fp_per_million_alerts": 0.0
+    },
+    {
+      "protocol": "chrono",
+      "config": "lgb_text",
+      "kind": "model",
+      "f1": 0.0,
+      "pr_auc": 0.0,
+      "alert_reduction_rate": 0.9814,
+      "background_filtered_pct": 96.28,
+      "false_positives": 5464,
+      "false_negatives": 6905,
+      "fp_per_million_alerts": 0.0
+    }
+  ],
+  "deployed": [
+    {
+      "config": "lgb_structured",
+      "zip": "model/model_lgb_structured.zip",
+      "sha256": "0a863549d45bc66277ea315956828559a86c7b0be510b29649ff655c121c38e2",
+      "zip_bytes": 1464797,
+      "threshold": 0.836376,
+      "train_rows": 2390239,
+      "holdout_rows": 265582,
+      "deploy_seconds": 1363.9,
+      "primary": true
+    },
+    {
+      "config": "lgb_text",
+      "zip": "model/model_lgb_text.zip",
+      "sha256": "837c3e869a72f03177b789fe04ebcf7b4afbab644ee485751c600bc530375476",
+      "zip_bytes": 1508444,
+      "threshold": 0.811385,
+      "train_rows": 2390239,
+      "holdout_rows": 265582,
+      "deploy_seconds": 1730.7,
+      "primary": false
+    }
+  ],
+  "total_seconds": 3094.6000000000004,
+  "feature_plan_summary": {
+    "numeric": 0,
+    "categorical": 0,
+    "dropped": 0
+  }
+}
