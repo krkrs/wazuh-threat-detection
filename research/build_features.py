@@ -385,6 +385,12 @@ def wazuh_row(obj: dict, scenario: str) -> dict | None:
         "firedtimes": to_num(rule.get("firedtimes")),
     }
     row.update(url_features(url, user_agent or full_log))
+
+    # --- DODANE: Wydobycie DNS z full_log ---
+    dns_query = auto_dns(full_log)
+    row.update(dns_features(dns_query))
+    # ----------------------------------------
+    
     return row
 
 
@@ -424,6 +430,7 @@ COLS_STR = [
 COLS_NUM = (
     [
         "ts",
+        "time_since_last_event",
         "rule_level",
         "src_port",
         "firedtimes",
@@ -436,6 +443,16 @@ COLS_NUM = (
         "url_traversal",
         "url_entropy",
         "url_max_token_len",
+        # --- DODANE CECHY DNS (aby model widział dnsteal) ---
+        "dns_len",
+        "dns_labels",
+        "dns_max_label_len",
+        "dns_avg_label_len",
+        "dns_digits",
+        "dns_letters",
+        "dns_digit_ratio",
+        "dns_entropy",
+        # ----------------------------------------------------
         "hour",
         "weekday",
         "seconds_from_start",
@@ -530,11 +547,20 @@ def build_scenario(data_dir: Path, out_dir: Path, phases: dict, scenario: str) -
     buffer: list[dict] = []
     total = 0
     start_ts = 0.0
+    last_ts = 0.0
     try:
         for row in merged_rows(data_dir, scenario):
             if total == 0 and start_ts == 0.0:
                 start_ts = row_ts(row)
             enrich(row, scenario, phases, windows, start_ts)
+#--- Obliczanie czasu między zdarzeniami
+            current_ts = row["ts"]
+            if last_ts == 0.0:
+                row["time_since_last_event"] = 0.0
+            else:
+                row["time_since_last_event"] = max(0.0, current_ts - last_ts)
+            last_ts = current_ts
+#---
             buffer.append(row)
             if len(buffer) >= BATCH_ROWS:
                 writer.write_batch(batch_from_rows(buffer, schema))

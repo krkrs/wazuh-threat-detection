@@ -2,56 +2,56 @@
   "thresholds": [
     {
       "fold": "los_fox",
-      "threshold_model": 0.555185,
-      "threshold_prior_baseline": 0.99705,
-      "best_iteration": 29
+      "threshold_model": 0.62838,
+      "threshold_prior_baseline": 0.555556,
+      "best_iteration": 90
     },
     {
       "fold": "los_harrison",
-      "threshold_model": 0.828784,
-      "threshold_prior_baseline": 0.805527,
-      "best_iteration": 71
+      "threshold_model": 0.638985,
+      "threshold_prior_baseline": 0.4,
+      "best_iteration": 64
     },
     {
       "fold": "los_russellmitchell",
-      "threshold_model": 0.468756,
-      "threshold_prior_baseline": 0.672727,
+      "threshold_model": 0.625009,
+      "threshold_prior_baseline": 0.526316,
       "best_iteration": 73
     },
     {
       "fold": "los_santos",
-      "threshold_model": 0.645475,
-      "threshold_prior_baseline": 0.978206,
-      "best_iteration": 36
+      "threshold_model": 0.580451,
+      "threshold_prior_baseline": 0.192982,
+      "best_iteration": 16
     },
     {
       "fold": "los_shaw",
-      "threshold_model": 0.627632,
-      "threshold_prior_baseline": 0.973877,
-      "best_iteration": 22
+      "threshold_model": 0.528297,
+      "threshold_prior_baseline": 0.571429,
+      "best_iteration": 11
     },
     {
       "fold": "los_wardbeck",
-      "threshold_model": 0.558515,
-      "threshold_prior_baseline": 0.807467,
-      "best_iteration": 22
+      "threshold_model": 0.419072,
+      "threshold_prior_baseline": 0.866667,
+      "best_iteration": 16
     },
     {
       "fold": "los_wheeler",
-      "threshold_model": 0.492376,
-      "threshold_prior_baseline": 0.181818,
-      "best_iteration": 62
+      "threshold_model": 0.662539,
+      "threshold_prior_baseline": 0.11828,
+      "best_iteration": 80
     },
     {
       "fold": "los_wilson",
-      "threshold_model": 0.903872,
-      "threshold_prior_baseline": 0.47619,
-      "best_iteration": 101
+      "threshold_model": 0.517028,
+      "threshold_prior_baseline": 0.190476,
+      "best_iteration": 21
     },
     {
       "fold": "deployment_los_lgb_text",
-      "threshold_model": 0.811385,
-      "threshold_prior_baseline": 0.672727,
+      "threshold_model": 0.625823,
+      "threshold_prior_baseline": 0.363636,
       "best_iteration": null
     }
   ]

@@ -12,12 +12,15 @@ import pandas as pd  # type: ignore[import-not-found]
 from sklearn.decomposition import TruncatedSVD  # type: ignore[import-not-found]
 from sklearn.feature_extraction.text import TfidfVectorizer  # type: ignore[import-not-found]
 from sklearn.metrics import (  # type: ignore[import-not-found]
+    
     average_precision_score,
     confusion_matrix,
     f1_score,
     precision_recall_curve,
     roc_auc_score,
 )
+from sklearn.ensemble import IsolationForest
+from scipy.special import expit  # <--- DODANY IMPORT
 
 ROOT = Path(__file__).resolve().parents[1]
 FEATURE_DIR = ROOT / "data" / "features"
@@ -44,8 +47,8 @@ CATEGORICAL_CANDIDATES = [
     "http_method",
     "status_code",
     "dst_port",
-    "src_ip_ctx",
-    "dst_ip_ctx",
+    # "src_ip_ctx",
+    # "dst_ip_ctx",
     "srcuser",
     "dstuser",
     "db_name",
@@ -64,6 +67,7 @@ CATEGORICAL_CANDIDATES = [
 ]
 NUMERIC_EXTRA = [
     "rule_level",
+    "time_since_last_event",
     "sig_severity",
     "src_port",
     "firedtimes",
@@ -127,6 +131,7 @@ MISSING_SHARE_MAX = 0.999
 
 LGB_BASE: dict[str, Any] = {
     "objective": "binary",
+    "is_unbalance": True,
     "n_estimators": 500,
     "learning_rate": 0.05,
     "num_leaves": 63,
@@ -281,12 +286,29 @@ def best_f1_threshold(y_true: Any, prob: Any) -> float:
     return float(thresholds[index])
 
 
+def custom_focal_loss(y_true: np.ndarray, y_pred: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """Ogniskowa funkcja straty (Focal Loss) dla LightGBM."""
+    gamma = 2.0
+    p = expit(y_pred)
+    pt = y_true * p + (1.0 - y_true) * (1.0 - p)
+    # Gradient i uproszczony Hesjan gwarantujący stabilność w LightGBM
+    grad = (p - y_true) * (1.0 - pt) ** gamma
+    hess = p * (1.0 - p) * (1.0 - pt) ** gamma
+    return grad, hess
+
 def positive_probabilities(model: Any, frame: Any) -> np.ndarray:
     raw: Any = model.predict_proba(frame)
     table = np.asarray(raw, dtype=np.float64)
     if table.ndim == 1:
-        return table.reshape(-1)
-    return table[:, 1].reshape(-1)
+        prob = table.reshape(-1)
+    else:
+        prob = table[:, 1].reshape(-1)
+        
+    # UWAGA: Przy własnej funkcji straty model zwraca surowe logity. 
+    # Musimy spłaszczyć je sigmoidą, jeśli wykraczają poza przedział [0, 1].
+    if np.min(prob) < 0 or np.max(prob) > 1:
+        prob = expit(prob)
+    return prob
 
 
 def metrics_under_budget(y_true: Any, prob: Any, budget_per_million: int) -> dict[str, Any]:
@@ -428,10 +450,50 @@ def phase_error_table(test_df: Any, y_pred: Any) -> dict[str, dict[str, int]]:
         }
     return out
 
+def apply_cap(df: Any, cap: int = 3000) -> Any:
+    """Odchudza powodziowe fazy ataku, ucinając je do limitu (cap), aby zbalansować klasy."""
+    mask = np.ones(len(df), dtype=bool)
+    is_attack = (df["label"] == "attack").to_numpy()
+    scenarios = df["scenario"].to_numpy()
+    phases = df["phase"].to_numpy()
+    counts: dict[str, int] = {}
+    
+    for i in range(len(df)):
+        if is_attack[i]:
+            key = f"{scenarios[i]}|{phases[i]}"
+            c = counts.get(key, 0)
+            if c >= cap:
+                mask[i] = False
+            counts[key] = c + 1
+            
+    return df.iloc[mask].copy()
+
+def compute_phase_weights(df: Any, max_weight: float = 2000.0) -> np.ndarray:
+    """Oblicza wagi dla poszczególnych faz ataku, aby wymusić na algorytmie naukę rzadkich klas."""
+    weights = np.ones(len(df), dtype=np.float32)
+    phases = df["phase"].to_numpy()
+    y = df["y"].to_numpy()
+    
+    attack_mask = (y == 1)
+    attack_phases = phases[attack_mask]
+    if len(attack_phases) == 0:
+        return weights
+        
+    unique_phases, counts = np.unique(attack_phases, return_counts=True)
+    max_count = np.max(counts)
+    
+    for phase, count in zip(unique_phases, counts):
+        # Skalujemy wagę odwrotnie proporcjonalnie do częstości (max. 100-krotne przebicie)
+        w = min(max_weight, float(max_count) / max(1, count))
+        weights[(phases == phase) & attack_mask] = w
+        
+    return weights
 
 def evaluate_fold(
     model_cfg: dict[str, Any], prepared: dict[str, Any], train_df: Any, cal_df: Any, test_df: Any, fold_name: str
 ) -> dict[str, Any]:
+    train_df = apply_cap(train_df, cap=3000)  # <--- DODANE (Ograniczenie alertów w treningu)
+
     y_train = np.asarray(train_df["y"].to_numpy())
     y_cal = np.asarray(cal_df["y"].to_numpy())
     y_test = np.asarray(test_df["y"].to_numpy())
@@ -447,12 +509,23 @@ def evaluate_fold(
     x_test = make_matrix(test_df, prepared, text_test)
     params = dict(model_cfg["params"])
     model = lgb.LGBMClassifier(**params)
+
+    model.set_params(objective=custom_focal_loss)  # <--- WSTRZYKNIĘCIE FOCAL LOSS
+    
     began = time.time()
+
+    # --- DODANE: Obliczanie wag próbek ---
+    train_weights = compute_phase_weights(train_df)
+    cal_weights = compute_phase_weights(cal_df)
+    # -------------------------------------
+
     model.fit(
         x_train,
         y_train,
+        sample_weight=train_weights,                 # <--- Przekazanie wag treningowych
         eval_X=x_cal,
         eval_y=y_cal,
+        eval_sample_weight=[cal_weights],              # <--- Przekazanie wag ewaluacyjnych
         eval_metric=["binary_logloss", "binary_error"],
         callbacks=[lgb.callback.early_stopping(EARLY_STOP_ROUNDS, verbose=False)],  # type: ignore[attr-defined]
     )
@@ -462,7 +535,25 @@ def evaluate_fold(
     prob_cal = positive_probabilities(model, x_cal)
     prob_test = positive_probabilities(model, x_test)
     threshold = best_f1_threshold(y_cal, prob_cal)
-    pred_test = np.where(prob_test >= threshold, 1, 0)
+    # 1. Wynik z bazowego modelu LightGBM
+    pred_test_lgb = np.where(prob_test >= threshold, 1, 0)
+
+    # 2. Wynik z modelu Isolation Forest (Anomalie)
+    num_cols = list(prepared["numeric_cols"])
+    x_train_num = train_df[num_cols].fillna(0).to_numpy(dtype=np.float32)
+    x_test_num = test_df[num_cols].fillna(0).to_numpy(dtype=np.float32)
+
+    if (y_train == 0).sum() > 0:
+        iso_forest = IsolationForest(n_estimators=100, random_state=SEED, contamination=0.01)
+        iso_forest.fit(x_train_num[y_train == 0])
+        pred_iso = iso_forest.predict(x_test_num)
+        pred_test_iso = np.where(pred_iso == -1, 1, 0)
+    else:
+        pred_test_iso = np.zeros_like(y_test)
+
+    # 3. Połączenie wyników (nadpisujemy pred_test, aby potok metryk działał poprawnie)
+    pred_test = np.maximum(pred_test_lgb, pred_test_iso)
+    # ------------------------------------
 
     prob_prior_cal = detector_prior_probabilities(train_df, cal_df)
     prior_threshold = best_f1_threshold(y_cal, prob_prior_cal)

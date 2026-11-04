@@ -192,6 +192,9 @@ def deploy_model(df: Any, prepared: dict[str, Any], cfg_name: str, threshold: fl
     fit_ids = np.arange(len(df), dtype=np.int64)[fit_positions]
     holdout_df = df.iloc[holdout_ids].copy()
     fit_df = df.iloc[fit_ids].copy()
+
+    fit_df = mc.apply_cap(fit_df, cap=3000)  # <--- DODANE (Ograniczenie powodzi przed deployem)
+
     if cfg["use_text"]:
         text_frames, vectorizer, reducer = mc.fit_text_transform(fit_df, [fit_df, holdout_df])
         text_fit_frame: Any = text_frames[0]
@@ -205,11 +208,20 @@ def deploy_model(df: Any, prepared: dict[str, Any], cfg_name: str, threshold: fl
     x_hold = mc.make_matrix(holdout_df, prepared, text_hold_frame)
     y_fit = np.asarray(fit_df["y"].to_numpy())
     y_hold = np.asarray(holdout_df["y"].to_numpy())
+
+    # --- DODANE: Obliczanie wag próbek dla deploy_model ---
+    fit_weights = mc.compute_phase_weights(fit_df)
+    holdout_weights = mc.compute_phase_weights(holdout_df)
+    # ------------------------------------------------------
+
     interim = lgb.LGBMClassifier(**cfg["params"])
+    interim.set_params(objective=mc.custom_focal_loss)  # <--- DODANE
     began_interim = time.time()
     interim.fit(
         x_fit, y_fit,
+        sample_weight=fit_weights,                    # <--- Wagi dla interim
         eval_X=x_hold, eval_y=y_hold,
+        eval_sample_weight=[holdout_weights],           # <--- Wagi ewaluacyjne
         eval_metric=["binary_logloss", "binary_error"],
         callbacks=[
             lgb.callback.early_stopping(
@@ -226,9 +238,9 @@ def deploy_model(df: Any, prepared: dict[str, Any], cfg_name: str, threshold: fl
     final_params = dict(cfg["params"])
     final_params["n_estimators"] = max(50, best_iteration)
     final_model = lgb.LGBMClassifier(**final_params)
+    final_model.set_params(objective=mc.custom_focal_loss)  # <--- DODANE
     began_final = time.time()
-    final_model.fit(x_fit, y_fit)
-    final_seconds = time.time() - began_final
+    final_model.fit(x_fit, y_fit, sample_weight=fit_weights)  # <--- Wagi dla finalnego modelu    final_seconds = time.time() - began_final
     return {
         "config": cfg_name,
         "best_iteration_full_data": best_iteration,

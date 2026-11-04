@@ -2,25 +2,25 @@
   "thresholds": [
     {
       "fold": "chrono_walk50",
-      "threshold_model": 0.503715,
-      "threshold_prior_baseline": 0.1,
-      "best_iteration": 1
+      "threshold_model": 0.491281,
+      "threshold_prior_baseline": 0.994956,
+      "best_iteration": 8
     },
     {
       "fold": "chrono_walk70",
-      "threshold_model": 0.503263,
-      "threshold_prior_baseline": 0.786312,
-      "best_iteration": 27
+      "threshold_model": 0.49864,
+      "threshold_prior_baseline": 0.5,
+      "best_iteration": 77
     },
     {
       "fold": "chrono_walk90",
-      "threshold_model": 0.486505,
-      "threshold_prior_baseline": 0.153846,
-      "best_iteration": 7
+      "threshold_model": 0.360205,
+      "threshold_prior_baseline": 0.0375,
+      "best_iteration": 150
     },
     {
       "fold": "deployment_chrono_lgb_text",
-      "threshold_model": 0.486505,
+      "threshold_model": 0.408387,
       "threshold_prior_baseline": null,
       "best_iteration": null
     }
