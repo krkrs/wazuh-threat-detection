@@ -554,11 +554,11 @@ def build_scenario(data_dir: Path, out_dir: Path, phases: dict, scenario: str) -
                 start_ts = row_ts(row)
             enrich(row, scenario, phases, windows, start_ts)
 #--- Obliczanie czasu między zdarzeniami
-            current_ts = row["ts"]
+            current_ts = row_ts(row) # Gwarantuje float, co usunie błędy operatora '-' w Pylance
             if last_ts == 0.0:
                 row["time_since_last_event"] = 0.0
             else:
-                row["time_since_last_event"] = max(0.0, current_ts - last_ts)
+                row["time_since_last_event"] = max(0.0, current_ts - float(last_ts)) # Rzutowanie do pewności
             last_ts = current_ts
 #---
             buffer.append(row)

@@ -130,8 +130,9 @@ CARDINALITY_MAX = 400
 MISSING_SHARE_MAX = 0.999
 
 LGB_BASE: dict[str, Any] = {
-    "objective": "binary",
-    "is_unbalance": True,
+    "objective": "binary",  # LightGBM podmieni to potem na funkcję Focal Loss w train.py
+    "is_unbalance": False,  # <-- WYŁĄCZ to, ponieważ dodajesz własne wagi (compute_phase_weights) i focal loss
+    "scale_pos_weight": 10.0, # <-- DODAJ (Zwiększa karę dla mniejszościowych FP, aby ustabilizować focal loss)
     "n_estimators": 500,
     "learning_rate": 0.05,
     "num_leaves": 63,
@@ -289,11 +290,19 @@ def best_f1_threshold(y_true: Any, prob: Any) -> float:
 def custom_focal_loss(y_true: np.ndarray, y_pred: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     """Ogniskowa funkcja straty (Focal Loss) dla LightGBM."""
     gamma = 2.0
+    alpha = 0.25  # <-- DODANE
     p = expit(y_pred)
+    
+    # <-- DODANE: Współczynnik ogniskujący dla mniejszości (dnsteal/cracking)
+    weight = np.where(y_true == 1, alpha, 1.0 - alpha) 
+    
     pt = y_true * p + (1.0 - y_true) * (1.0 - p)
-    # Gradient i uproszczony Hesjan gwarantujący stabilność w LightGBM
-    grad = (p - y_true) * (1.0 - pt) ** gamma
-    hess = p * (1.0 - p) * (1.0 - pt) ** gamma
+    
+    # Skorygowany Gradient i Hesjan
+    mod = (1.0 - pt) ** gamma
+    grad = weight * (p - y_true) * mod
+    hess = weight * p * (1.0 - p) * mod * (1.0 + gamma * (p * y_true + (1.0 - p) * (1.0 - y_true)))
+    
     return grad, hess
 
 def positive_probabilities(model: Any, frame: Any) -> np.ndarray:
@@ -522,13 +531,19 @@ def evaluate_fold(
     model.fit(
         x_train,
         y_train,
-        sample_weight=train_weights,                 # <--- Przekazanie wag treningowych
-        eval_X=x_cal,
-        eval_y=y_cal,
-        eval_sample_weight=[cal_weights],              # <--- Przekazanie wag ewaluacyjnych
-        eval_metric=["binary_logloss", "binary_error"],
-        callbacks=[lgb.callback.early_stopping(EARLY_STOP_ROUNDS, verbose=False)],  # type: ignore[attr-defined]
+        sample_weight=train_weights,
+        eval_X=x_cal, eval_y=y_cal, # <--- POWRÓT DO eval_X i eval_y
+        eval_sample_weight=[cal_weights],
+        eval_metric=["auc", "binary_logloss"], 
+        callbacks=[
+            lgb.callback.early_stopping(
+                stopping_rounds=EARLY_STOP_ROUNDS, 
+                first_metric_only=False, 
+                verbose=False
+            )
+        ],
     )
+
     fit_seconds = round(time.time() - began, 2)
     best_iteration_value: Any = getattr(model, "best_iteration_", None)
     best_iteration = int(best_iteration_value) if best_iteration_value else int(params["n_estimators"])

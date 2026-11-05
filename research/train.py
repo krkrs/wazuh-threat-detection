@@ -183,6 +183,12 @@ def run_chrono(df: Any, prepared: dict[str, Any], cfg_name: str) -> result_type:
 def deploy_model(df: Any, prepared: dict[str, Any], cfg_name: str, threshold: float) -> result_type:
     cfg = dict(mc.MODEL_CONFIGS[cfg_name])
     cfg["params"] = dict(cfg["params"])
+    # --- DODANE: Wymuszenie focal loss i scale_pos_weight ---
+    cfg["params"]["is_unbalance"] = False # Wyłącz wbudowane, jeśli używamy custom objective lub scale_pos_weight
+    cfg["params"]["scale_pos_weight"] = 10.0 # Dostosuj wstępną wartość do dnsteal (jeśli Focal Loss wyłączone)
+    # Włączenie niestandardowej straty Focal Loss w hiperparametrach
+    cfg["params"]["objective"] = mc.custom_focal_loss if hasattr(mc, "custom_focal_loss") else "binary"
+    # ---------------------------------------------------------
     rng = np.random.default_rng(mc.SEED)
     order = rng.permutation(len(df))
     holdout_size = int(0.1 * len(df))
@@ -215,17 +221,17 @@ def deploy_model(df: Any, prepared: dict[str, Any], cfg_name: str, threshold: fl
     # ------------------------------------------------------
 
     interim = lgb.LGBMClassifier(**cfg["params"])
-    interim.set_params(objective=mc.custom_focal_loss)  # <--- DODANE
     began_interim = time.time()
     interim.fit(
         x_fit, y_fit,
-        sample_weight=fit_weights,                    # <--- Wagi dla interim
-        eval_X=x_hold, eval_y=y_hold,
-        eval_sample_weight=[holdout_weights],           # <--- Wagi ewaluacyjne
-        eval_metric=["binary_logloss", "binary_error"],
+        sample_weight=fit_weights,                    
+        eval_X=x_hold, eval_y=y_hold, # <--- POWRÓT DO eval_X i eval_y
+        eval_sample_weight=[holdout_weights],           
+        eval_metric=["auc", "binary_error"], 
         callbacks=[
             lgb.callback.early_stopping(
-                mc.EARLY_STOP_ROUNDS,
+                stopping_rounds=mc.EARLY_STOP_ROUNDS,
+                first_metric_only=False,
                 verbose=False,
             )
         ],
@@ -238,9 +244,9 @@ def deploy_model(df: Any, prepared: dict[str, Any], cfg_name: str, threshold: fl
     final_params = dict(cfg["params"])
     final_params["n_estimators"] = max(50, best_iteration)
     final_model = lgb.LGBMClassifier(**final_params)
-    final_model.set_params(objective=mc.custom_focal_loss)  # <--- DODANE
     began_final = time.time()
-    final_model.fit(x_fit, y_fit, sample_weight=fit_weights)  # <--- Wagi dla finalnego modelu    final_seconds = time.time() - began_final
+    final_model.fit(x_fit, y_fit, sample_weight=fit_weights)  # <--- Wagi dla finalnego modelu    
+    final_seconds = time.time() - began_final
     return {
         "config": cfg_name,
         "best_iteration_full_data": best_iteration,

@@ -2,55 +2,55 @@
   "protocol": "chronologic_expanding_window",
   "config": "lgb_structured",
   "seed": 42,
-  "fit_total_seconds": 119.3,
-  "deployment_threshold": 0.450371,
+  "fit_total_seconds": 37.7,
+  "deployment_threshold": 0.264792,
   "aggregate_model": {
     "n": 574881,
     "n_attack": 468770,
     "n_background": 106111,
-    "n_predicted_attack": 464237,
-    "tn": 105886,
-    "fp": 225,
-    "fn": 4758,
-    "tp": 464012,
-    "threshold": 0.450371,
-    "accuracy": 0.9913,
+    "n_predicted_attack": 467897,
+    "tn": 102475,
+    "fp": 3636,
+    "fn": 4509,
+    "tp": 464261,
+    "threshold": 0.264792,
+    "accuracy": 0.9858,
     "base_rate_attack": 0.8154,
-    "predicted_attack_share": 0.8075,
-    "precision_attack": 0.9995,
-    "recall_attack": 0.9899,
-    "f1_attack": 0.9947,
-    "macro_f1": 0.9858,
-    "background_filtered_share": 0.9979,
-    "background_filtered_pct": 99.79,
-    "false_positive_rate": 0.0021,
-    "false_positives_per_million_alerts": 391.4,
-    "false_positives_per_million_background": 2120.4,
-    "alert_reduction_rate": 0.9913,
-    "noise_reduction_rate": 0.9979,
-    "alerts_kept_for_review": 464237,
+    "predicted_attack_share": 0.8139,
+    "precision_attack": 0.9922,
+    "recall_attack": 0.9904,
+    "f1_attack": 0.9913,
+    "macro_f1": 0.9765,
+    "background_filtered_share": 0.9657,
+    "background_filtered_pct": 96.57,
+    "false_positive_rate": 0.0343,
+    "false_positives_per_million_alerts": 6324.8,
+    "false_positives_per_million_background": 34266.0,
+    "alert_reduction_rate": 0.9858,
+    "noise_reduction_rate": 0.9657,
+    "alerts_kept_for_review": 467897,
     "pr_auc_attack": 0.9992,
     "roc_auc": 0.9963,
     "budget_fp_per_m_5000": {
-      "recall_at_budget": 0.9908,
-      "threshold": 0.322429,
-      "false_positives": 2932,
-      "true_positives": 464480,
-      "predicted_positives": 467412
+      "recall_at_budget": 0.9904,
+      "threshold": 0.267791,
+      "false_positives": 3056,
+      "true_positives": 464249,
+      "predicted_positives": 467305
     },
     "budget_fp_per_m_20000": {
-      "recall_at_budget": 0.9914,
-      "threshold": 0.303883,
-      "false_positives": 11946,
-      "true_positives": 464728,
-      "predicted_positives": 476674
+      "recall_at_budget": 0.992,
+      "threshold": 0.252221,
+      "false_positives": 13795,
+      "true_positives": 465038,
+      "predicted_positives": 478833
     },
     "budget_fp_per_m_50000": {
-      "recall_at_budget": 0.9934,
-      "threshold": 0.091859,
-      "false_positives": 28744,
-      "true_positives": 465696,
-      "predicted_positives": 494440
+      "recall_at_budget": 0.9948,
+      "threshold": 0.248902,
+      "false_positives": 30675,
+      "true_positives": 466330,
+      "predicted_positives": 497005
     }
   },
   "steps": [
@@ -59,106 +59,106 @@
       "train_rows": 448998,
       "cal_rows": 229265,
       "test_rows": 229720,
-      "best_iteration": 10,
-      "fit_seconds": 4.5,
-      "threshold_model": 0.491122,
+      "best_iteration": 83,
+      "fit_seconds": 6.47,
+      "threshold_model": 0.287192,
       "threshold_prior_baseline": 0.994956,
       "model_metrics": {
         "n": 229720,
         "n_attack": 213450,
         "n_background": 16270,
-        "n_predicted_attack": 212653,
-        "tn": 16176,
-        "fp": 94,
-        "fn": 891,
-        "tp": 212559,
-        "threshold": 0.491122,
-        "accuracy": 0.9957,
+        "n_predicted_attack": 212833,
+        "tn": 16043,
+        "fp": 227,
+        "fn": 844,
+        "tp": 212606,
+        "threshold": 0.287192,
+        "accuracy": 0.9953,
         "base_rate_attack": 0.9292,
-        "predicted_attack_share": 0.9257,
-        "precision_attack": 0.9996,
-        "recall_attack": 0.9958,
-        "f1_attack": 0.9977,
-        "macro_f1": 0.9841,
-        "background_filtered_share": 0.9942,
-        "background_filtered_pct": 99.42,
-        "false_positive_rate": 0.0058,
-        "false_positives_per_million_alerts": 409.2,
-        "false_positives_per_million_background": 5777.5,
-        "alert_reduction_rate": 0.9957,
-        "noise_reduction_rate": 0.9942,
-        "alerts_kept_for_review": 212653,
+        "predicted_attack_share": 0.9265,
+        "precision_attack": 0.9989,
+        "recall_attack": 0.996,
+        "f1_attack": 0.9975,
+        "macro_f1": 0.9826,
+        "background_filtered_share": 0.986,
+        "background_filtered_pct": 98.6,
+        "false_positive_rate": 0.014,
+        "false_positives_per_million_alerts": 988.2,
+        "false_positives_per_million_background": 13952.1,
+        "alert_reduction_rate": 0.9953,
+        "noise_reduction_rate": 0.986,
+        "alerts_kept_for_review": 212833,
         "pr_auc_attack": 0.9999,
-        "roc_auc": 0.9985,
+        "roc_auc": 0.9988,
         "budget_fp_per_m_5000": {
-          "recall_at_budget": 0.997,
-          "threshold": 0.327664,
-          "false_positives": 1152,
-          "true_positives": 212805,
-          "predicted_positives": 213957
+          "recall_at_budget": 0.9967,
+          "threshold": 0.176539,
+          "false_positives": 1148,
+          "true_positives": 212750,
+          "predicted_positives": 213898
         },
         "budget_fp_per_m_20000": {
           "recall_at_budget": 0.9979,
-          "threshold": 0.309804,
-          "false_positives": 4820,
-          "true_positives": 212992,
-          "predicted_positives": 217812
+          "threshold": 0.126508,
+          "false_positives": 4594,
+          "true_positives": 213000,
+          "predicted_positives": 217594
         },
         "budget_fp_per_m_50000": {
-          "recall_at_budget": 0.9998,
-          "threshold": 0.303614,
-          "false_positives": 11614,
-          "true_positives": 213411,
-          "predicted_positives": 225025
+          "recall_at_budget": 0.9999,
+          "threshold": 0.100538,
+          "false_positives": 11512,
+          "true_positives": 213438,
+          "predicted_positives": 224950
         }
       },
       "model_metrics_cal": {
         "n": 229265,
         "n_attack": 207303,
         "n_background": 21962,
-        "n_predicted_attack": 207007,
+        "n_predicted_attack": 207070,
         "tn": 21962,
         "fp": 0,
-        "fn": 296,
-        "tp": 207007,
-        "threshold": 0.491122,
-        "accuracy": 0.9987,
+        "fn": 233,
+        "tp": 207070,
+        "threshold": 0.287192,
+        "accuracy": 0.999,
         "base_rate_attack": 0.9042,
-        "predicted_attack_share": 0.9029,
+        "predicted_attack_share": 0.9032,
         "precision_attack": 1.0,
-        "recall_attack": 0.9986,
-        "f1_attack": 0.9993,
-        "macro_f1": 0.9963,
+        "recall_attack": 0.9989,
+        "f1_attack": 0.9994,
+        "macro_f1": 0.9971,
         "background_filtered_share": 1.0,
         "background_filtered_pct": 100.0,
         "false_positive_rate": 0.0,
         "false_positives_per_million_alerts": 0.0,
         "false_positives_per_million_background": 0.0,
-        "alert_reduction_rate": 0.9987,
+        "alert_reduction_rate": 0.999,
         "noise_reduction_rate": 1.0,
-        "alerts_kept_for_review": 207007,
+        "alerts_kept_for_review": 207070,
         "pr_auc_attack": 1.0,
         "roc_auc": 0.9997,
         "budget_fp_per_m_5000": {
           "recall_at_budget": 0.9991,
-          "threshold": 0.319714,
-          "false_positives": 1159,
-          "true_positives": 207123,
-          "predicted_positives": 208282
+          "threshold": 0.161554,
+          "false_positives": 1146,
+          "true_positives": 207119,
+          "predicted_positives": 208265
         },
         "budget_fp_per_m_20000": {
           "recall_at_budget": 0.9995,
-          "threshold": 0.303123,
-          "false_positives": 4715,
-          "true_positives": 207198,
-          "predicted_positives": 211913
+          "threshold": 0.099211,
+          "false_positives": 4587,
+          "true_positives": 207200,
+          "predicted_positives": 211787
         },
         "budget_fp_per_m_50000": {
-          "recall_at_budget": 0.9999,
-          "threshold": 0.302036,
-          "false_positives": 12466,
-          "true_positives": 207287,
-          "predicted_positives": 219753
+          "recall_at_budget": 0.9998,
+          "threshold": 0.097298,
+          "false_positives": 11491,
+          "true_positives": 207268,
+          "predicted_positives": 218759
         }
       },
       "baseline_detector_prior": {
@@ -261,6 +261,20 @@
       },
       "detector_top_errors": [
         {
+          "sig_key": "Dovecot Authentication Success.",
+          "source": "wazuh",
+          "detector": "Dovecot Authentication Success.",
+          "n": 9402,
+          "attack_true": 585,
+          "predicted_attack": 95,
+          "tp": 0,
+          "fp": 95,
+          "fn": 585,
+          "precision": 0.0,
+          "recall": 0.0,
+          "true_background": 8817
+        },
+        {
           "sig_key": "Multiple IDS alerts for same id.",
           "source": "wazuh",
           "detector": "Multiple IDS alerts for same id.",
@@ -287,6 +301,34 @@
           "precision": 0.0,
           "recall": 0.0,
           "true_background": 37
+        },
+        {
+          "sig_key": "IDS event.",
+          "source": "wazuh",
+          "detector": "IDS event.",
+          "n": 7061,
+          "attack_true": 229,
+          "predicted_attack": 32,
+          "tp": 0,
+          "fp": 32,
+          "fn": 229,
+          "precision": 0.0,
+          "recall": 0.0,
+          "true_background": 6832
+        },
+        {
+          "sig_key": "Web server 400 error code.",
+          "source": "wazuh",
+          "detector": "Web server 400 error code.",
+          "n": 196771,
+          "attack_true": 196749,
+          "predicted_attack": 196756,
+          "tp": 196749,
+          "fp": 7,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "true_background": 22
         },
         {
           "sig_key": "Multiple IDS events from same source ip.",
@@ -317,20 +359,6 @@
           "true_background": 48
         },
         {
-          "sig_key": "Multiple IDS events from same source ip (ignoring now this srcip and id).",
-          "source": "wazuh",
-          "detector": "Multiple IDS events from same source ip (ignoring now this srcip and id).",
-          "n": 1,
-          "attack_true": 0,
-          "predicted_attack": 1,
-          "tp": 0,
-          "fp": 1,
-          "fn": 0,
-          "precision": 0.0,
-          "recall": 0.0,
-          "true_background": 1
-        },
-        {
           "sig_key": "CMS (WordPress or Joomla) login attempt.",
           "source": "wazuh",
           "detector": "CMS (WordPress or Joomla) login attempt.",
@@ -345,42 +373,14 @@
           "true_background": 12
         },
         {
-          "sig_key": "Web server 400 error code.",
+          "sig_key": "Multiple IDS events from same source ip (ignoring now this srcip and id).",
           "source": "wazuh",
-          "detector": "Web server 400 error code.",
-          "n": 196771,
-          "attack_true": 196749,
-          "predicted_attack": 196750,
-          "tp": 196749,
-          "fp": 1,
-          "fn": 0,
-          "precision": 1.0,
-          "recall": 1.0,
-          "true_background": 22
-        },
-        {
-          "sig_key": "Apache: Attempt to access forbidden directory index.",
-          "source": "wazuh",
-          "detector": "Apache: Attempt to access forbidden directory index.",
-          "n": 47,
-          "attack_true": 47,
-          "predicted_attack": 0,
-          "tp": 0,
-          "fp": 0,
-          "fn": 47,
-          "precision": 0.0,
-          "recall": 0.0,
-          "true_background": 0
-        },
-        {
-          "sig_key": "Dovecot brute force attack (multiple auth failures).",
-          "source": "wazuh",
-          "detector": "Dovecot brute force attack (multiple auth failures).",
+          "detector": "Multiple IDS events from same source ip (ignoring now this srcip and id).",
           "n": 1,
           "attack_true": 0,
-          "predicted_attack": 0,
+          "predicted_attack": 1,
           "tp": 0,
-          "fp": 0,
+          "fp": 1,
           "fn": 0,
           "precision": 0.0,
           "recall": 0.0,
@@ -401,46 +401,46 @@
           "true_background": 62
         },
         {
-          "sig_key": "Dovecot Authentication Success.",
+          "sig_key": "Dovecot brute force attack (multiple auth failures).",
           "source": "wazuh",
-          "detector": "Dovecot Authentication Success.",
-          "n": 9402,
-          "attack_true": 585,
+          "detector": "Dovecot brute force attack (multiple auth failures).",
+          "n": 1,
+          "attack_true": 0,
           "predicted_attack": 0,
           "tp": 0,
-          "fp": 0,
-          "fn": 585,
-          "precision": 0.0,
-          "recall": 0.0,
-          "true_background": 8817
-        },
-        {
-          "sig_key": "Common web attack.",
-          "source": "wazuh",
-          "detector": "Common web attack.",
-          "n": 94,
-          "attack_true": 94,
-          "predicted_attack": 94,
-          "tp": 94,
           "fp": 0,
           "fn": 0,
-          "precision": 1.0,
-          "recall": 1.0,
-          "true_background": 0
+          "precision": 0.0,
+          "recall": 0.0,
+          "true_background": 1
         },
         {
-          "sig_key": "IDS event.",
+          "sig_key": "ClamAV database update",
           "source": "wazuh",
-          "detector": "IDS event.",
-          "n": 7061,
-          "attack_true": 229,
+          "detector": "ClamAV database update",
+          "n": 171,
+          "attack_true": 8,
           "predicted_attack": 0,
           "tp": 0,
           "fp": 0,
-          "fn": 229,
+          "fn": 8,
           "precision": 0.0,
           "recall": 0.0,
-          "true_background": 6832
+          "true_background": 163
+        },
+        {
+          "sig_key": "Apache: Attempt to access forbidden directory index.",
+          "source": "wazuh",
+          "detector": "Apache: Attempt to access forbidden directory index.",
+          "n": 47,
+          "attack_true": 47,
+          "predicted_attack": 46,
+          "tp": 46,
+          "fp": 0,
+          "fn": 1,
+          "precision": 1.0,
+          "recall": 0.9787,
+          "true_background": 0
         },
         {
           "sig_key": "First time user executed sudo.",
@@ -457,6 +457,20 @@
           "true_background": 1
         },
         {
+          "sig_key": "Common web attack.",
+          "source": "wazuh",
+          "detector": "Common web attack.",
+          "n": 94,
+          "attack_true": 94,
+          "predicted_attack": 94,
+          "tp": 94,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "true_background": 0
+        },
+        {
           "sig_key": "Apache: Attempt to access forbidden file or directory.",
           "source": "wazuh",
           "detector": "Apache: Attempt to access forbidden file or directory.",
@@ -469,20 +483,6 @@
           "precision": 1.0,
           "recall": 1.0,
           "true_background": 0
-        },
-        {
-          "sig_key": "ClamAV database update",
-          "source": "wazuh",
-          "detector": "ClamAV database update",
-          "n": 171,
-          "attack_true": 8,
-          "predicted_attack": 0,
-          "tp": 0,
-          "fp": 0,
-          "fn": 8,
-          "precision": 0.0,
-          "recall": 0.0,
-          "true_background": 163
         },
         {
           "sig_key": "Multiple web server 400 error codes from same source ip.",
@@ -574,12 +574,12 @@
           "detector": "Web server 500 error code (Internal Error).",
           "n": 2,
           "attack_true": 2,
-          "predicted_attack": 0,
-          "tp": 0,
+          "predicted_attack": 1,
+          "tp": 1,
           "fp": 0,
-          "fn": 2,
-          "precision": 0.0,
-          "recall": 0.0,
+          "fn": 1,
+          "precision": 1.0,
+          "recall": 0.5,
           "true_background": 0
         },
         {
@@ -628,8 +628,8 @@
       "phase_errors": {
         "attack|dirb": {
           "n": 211832,
-          "kept_as_attack": 211633,
-          "filtered_out": 199,
+          "kept_as_attack": 211679,
+          "filtered_out": 153,
           "attack_true": 211832
         },
         "attack|dnsteal": {
@@ -652,14 +652,14 @@
         },
         "attack|wpscan": {
           "n": 927,
-          "kept_as_attack": 924,
-          "filtered_out": 3,
+          "kept_as_attack": 925,
+          "filtered_out": 2,
           "attack_true": 927
         },
         "background|background": {
           "n": 16270,
-          "kept_as_attack": 94,
-          "filtered_out": 16176,
+          "kept_as_attack": 227,
+          "filtered_out": 16043,
           "attack_true": 0
         }
       },
@@ -667,51 +667,75 @@
         "gain": [
           {
             "feature": "status_code",
-            "importance": 63025.65
+            "importance": 15317.87
           },
           {
-            "feature": "rule_groups",
-            "importance": 2820.69
-          },
-          {
-            "feature": "firedtimes",
-            "importance": 1677.57
+            "feature": "group_accesslog",
+            "importance": 3037.46
           },
           {
             "feature": "hour",
-            "importance": 1492.89
+            "importance": 2184.97
+          },
+          {
+            "feature": "firedtimes",
+            "importance": 1904.42
           },
           {
             "feature": "sig_count_prev_600s",
-            "importance": 990.28
+            "importance": 1436.97
+          },
+          {
+            "feature": "rule_groups",
+            "importance": 800.58
           },
           {
             "feature": "sig_count_prev_60s",
-            "importance": 543.17
+            "importance": 669.58
           },
           {
-            "feature": "url_len",
-            "importance": 137.42
-          },
-          {
-            "feature": "url_entropy",
-            "importance": 80.59
-          },
-          {
-            "feature": "url_tokens",
-            "importance": 74.45
+            "feature": "sig_key",
+            "importance": 205.77
           },
           {
             "feature": "time_since_last_event",
-            "importance": 13.21
+            "importance": 129.39
+          },
+          {
+            "feature": "url_tokens",
+            "importance": 116.96
+          },
+          {
+            "feature": "url_entropy",
+            "importance": 98.75
           },
           {
             "feature": "rule_level",
-            "importance": 0.0
+            "importance": 92.58
+          },
+          {
+            "feature": "url_len",
+            "importance": 55.63
+          },
+          {
+            "feature": "group_web",
+            "importance": 14.9
           },
           {
             "feature": "src_port",
-            "importance": 0.0
+            "importance": 12.06
+          },
+          {
+            "feature": "rule_desc",
+            "importance": 7.13
+          },
+          {
+            "feature": "log_resource_class",
+            "importance": 2.21
+          },
+          {
+            "feature": "group_syslog",
+            "importance": 0.32
           },
           {
             "feature": "url_parts",
@@ -731,18 +755,6 @@
           },
           {
             "feature": "group_ids",
-            "importance": 0.0
-          },
-          {
-            "feature": "group_web",
-            "importance": 0.0
-          },
-          {
-            "feature": "group_accesslog",
-            "importance": 0.0
-          },
-          {
-            "feature": "group_syslog",
             "importance": 0.0
           },
           {
@@ -811,69 +823,81 @@
           },
           {
             "feature": "urlflag_license",
-            "importance": 0.0
-          },
-          {
-            "feature": "urlflag_test",
-            "importance": 0.0
-          },
-          {
-            "feature": "urlflag_dev",
-            "importance": 0.0
-          },
-          {
-            "feature": "urlflag_secret",
             "importance": 0.0
           }
         ],
         "split": [
           {
             "feature": "firedtimes",
-            "importance": 137
-          },
-          {
-            "feature": "hour",
-            "importance": 73
+            "importance": 1135
           },
           {
             "feature": "sig_count_prev_600s",
-            "importance": 73
+            "importance": 1045
+          },
+          {
+            "feature": "hour",
+            "importance": 770
           },
           {
             "feature": "sig_count_prev_60s",
-            "importance": 71
-          },
-          {
-            "feature": "status_code",
-            "importance": 9
+            "importance": 601
           },
           {
             "feature": "time_since_last_event",
-            "importance": 5
+            "importance": 193
           },
           {
-            "feature": "url_len",
-            "importance": 4
-          },
-          {
-            "feature": "url_tokens",
-            "importance": 3
-          },
-          {
-            "feature": "url_entropy",
-            "importance": 2
-          },
-          {
-            "feature": "rule_groups",
-            "importance": 1
+            "feature": "status_code",
+            "importance": 64
           },
           {
             "feature": "rule_level",
-            "importance": 0
+            "importance": 56
+          },
+          {
+            "feature": "url_entropy",
+            "importance": 27
+          },
+          {
+            "feature": "url_tokens",
+            "importance": 18
+          },
+          {
+            "feature": "sig_key",
+            "importance": 17
+          },
+          {
+            "feature": "rule_groups",
+            "importance": 16
+          },
+          {
+            "feature": "url_len",
+            "importance": 11
           },
           {
             "feature": "src_port",
-            "importance": 0
+            "importance": 9
+          },
+          {
+            "feature": "group_web",
+            "importance": 4
+          },
+          {
+            "feature": "group_accesslog",
+            "importance": 4
+          },
+          {
+            "feature": "log_resource_class",
+            "importance": 4
+          },
+          {
+            "feature": "group_syslog",
+            "importance": 2
+          },
+          {
+            "feature": "rule_desc",
+            "importance": 1
           },
           {
             "feature": "url_parts",
@@ -893,18 +917,6 @@
           },
           {
             "feature": "group_ids",
-            "importance": 0
-          },
-          {
-            "feature": "group_web",
-            "importance": 0
-          },
-          {
-            "feature": "group_accesslog",
-            "importance": 0
-          },
-          {
-            "feature": "group_syslog",
             "importance": 0
           },
           {
@@ -973,18 +985,6 @@
           },
           {
             "feature": "urlflag_license",
-            "importance": 0
-          },
-          {
-            "feature": "urlflag_test",
-            "importance": 0
-          },
-          {
-            "feature": "urlflag_dev",
-            "importance": 0
-          },
-          {
-            "feature": "urlflag_secret",
             "importance": 0
           }
         ]
@@ -995,54 +995,54 @@
       "train_rows": 493969,
       "cal_rows": 229001,
       "test_rows": 229794,
-      "best_iteration": 125,
-      "fit_seconds": 13.5,
-      "threshold_model": 0.472843,
+      "best_iteration": 38,
+      "fit_seconds": 4.55,
+      "threshold_model": 0.287184,
       "threshold_prior_baseline": 0.5,
       "model_metrics": {
         "n": 229794,
         "n_attack": 219130,
         "n_background": 10664,
-        "n_predicted_attack": 218873,
-        "tn": 10613,
-        "fp": 51,
-        "fn": 308,
-        "tp": 218822,
-        "threshold": 0.472843,
-        "accuracy": 0.9984,
+        "n_predicted_attack": 219061,
+        "tn": 10439,
+        "fp": 225,
+        "fn": 294,
+        "tp": 218836,
+        "threshold": 0.287184,
+        "accuracy": 0.9977,
         "base_rate_attack": 0.9536,
-        "predicted_attack_share": 0.9525,
-        "precision_attack": 0.9998,
-        "recall_attack": 0.9986,
-        "f1_attack": 0.9992,
-        "macro_f1": 0.9913,
-        "background_filtered_share": 0.9952,
-        "background_filtered_pct": 99.52,
-        "false_positive_rate": 0.0048,
-        "false_positives_per_million_alerts": 221.9,
-        "false_positives_per_million_background": 4782.4,
-        "alert_reduction_rate": 0.9984,
-        "noise_reduction_rate": 0.9952,
-        "alerts_kept_for_review": 218873,
+        "predicted_attack_share": 0.9533,
+        "precision_attack": 0.999,
+        "recall_attack": 0.9987,
+        "f1_attack": 0.9988,
+        "macro_f1": 0.9873,
+        "background_filtered_share": 0.9789,
+        "background_filtered_pct": 97.89,
+        "false_positive_rate": 0.0211,
+        "false_positives_per_million_alerts": 979.1,
+        "false_positives_per_million_background": 21099.0,
+        "alert_reduction_rate": 0.9977,
+        "noise_reduction_rate": 0.9789,
+        "alerts_kept_for_review": 219061,
         "pr_auc_attack": 1.0,
         "roc_auc": 0.9994,
         "budget_fp_per_m_5000": {
-          "recall_at_budget": 0.9987,
-          "threshold": 0.205122,
-          "false_positives": 1148,
-          "true_positives": 218855,
-          "predicted_positives": 220003
+          "recall_at_budget": 0.9988,
+          "threshold": 0.248388,
+          "false_positives": 1176,
+          "true_positives": 218872,
+          "predicted_positives": 220048
         },
         "budget_fp_per_m_20000": {
-          "recall_at_budget": 0.9993,
-          "threshold": 0.087735,
-          "false_positives": 4595,
-          "true_positives": 218969,
-          "predicted_positives": 223564
+          "recall_at_budget": 0.9995,
+          "threshold": 0.228331,
+          "false_positives": 4596,
+          "true_positives": 219016,
+          "predicted_positives": 223612
         },
         "budget_fp_per_m_50000": {
           "recall_at_budget": 1.0,
-          "threshold": 0.014331,
+          "threshold": 0.220398,
           "false_positives": 10664,
           "true_positives": 219130,
           "predicted_positives": 229794
@@ -1052,49 +1052,49 @@
         "n": 229001,
         "n_attack": 212022,
         "n_background": 16979,
-        "n_predicted_attack": 211469,
-        "tn": 16972,
-        "fp": 7,
-        "fn": 560,
-        "tp": 211462,
-        "threshold": 0.472843,
-        "accuracy": 0.9975,
+        "n_predicted_attack": 211485,
+        "tn": 16946,
+        "fp": 33,
+        "fn": 570,
+        "tp": 211452,
+        "threshold": 0.287184,
+        "accuracy": 0.9974,
         "base_rate_attack": 0.9259,
-        "predicted_attack_share": 0.9234,
-        "precision_attack": 1.0,
-        "recall_attack": 0.9974,
-        "f1_attack": 0.9987,
-        "macro_f1": 0.9911,
-        "background_filtered_share": 0.9996,
-        "background_filtered_pct": 99.96,
-        "false_positive_rate": 0.0004,
-        "false_positives_per_million_alerts": 30.6,
-        "false_positives_per_million_background": 412.3,
-        "alert_reduction_rate": 0.9975,
-        "noise_reduction_rate": 0.9996,
-        "alerts_kept_for_review": 211469,
+        "predicted_attack_share": 0.9235,
+        "precision_attack": 0.9998,
+        "recall_attack": 0.9973,
+        "f1_attack": 0.9986,
+        "macro_f1": 0.9905,
+        "background_filtered_share": 0.9981,
+        "background_filtered_pct": 99.81,
+        "false_positive_rate": 0.0019,
+        "false_positives_per_million_alerts": 144.1,
+        "false_positives_per_million_background": 1943.6,
+        "alert_reduction_rate": 0.9974,
+        "noise_reduction_rate": 0.9981,
+        "alerts_kept_for_review": 211485,
         "pr_auc_attack": 0.9999,
-        "roc_auc": 0.9986,
+        "roc_auc": 0.9987,
         "budget_fp_per_m_5000": {
-          "recall_at_budget": 0.9974,
-          "threshold": 0.190391,
-          "false_positives": 1145,
-          "true_positives": 211472,
-          "predicted_positives": 212617
+          "recall_at_budget": 0.9976,
+          "threshold": 0.237304,
+          "false_positives": 1189,
+          "true_positives": 211513,
+          "predicted_positives": 212702
         },
         "budget_fp_per_m_20000": {
-          "recall_at_budget": 0.9977,
-          "threshold": 0.06689,
-          "false_positives": 4580,
-          "true_positives": 211541,
-          "predicted_positives": 216121
+          "recall_at_budget": 0.9978,
+          "threshold": 0.223274,
+          "false_positives": 4583,
+          "true_positives": 211547,
+          "predicted_positives": 216130
         },
         "budget_fp_per_m_50000": {
-          "recall_at_budget": 0.999,
-          "threshold": 0.024702,
-          "false_positives": 11450,
-          "true_positives": 211819,
-          "predicted_positives": 223269
+          "recall_at_budget": 0.9997,
+          "threshold": 0.220419,
+          "false_positives": 13428,
+          "true_positives": 211959,
+          "predicted_positives": 225387
         }
       },
       "baseline_detector_prior": {
@@ -1202,13 +1202,27 @@
           "detector": "IDS event.",
           "n": 5723,
           "attack_true": 137,
-          "predicted_attack": 61,
-          "tp": 27,
-          "fp": 34,
-          "fn": 110,
-          "precision": 0.4426,
-          "recall": 0.1971,
+          "predicted_attack": 206,
+          "tp": 34,
+          "fp": 172,
+          "fn": 103,
+          "precision": 0.165,
+          "recall": 0.2482,
           "true_background": 5586
+        },
+        {
+          "sig_key": "Dovecot Authentication Success.",
+          "source": "wazuh",
+          "detector": "Dovecot Authentication Success.",
+          "n": 4848,
+          "attack_true": 156,
+          "predicted_attack": 36,
+          "tp": 0,
+          "fp": 36,
+          "fn": 156,
+          "precision": 0.0,
+          "recall": 0.0,
+          "true_background": 4692
         },
         {
           "sig_key": "ClamAV database update",
@@ -1253,20 +1267,6 @@
           "true_background": 70
         },
         {
-          "sig_key": "Web server 400 error code.",
-          "source": "wazuh",
-          "detector": "Web server 400 error code.",
-          "n": 202457,
-          "attack_true": 202455,
-          "predicted_attack": 202456,
-          "tp": 202455,
-          "fp": 1,
-          "fn": 0,
-          "precision": 1.0,
-          "recall": 1.0,
-          "true_background": 2
-        },
-        {
           "sig_key": "PAM: User login failed.",
           "source": "wazuh",
           "detector": "PAM: User login failed.",
@@ -1279,6 +1279,20 @@
           "precision": 0.0,
           "recall": 0.0,
           "true_background": 4
+        },
+        {
+          "sig_key": "Web server 400 error code.",
+          "source": "wazuh",
+          "detector": "Web server 400 error code.",
+          "n": 202457,
+          "attack_true": 202455,
+          "predicted_attack": 202456,
+          "tp": 202455,
+          "fp": 1,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "true_background": 2
         },
         {
           "sig_key": "CMS (WordPress or Joomla) login attempt.",
@@ -1295,20 +1309,6 @@
           "true_background": 2
         },
         {
-          "sig_key": "Apache: Attempt to access forbidden directory index.",
-          "source": "wazuh",
-          "detector": "Apache: Attempt to access forbidden directory index.",
-          "n": 47,
-          "attack_true": 47,
-          "predicted_attack": 29,
-          "tp": 29,
-          "fp": 0,
-          "fn": 18,
-          "precision": 1.0,
-          "recall": 0.617,
-          "true_background": 0
-        },
-        {
           "sig_key": "Dovecot Invalid User Login Attempt.",
           "source": "wazuh",
           "detector": "Dovecot Invalid User Login Attempt.",
@@ -1323,20 +1323,6 @@
           "true_background": 58
         },
         {
-          "sig_key": "Dovecot Authentication Success.",
-          "source": "wazuh",
-          "detector": "Dovecot Authentication Success.",
-          "n": 4848,
-          "attack_true": 156,
-          "predicted_attack": 0,
-          "tp": 0,
-          "fp": 0,
-          "fn": 156,
-          "precision": 0.0,
-          "recall": 0.0,
-          "true_background": 4692
-        },
-        {
           "sig_key": "Common web attack.",
           "source": "wazuh",
           "detector": "Common web attack.",
@@ -1348,6 +1334,20 @@
           "fn": 0,
           "precision": 1.0,
           "recall": 1.0,
+          "true_background": 0
+        },
+        {
+          "sig_key": "CMS (WordPress or Joomla) brute force attempt.",
+          "source": "wazuh",
+          "detector": "CMS (WordPress or Joomla) brute force attempt.",
+          "n": 1,
+          "attack_true": 1,
+          "predicted_attack": 0,
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "precision": 0.0,
+          "recall": 0.0,
           "true_background": 0
         },
         {
@@ -1393,17 +1393,17 @@
           "true_background": 3
         },
         {
-          "sig_key": "CMS (WordPress or Joomla) brute force attempt.",
+          "sig_key": "Apache: Attempt to access forbidden directory index.",
           "source": "wazuh",
-          "detector": "CMS (WordPress or Joomla) brute force attempt.",
-          "n": 1,
-          "attack_true": 1,
-          "predicted_attack": 0,
-          "tp": 0,
+          "detector": "Apache: Attempt to access forbidden directory index.",
+          "n": 47,
+          "attack_true": 47,
+          "predicted_attack": 36,
+          "tp": 36,
           "fp": 0,
-          "fn": 1,
-          "precision": 0.0,
-          "recall": 0.0,
+          "fn": 11,
+          "precision": 1.0,
+          "recall": 0.766,
           "true_background": 0
         },
         {
@@ -1570,8 +1570,8 @@
         },
         "attack|dirb": {
           "n": 215122,
-          "kept_as_attack": 214930,
-          "filtered_out": 192,
+          "kept_as_attack": 214945,
+          "filtered_out": 177,
           "attack_true": 215122
         },
         "attack|network_scans": {
@@ -1600,14 +1600,14 @@
         },
         "attack|wpscan": {
           "n": 3830,
-          "kept_as_attack": 3815,
-          "filtered_out": 15,
+          "kept_as_attack": 3814,
+          "filtered_out": 16,
           "attack_true": 3830
         },
         "background|background": {
           "n": 10664,
-          "kept_as_attack": 51,
-          "filtered_out": 10613,
+          "kept_as_attack": 225,
+          "filtered_out": 10439,
           "attack_true": 0
         }
       },
@@ -1615,115 +1615,75 @@
         "gain": [
           {
             "feature": "status_code",
-            "importance": 88676.84
-          },
-          {
-            "feature": "hour",
-            "importance": 12173.04
-          },
-          {
-            "feature": "firedtimes",
-            "importance": 11433.4
-          },
-          {
-            "feature": "sig_count_prev_600s",
-            "importance": 10522.39
-          },
-          {
-            "feature": "rule_groups",
-            "importance": 7825.7
+            "importance": 21164.23
           },
           {
             "feature": "sig_key",
-            "importance": 3579.95
-          },
-          {
-            "feature": "sig_count_prev_60s",
-            "importance": 3545.88
-          },
-          {
-            "feature": "rule_level",
-            "importance": 1528.46
-          },
-          {
-            "feature": "time_since_last_event",
-            "importance": 760.4
-          },
-          {
-            "feature": "url_entropy",
-            "importance": 496.41
+            "importance": 1222.29
           },
           {
             "feature": "group_accesslog",
-            "importance": 245.87
+            "importance": 924.77
           },
           {
-            "feature": "group_web",
-            "importance": 241.73
+            "feature": "rule_groups",
+            "importance": 876.1
+          },
+          {
+            "feature": "firedtimes",
+            "importance": 729.67
+          },
+          {
+            "feature": "hour",
+            "importance": 544.62
+          },
+          {
+            "feature": "sig_count_prev_600s",
+            "importance": 522.5
+          },
+          {
+            "feature": "url_entropy",
+            "importance": 330.78
+          },
+          {
+            "feature": "sig_count_prev_60s",
+            "importance": 220.38
           },
           {
             "feature": "url_tokens",
-            "importance": 206.21
+            "importance": 126.48
           },
           {
-            "feature": "group_ids",
-            "importance": 199.75
-          },
-          {
-            "feature": "urlflag_remote",
-            "importance": 64.75
-          },
-          {
-            "feature": "url_parts",
-            "importance": 61.71
-          },
-          {
-            "feature": "src_port",
-            "importance": 56.83
+            "feature": "rule_level",
+            "importance": 29.91
           },
           {
             "feature": "url_len",
-            "importance": 25.91
+            "importance": 9.99
           },
           {
-            "feature": "rule_desc",
-            "importance": 15.62
+            "feature": "time_since_last_event",
+            "importance": 9.85
           },
           {
-            "feature": "url_query",
-            "importance": 15.24
+            "feature": "src_port",
+            "importance": 5.04
+          },
+          {
+            "feature": "group_ids",
+            "importance": 4.76
           },
           {
             "feature": "log_resource_class",
-            "importance": 14.1
+            "importance": 1.32
           },
           {
-            "feature": "location",
-            "importance": 12.12
+            "feature": "url_parts",
+            "importance": 0.0
           },
           {
-            "feature": "is_aggregated",
-            "importance": 5.36
-          },
-          {
-            "feature": "group_syslog",
-            "importance": 4.2
-          },
-          {
-            "feature": "ua_nmap",
-            "importance": 2.51
-          },
-          {
-            "feature": "ua_wpscan",
-            "importance": 1.78
-          },
-          {
-            "feature": "urlflag_php",
-            "importance": 1.05
-          },
-          {
-            "feature": "srcuser",
-            "importance": 0.45
+            "feature": "url_query",
+            "importance": 0.0
           },
           {
             "feature": "url_encoded_chars",
@@ -1734,11 +1694,23 @@
             "importance": 0.0
           },
           {
+            "feature": "group_web",
+            "importance": 0.0
+          },
+          {
+            "feature": "group_syslog",
+            "importance": 0.0
+          },
+          {
             "feature": "group_audit",
             "importance": 0.0
           },
           {
             "feature": "group_mitre",
+            "importance": 0.0
+          },
+          {
+            "feature": "is_aggregated",
             "importance": 0.0
           },
           {
@@ -1771,121 +1743,109 @@
           },
           {
             "feature": "urlflag_backup",
+            "importance": 0.0
+          },
+          {
+            "feature": "urlflag_dump",
+            "importance": 0.0
+          },
+          {
+            "feature": "urlflag_config",
+            "importance": 0.0
+          },
+          {
+            "feature": "urlflag_git",
+            "importance": 0.0
+          },
+          {
+            "feature": "urlflag_sql",
+            "importance": 0.0
+          },
+          {
+            "feature": "urlflag_readme",
+            "importance": 0.0
+          },
+          {
+            "feature": "urlflag_license",
+            "importance": 0.0
+          },
+          {
+            "feature": "urlflag_test",
             "importance": 0.0
           }
         ],
         "split": [
           {
             "feature": "firedtimes",
-            "importance": 2264
+            "importance": 389
           },
           {
             "feature": "sig_count_prev_600s",
-            "importance": 2022
+            "importance": 281
           },
           {
             "feature": "hour",
-            "importance": 1095
+            "importance": 183
           },
           {
             "feature": "sig_count_prev_60s",
-            "importance": 990
-          },
-          {
-            "feature": "time_since_last_event",
-            "importance": 520
-          },
-          {
-            "feature": "rule_level",
-            "importance": 232
+            "importance": 160
           },
           {
             "feature": "status_code",
-            "importance": 121
+            "importance": 30
           },
           {
-            "feature": "sig_key",
-            "importance": 62
-          },
-          {
-            "feature": "group_ids",
-            "importance": 37
-          },
-          {
-            "feature": "src_port",
-            "importance": 25
-          },
-          {
-            "feature": "group_web",
-            "importance": 23
-          },
-          {
-            "feature": "url_parts",
-            "importance": 20
+            "feature": "time_since_last_event",
+            "importance": 24
           },
           {
             "feature": "url_entropy",
-            "importance": 16
+            "importance": 19
           },
           {
-            "feature": "rule_groups",
-            "importance": 14
-          },
-          {
-            "feature": "log_resource_class",
-            "importance": 14
-          },
-          {
-            "feature": "url_len",
-            "importance": 12
-          },
-          {
-            "feature": "location",
-            "importance": 11
-          },
-          {
-            "feature": "urlflag_remote",
-            "importance": 7
-          },
-          {
-            "feature": "url_query",
-            "importance": 6
-          },
-          {
-            "feature": "group_accesslog",
-            "importance": 6
+            "feature": "rule_level",
+            "importance": 18
           },
           {
             "feature": "url_tokens",
-            "importance": 5
+            "importance": 16
           },
           {
-            "feature": "group_syslog",
-            "importance": 5
+            "feature": "group_ids",
+            "importance": 6
           },
           {
-            "feature": "rule_desc",
-            "importance": 5
-          },
-          {
-            "feature": "is_aggregated",
+            "feature": "rule_groups",
             "importance": 4
           },
           {
-            "feature": "ua_nmap",
-            "importance": 4
-          },
-          {
-            "feature": "urlflag_php",
+            "feature": "url_len",
             "importance": 2
           },
           {
-            "feature": "ua_wpscan",
+            "feature": "group_accesslog",
+            "importance": 2
+          },
+          {
+            "feature": "sig_key",
+            "importance": 2
+          },
+          {
+            "feature": "src_port",
             "importance": 1
           },
           {
-            "feature": "srcuser",
+            "feature": "log_resource_class",
             "importance": 1
+          },
+          {
+            "feature": "url_parts",
+            "importance": 0
+          },
+          {
+            "feature": "url_query",
+            "importance": 0
           },
           {
             "feature": "url_encoded_chars",
@@ -1896,11 +1856,23 @@
             "importance": 0
           },
           {
+            "feature": "group_web",
+            "importance": 0
+          },
+          {
+            "feature": "group_syslog",
+            "importance": 0
+          },
+          {
             "feature": "group_audit",
             "importance": 0
           },
           {
             "feature": "group_mitre",
+            "importance": 0
+          },
+          {
+            "feature": "is_aggregated",
             "importance": 0
           },
           {
@@ -1933,6 +1905,34 @@
           },
           {
             "feature": "urlflag_backup",
+            "importance": 0
+          },
+          {
+            "feature": "urlflag_dump",
+            "importance": 0
+          },
+          {
+            "feature": "urlflag_config",
+            "importance": 0
+          },
+          {
+            "feature": "urlflag_git",
+            "importance": 0
+          },
+          {
+            "feature": "urlflag_sql",
+            "importance": 0
+          },
+          {
+            "feature": "urlflag_readme",
+            "importance": 0
+          },
+          {
+            "feature": "urlflag_license",
+            "importance": 0
+          },
+          {
+            "feature": "urlflag_test",
             "importance": 0
           }
         ]
@@ -1943,106 +1943,106 @@
       "train_rows": 535734,
       "cal_rows": 114658,
       "test_rows": 115367,
-      "best_iteration": 408,
-      "fit_seconds": 51.74,
-      "threshold_model": 0.319744,
+      "best_iteration": 32,
+      "fit_seconds": 4.29,
+      "threshold_model": 0.263867,
       "threshold_prior_baseline": 0.0375,
       "model_metrics": {
         "n": 115367,
         "n_attack": 36190,
         "n_background": 79177,
-        "n_predicted_attack": 33736,
-        "tn": 78141,
-        "fp": 1036,
-        "fn": 3490,
-        "tp": 32700,
-        "threshold": 0.319744,
-        "accuracy": 0.9608,
+        "n_predicted_attack": 36113,
+        "tn": 75874,
+        "fp": 3303,
+        "fn": 3380,
+        "tp": 32810,
+        "threshold": 0.263867,
+        "accuracy": 0.9421,
         "base_rate_attack": 0.3137,
-        "predicted_attack_share": 0.2924,
-        "precision_attack": 0.9693,
-        "recall_attack": 0.9036,
-        "f1_attack": 0.9353,
-        "macro_f1": 0.9536,
-        "background_filtered_share": 0.9869,
-        "background_filtered_pct": 98.69,
-        "false_positive_rate": 0.0131,
-        "false_positives_per_million_alerts": 8980.0,
-        "false_positives_per_million_background": 13084.6,
-        "alert_reduction_rate": 0.9608,
-        "noise_reduction_rate": 0.9869,
-        "alerts_kept_for_review": 33736,
-        "pr_auc_attack": 0.9644,
-        "roc_auc": 0.9708,
+        "predicted_attack_share": 0.313,
+        "precision_attack": 0.9085,
+        "recall_attack": 0.9066,
+        "f1_attack": 0.9076,
+        "macro_f1": 0.9327,
+        "background_filtered_share": 0.9583,
+        "background_filtered_pct": 95.83,
+        "false_positive_rate": 0.0417,
+        "false_positives_per_million_alerts": 28630.4,
+        "false_positives_per_million_background": 41716.7,
+        "alert_reduction_rate": 0.9421,
+        "noise_reduction_rate": 0.9583,
+        "alerts_kept_for_review": 36113,
+        "pr_auc_attack": 0.9638,
+        "roc_auc": 0.9713,
         "budget_fp_per_m_5000": {
-          "recall_at_budget": 0.9028,
-          "threshold": 0.353197,
-          "false_positives": 576,
-          "true_positives": 32672,
-          "predicted_positives": 33248
+          "recall_at_budget": 0.9049,
+          "threshold": 0.295032,
+          "false_positives": 582,
+          "true_positives": 32747,
+          "predicted_positives": 33329
         },
         "budget_fp_per_m_20000": {
-          "recall_at_budget": 0.907,
-          "threshold": 0.209471,
-          "false_positives": 2307,
-          "true_positives": 32823,
-          "predicted_positives": 35130
+          "recall_at_budget": 0.9062,
+          "threshold": 0.267791,
+          "false_positives": 2478,
+          "true_positives": 32794,
+          "predicted_positives": 35272
         },
         "budget_fp_per_m_50000": {
-          "recall_at_budget": 0.9147,
-          "threshold": 0.117482,
-          "false_positives": 5768,
-          "true_positives": 33102,
-          "predicted_positives": 38870
+          "recall_at_budget": 0.9086,
+          "threshold": 0.25818,
+          "false_positives": 5904,
+          "true_positives": 32882,
+          "predicted_positives": 38786
         }
       },
       "model_metrics_cal": {
         "n": 114658,
         "n_attack": 104068,
         "n_background": 10590,
-        "n_predicted_attack": 101531,
-        "tn": 10502,
-        "fp": 88,
-        "fn": 2625,
-        "tp": 101443,
-        "threshold": 0.319744,
-        "accuracy": 0.9763,
+        "n_predicted_attack": 102112,
+        "tn": 10455,
+        "fp": 135,
+        "fn": 2091,
+        "tp": 101977,
+        "threshold": 0.263867,
+        "accuracy": 0.9806,
         "base_rate_attack": 0.9076,
-        "predicted_attack_share": 0.8855,
-        "precision_attack": 0.9991,
-        "recall_attack": 0.9748,
-        "f1_attack": 0.9868,
-        "macro_f1": 0.9362,
-        "background_filtered_share": 0.9917,
-        "background_filtered_pct": 99.17,
-        "false_positive_rate": 0.0083,
-        "false_positives_per_million_alerts": 767.5,
-        "false_positives_per_million_background": 8309.7,
-        "alert_reduction_rate": 0.9763,
-        "noise_reduction_rate": 0.9917,
-        "alerts_kept_for_review": 101531,
-        "pr_auc_attack": 0.9992,
-        "roc_auc": 0.9919,
+        "predicted_attack_share": 0.8906,
+        "precision_attack": 0.9987,
+        "recall_attack": 0.9799,
+        "f1_attack": 0.9892,
+        "macro_f1": 0.9465,
+        "background_filtered_share": 0.9873,
+        "background_filtered_pct": 98.73,
+        "false_positive_rate": 0.0127,
+        "false_positives_per_million_alerts": 1177.4,
+        "false_positives_per_million_background": 12747.9,
+        "alert_reduction_rate": 0.9806,
+        "noise_reduction_rate": 0.9873,
+        "alerts_kept_for_review": 102112,
+        "pr_auc_attack": 0.9995,
+        "roc_auc": 0.995,
         "budget_fp_per_m_5000": {
-          "recall_at_budget": 0.9776,
-          "threshold": 0.172027,
-          "false_positives": 573,
-          "true_positives": 101741,
-          "predicted_positives": 102314
+          "recall_at_budget": 0.9813,
+          "threshold": 0.26062,
+          "false_positives": 580,
+          "true_positives": 102122,
+          "predicted_positives": 102702
         },
         "budget_fp_per_m_20000": {
-          "recall_at_budget": 0.9845,
-          "threshold": 0.079128,
-          "false_positives": 2293,
-          "true_positives": 102459,
-          "predicted_positives": 104752
+          "recall_at_budget": 0.9922,
+          "threshold": 0.252162,
+          "false_positives": 2611,
+          "true_positives": 103252,
+          "predicted_positives": 105863
         },
         "budget_fp_per_m_50000": {
-          "recall_at_budget": 0.9956,
-          "threshold": 0.031722,
-          "false_positives": 5732,
-          "true_positives": 103608,
-          "predicted_positives": 109340
+          "recall_at_budget": 0.9983,
+          "threshold": 0.24809,
+          "false_positives": 6716,
+          "true_positives": 103893,
+          "predicted_positives": 110609
         }
       },
       "baseline_detector_prior": {
@@ -2145,32 +2145,32 @@
       },
       "detector_top_errors": [
         {
-          "sig_key": "Dovecot Authentication Success.",
-          "source": "wazuh",
-          "detector": "Dovecot Authentication Success.",
-          "n": 43659,
-          "attack_true": 1911,
-          "predicted_attack": 607,
-          "tp": 80,
-          "fp": 527,
-          "fn": 1831,
-          "precision": 0.1318,
-          "recall": 0.0419,
-          "true_background": 41748
-        },
-        {
           "sig_key": "IDS event.",
           "source": "wazuh",
           "detector": "IDS event.",
           "n": 36283,
           "attack_true": 1597,
-          "predicted_attack": 371,
-          "tp": 51,
-          "fp": 320,
-          "fn": 1546,
-          "precision": 0.1375,
-          "recall": 0.0319,
+          "predicted_attack": 1707,
+          "tp": 71,
+          "fp": 1636,
+          "fn": 1526,
+          "precision": 0.0416,
+          "recall": 0.0445,
           "true_background": 34686
+        },
+        {
+          "sig_key": "Dovecot Authentication Success.",
+          "source": "wazuh",
+          "detector": "Dovecot Authentication Success.",
+          "n": 43659,
+          "attack_true": 1911,
+          "predicted_attack": 1570,
+          "tp": 164,
+          "fp": 1406,
+          "fn": 1747,
+          "precision": 0.1045,
+          "recall": 0.0858,
+          "true_background": 41748
         },
         {
           "sig_key": "ClamAV database update",
@@ -2178,9 +2178,9 @@
           "detector": "ClamAV database update",
           "n": 1221,
           "attack_true": 24,
-          "predicted_attack": 71,
+          "predicted_attack": 85,
           "tp": 0,
-          "fp": 71,
+          "fp": 85,
           "fn": 24,
           "precision": 0.0,
           "recall": 0.0,
@@ -2192,13 +2192,27 @@
           "detector": "Multiple IDS alerts for same id.",
           "n": 610,
           "attack_true": 33,
-          "predicted_attack": 38,
+          "predicted_attack": 50,
           "tp": 4,
-          "fp": 34,
+          "fp": 46,
           "fn": 29,
-          "precision": 0.1053,
+          "precision": 0.08,
           "recall": 0.1212,
           "true_background": 577
+        },
+        {
+          "sig_key": "Web server 400 error code.",
+          "source": "wazuh",
+          "detector": "Web server 400 error code.",
+          "n": 30186,
+          "attack_true": 30144,
+          "predicted_attack": 30186,
+          "tp": 30144,
+          "fp": 42,
+          "fn": 0,
+          "precision": 0.9986,
+          "recall": 1.0,
+          "true_background": 42
         },
         {
           "sig_key": "Multiple IDS events from same source ip.",
@@ -2206,13 +2220,27 @@
           "detector": "Multiple IDS events from same source ip.",
           "n": 370,
           "attack_true": 7,
-          "predicted_attack": 31,
-          "tp": 0,
-          "fp": 31,
-          "fn": 7,
-          "precision": 0.0,
-          "recall": 0.0,
+          "predicted_attack": 35,
+          "tp": 1,
+          "fp": 34,
+          "fn": 6,
+          "precision": 0.0286,
+          "recall": 0.1429,
           "true_background": 363
+        },
+        {
+          "sig_key": "CMS (WordPress or Joomla) login attempt.",
+          "source": "wazuh",
+          "detector": "CMS (WordPress or Joomla) login attempt.",
+          "n": 84,
+          "attack_true": 15,
+          "predicted_attack": 23,
+          "tp": 9,
+          "fp": 14,
+          "fn": 6,
+          "precision": 0.3913,
+          "recall": 0.6,
+          "true_background": 69
         },
         {
           "sig_key": "Multiple IDS alerts for same id (ignoring now this id).",
@@ -2220,11 +2248,11 @@
           "detector": "Multiple IDS alerts for same id (ignoring now this id).",
           "n": 110,
           "attack_true": 6,
-          "predicted_attack": 19,
+          "predicted_attack": 17,
           "tp": 4,
-          "fp": 15,
+          "fp": 13,
           "fn": 2,
-          "precision": 0.2105,
+          "precision": 0.2353,
           "recall": 0.6667,
           "true_background": 104
         },
@@ -2234,9 +2262,9 @@
           "detector": "Multiple IDS events from same source ip (ignoring now this srcip and id).",
           "n": 38,
           "attack_true": 0,
-          "predicted_attack": 9,
+          "predicted_attack": 10,
           "tp": 0,
-          "fp": 9,
+          "fp": 10,
           "fn": 0,
           "precision": 0.0,
           "recall": 0.0,
@@ -2257,32 +2285,32 @@
           "true_background": 44
         },
         {
-          "sig_key": "Web server 400 error code.",
+          "sig_key": "First time this IDS alert is generated.",
           "source": "wazuh",
-          "detector": "Web server 400 error code.",
-          "n": 30186,
-          "attack_true": 30144,
-          "predicted_attack": 30152,
-          "tp": 30144,
-          "fp": 8,
-          "fn": 0,
-          "precision": 0.9997,
-          "recall": 1.0,
-          "true_background": 42
+          "detector": "First time this IDS alert is generated.",
+          "n": 87,
+          "attack_true": 5,
+          "predicted_attack": 4,
+          "tp": 0,
+          "fp": 4,
+          "fn": 5,
+          "precision": 0.0,
+          "recall": 0.0,
+          "true_background": 82
         },
         {
-          "sig_key": "CMS (WordPress or Joomla) login attempt.",
+          "sig_key": "Web server 500 error code (Internal Error).",
           "source": "wazuh",
-          "detector": "CMS (WordPress or Joomla) login attempt.",
-          "n": 84,
-          "attack_true": 15,
-          "predicted_attack": 16,
-          "tp": 9,
-          "fp": 7,
-          "fn": 6,
-          "precision": 0.5625,
-          "recall": 0.6,
-          "true_background": 69
+          "detector": "Web server 500 error code (Internal Error).",
+          "n": 2,
+          "attack_true": 0,
+          "predicted_attack": 2,
+          "tp": 0,
+          "fp": 2,
+          "fn": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "true_background": 2
         },
         {
           "sig_key": "PAM: Login session closed.",
@@ -2290,27 +2318,13 @@
           "detector": "PAM: Login session closed.",
           "n": 12,
           "attack_true": 7,
-          "predicted_attack": 3,
+          "predicted_attack": 2,
           "tp": 0,
-          "fp": 3,
+          "fp": 2,
           "fn": 7,
           "precision": 0.0,
           "recall": 0.0,
           "true_background": 5
-        },
-        {
-          "sig_key": "syslog: User authentication failure.",
-          "source": "wazuh",
-          "detector": "syslog: User authentication failure.",
-          "n": 92,
-          "attack_true": 4,
-          "predicted_attack": 2,
-          "tp": 0,
-          "fp": 2,
-          "fn": 4,
-          "precision": 0.0,
-          "recall": 0.0,
-          "true_background": 88
         },
         {
           "sig_key": "Dovecot Invalid User Login Attempt.",
@@ -2325,20 +2339,6 @@
           "precision": 0.0,
           "recall": 0.0,
           "true_background": 132
-        },
-        {
-          "sig_key": "Common web attack.",
-          "source": "wazuh",
-          "detector": "Common web attack.",
-          "n": 11,
-          "attack_true": 11,
-          "predicted_attack": 11,
-          "tp": 11,
-          "fp": 0,
-          "fn": 0,
-          "precision": 1.0,
-          "recall": 1.0,
-          "true_background": 0
         },
         {
           "sig_key": "Apache: Attempt to access forbidden file or directory.",
@@ -2383,31 +2383,31 @@
           "true_background": 0
         },
         {
-          "sig_key": "First time this IDS alert is generated.",
-          "source": "wazuh",
-          "detector": "First time this IDS alert is generated.",
-          "n": 87,
-          "attack_true": 5,
-          "predicted_attack": 0,
-          "tp": 0,
-          "fp": 0,
-          "fn": 5,
-          "precision": 0.0,
-          "recall": 0.0,
-          "true_background": 82
-        },
-        {
           "sig_key": "First time user executed sudo.",
           "source": "wazuh",
           "detector": "First time user executed sudo.",
           "n": 2,
           "attack_true": 2,
-          "predicted_attack": 0,
-          "tp": 0,
+          "predicted_attack": 1,
+          "tp": 1,
           "fp": 0,
-          "fn": 2,
-          "precision": 0.0,
-          "recall": 0.0,
+          "fn": 1,
+          "precision": 1.0,
+          "recall": 0.5,
+          "true_background": 0
+        },
+        {
+          "sig_key": "Common web attack.",
+          "source": "wazuh",
+          "detector": "Common web attack.",
+          "n": 11,
+          "attack_true": 11,
+          "predicted_attack": 11,
+          "tp": 11,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
           "true_background": 0
         },
         {
@@ -2430,40 +2430,12 @@
           "detector": "Successful sudo to ROOT executed.",
           "n": 8,
           "attack_true": 8,
-          "predicted_attack": 2,
-          "tp": 2,
-          "fp": 0,
-          "fn": 6,
-          "precision": 1.0,
-          "recall": 0.25,
-          "true_background": 0
-        },
-        {
-          "sig_key": "Suspicious URL access.",
-          "source": "wazuh",
-          "detector": "Suspicious URL access.",
-          "n": 28,
-          "attack_true": 28,
-          "predicted_attack": 28,
-          "tp": 28,
-          "fp": 0,
-          "fn": 0,
-          "precision": 1.0,
-          "recall": 1.0,
-          "true_background": 0
-        },
-        {
-          "sig_key": "User successfully changed UID.",
-          "source": "wazuh",
-          "detector": "User successfully changed UID.",
-          "n": 3,
-          "attack_true": 3,
-          "predicted_attack": 1,
-          "tp": 1,
+          "predicted_attack": 6,
+          "tp": 6,
           "fp": 0,
           "fn": 2,
           "precision": 1.0,
-          "recall": 0.3333,
+          "recall": 0.75,
           "true_background": 0
         },
         {
@@ -2481,43 +2453,71 @@
           "true_background": 0
         },
         {
-          "sig_key": "Web server 500 error code (Internal Error).",
+          "sig_key": "User successfully changed UID.",
           "source": "wazuh",
-          "detector": "Web server 500 error code (Internal Error).",
-          "n": 2,
-          "attack_true": 0,
+          "detector": "User successfully changed UID.",
+          "n": 3,
+          "attack_true": 3,
+          "predicted_attack": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 2,
+          "precision": 1.0,
+          "recall": 0.3333,
+          "true_background": 0
+        },
+        {
+          "sig_key": "Suspicious URL access.",
+          "source": "wazuh",
+          "detector": "Suspicious URL access.",
+          "n": 28,
+          "attack_true": 28,
+          "predicted_attack": 28,
+          "tp": 28,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "true_background": 0
+        },
+        {
+          "sig_key": "syslog: User authentication failure.",
+          "source": "wazuh",
+          "detector": "syslog: User authentication failure.",
+          "n": 92,
+          "attack_true": 4,
           "predicted_attack": 0,
           "tp": 0,
           "fp": 0,
-          "fn": 0,
+          "fn": 4,
           "precision": 0.0,
           "recall": 0.0,
-          "true_background": 2
+          "true_background": 88
         }
       ],
       "phase_errors": {
         "attack|cracking": {
           "n": 1164,
-          "kept_as_attack": 56,
-          "filtered_out": 1108,
+          "kept_as_attack": 42,
+          "filtered_out": 1122,
           "attack_true": 1164
         },
         "attack|dirb": {
           "n": 25997,
-          "kept_as_attack": 25979,
-          "filtered_out": 18,
+          "kept_as_attack": 25986,
+          "filtered_out": 11,
           "attack_true": 25997
         },
         "attack|dnsteal": {
           "n": 2303,
-          "kept_as_attack": 66,
-          "filtered_out": 2237,
+          "kept_as_attack": 157,
+          "filtered_out": 2146,
           "attack_true": 2303
         },
         "attack|privilege_escalation": {
           "n": 68,
-          "kept_as_attack": 4,
-          "filtered_out": 64,
+          "kept_as_attack": 9,
+          "filtered_out": 59,
           "attack_true": 68
         },
         "attack|reverse_shell": {
@@ -2534,20 +2534,20 @@
         },
         "attack|webshell": {
           "n": 27,
-          "kept_as_attack": 7,
-          "filtered_out": 20,
+          "kept_as_attack": 12,
+          "filtered_out": 15,
           "attack_true": 27
         },
         "attack|wpscan": {
           "n": 6604,
-          "kept_as_attack": 6588,
-          "filtered_out": 16,
+          "kept_as_attack": 6604,
+          "filtered_out": 0,
           "attack_true": 6604
         },
         "background|background": {
           "n": 79177,
-          "kept_as_attack": 1036,
-          "filtered_out": 78141,
+          "kept_as_attack": 3303,
+          "filtered_out": 75874,
           "attack_true": 0
         }
       },
@@ -2555,123 +2555,67 @@
         "gain": [
           {
             "feature": "status_code",
-            "importance": 127235.92
-          },
-          {
-            "feature": "sig_key",
-            "importance": 23504.04
-          },
-          {
-            "feature": "firedtimes",
-            "importance": 16356.87
-          },
-          {
-            "feature": "hour",
-            "importance": 13783.19
-          },
-          {
-            "feature": "sig_count_prev_600s",
-            "importance": 13410.13
-          },
-          {
-            "feature": "sig_count_prev_60s",
-            "importance": 5718.27
-          },
-          {
-            "feature": "rule_level",
-            "importance": 2009.41
-          },
-          {
-            "feature": "time_since_last_event",
-            "importance": 1714.11
+            "importance": 31805.12
           },
           {
             "feature": "rule_groups",
-            "importance": 1545.12
+            "importance": 3804.19
+          },
+          {
+            "feature": "sig_key",
+            "importance": 822.12
           },
           {
             "feature": "url_tokens",
-            "importance": 871.77
+            "importance": 589.22
           },
           {
-            "feature": "group_ids",
-            "importance": 367.02
+            "feature": "firedtimes",
+            "importance": 499.4
           },
           {
-            "feature": "rule_desc",
-            "importance": 258.5
+            "feature": "hour",
+            "importance": 368.31
           },
           {
-            "feature": "urlflag_remote",
-            "importance": 148.0
+            "feature": "sig_count_prev_600s",
+            "importance": 319.59
           },
           {
-            "feature": "log_resource_class",
-            "importance": 67.03
-          },
-          {
-            "feature": "url_entropy",
-            "importance": 59.79
+            "feature": "sig_count_prev_60s",
+            "importance": 146.82
           },
           {
             "feature": "url_len",
-            "importance": 52.14
+            "importance": 19.72
+          },
+          {
+            "feature": "url_entropy",
+            "importance": 15.21
+          },
+          {
+            "feature": "time_since_last_event",
+            "importance": 12.82
+          },
+          {
+            "feature": "group_ids",
+            "importance": 9.7
+          },
+          {
+            "feature": "rule_level",
+            "importance": 4.36
           },
           {
             "feature": "src_port",
-            "importance": 36.34
-          },
-          {
-            "feature": "group_syslog",
-            "importance": 29.28
-          },
-          {
-            "feature": "location",
-            "importance": 28.63
-          },
-          {
-            "feature": "group_accesslog",
-            "importance": 25.97
-          },
-          {
-            "feature": "ua_nmap",
-            "importance": 20.82
-          },
-          {
-            "feature": "ua_wpscan",
-            "importance": 17.25
+            "importance": 0.79
           },
           {
             "feature": "group_web",
-            "importance": 14.35
-          },
-          {
-            "feature": "urlflag_php",
-            "importance": 8.43
-          },
-          {
-            "feature": "is_aggregated",
-            "importance": 6.6
+            "importance": 0.13
           },
           {
             "feature": "url_parts",
-            "importance": 5.62
-          },
-          {
-            "feature": "decoder_parent",
-            "importance": 3.69
-          },
-          {
-            "feature": "srcuser",
-            "importance": 2.04
-          },
-          {
-            "feature": "dstuser",
-            "importance": 1.57
-          },
-          {
-            "feature": "decoder",
-            "importance": 1.04
+            "importance": 0.0
           },
           {
             "feature": "url_query",
@@ -2686,11 +2630,23 @@
             "importance": 0.0
           },
           {
+            "feature": "group_accesslog",
+            "importance": 0.0
+          },
+          {
+            "feature": "group_syslog",
+            "importance": 0.0
+          },
+          {
             "feature": "group_audit",
             "importance": 0.0
           },
           {
             "feature": "group_mitre",
+            "importance": 0.0
+          },
+          {
+            "feature": "is_aggregated",
             "importance": 0.0
           },
           {
@@ -2711,129 +2667,117 @@
           },
           {
             "feature": "urlflag_xmlrpc",
+            "importance": 0.0
+          },
+          {
+            "feature": "urlflag_wpconfig",
+            "importance": 0.0
+          },
+          {
+            "feature": "urlflag_phpmyadmin",
+            "importance": 0.0
+          },
+          {
+            "feature": "urlflag_backup",
+            "importance": 0.0
+          },
+          {
+            "feature": "urlflag_dump",
+            "importance": 0.0
+          },
+          {
+            "feature": "urlflag_config",
+            "importance": 0.0
+          },
+          {
+            "feature": "urlflag_git",
+            "importance": 0.0
+          },
+          {
+            "feature": "urlflag_sql",
+            "importance": 0.0
+          },
+          {
+            "feature": "urlflag_readme",
+            "importance": 0.0
+          },
+          {
+            "feature": "urlflag_license",
+            "importance": 0.0
+          },
+          {
+            "feature": "urlflag_test",
+            "importance": 0.0
+          },
+          {
+            "feature": "urlflag_dev",
             "importance": 0.0
           }
         ],
         "split": [
           {
             "feature": "firedtimes",
-            "importance": 7539
+            "importance": 326
           },
           {
             "feature": "sig_count_prev_600s",
-            "importance": 6167
-          },
-          {
-            "feature": "sig_count_prev_60s",
-            "importance": 3996
+            "importance": 190
           },
           {
             "feature": "hour",
-            "importance": 3236
+            "importance": 147
           },
           {
-            "feature": "time_since_last_event",
-            "importance": 2649
-          },
-          {
-            "feature": "rule_level",
-            "importance": 509
-          },
-          {
-            "feature": "status_code",
-            "importance": 239
-          },
-          {
-            "feature": "sig_key",
-            "importance": 217
-          },
-          {
-            "feature": "log_resource_class",
-            "importance": 119
-          },
-          {
-            "feature": "group_ids",
-            "importance": 85
-          },
-          {
-            "feature": "location",
-            "importance": 63
-          },
-          {
-            "feature": "rule_groups",
-            "importance": 31
-          },
-          {
-            "feature": "group_syslog",
-            "importance": 28
-          },
-          {
-            "feature": "ua_nmap",
-            "importance": 28
-          },
-          {
-            "feature": "rule_desc",
-            "importance": 19
-          },
-          {
-            "feature": "ua_wpscan",
-            "importance": 18
-          },
-          {
-            "feature": "urlflag_remote",
-            "importance": 15
-          },
-          {
-            "feature": "url_len",
-            "importance": 13
+            "feature": "sig_count_prev_60s",
+            "importance": 112
           },
           {
             "feature": "url_tokens",
-            "importance": 12
+            "importance": 29
           },
           {
-            "feature": "urlflag_php",
-            "importance": 12
+            "feature": "status_code",
+            "importance": 26
           },
           {
-            "feature": "is_aggregated",
-            "importance": 11
+            "feature": "time_since_last_event",
+            "importance": 20
           },
           {
-            "feature": "group_web",
-            "importance": 9
+            "feature": "group_ids",
+            "importance": 5
           },
           {
-            "feature": "url_parts",
-            "importance": 7
+            "feature": "rule_groups",
+            "importance": 5
           },
           {
-            "feature": "srcuser",
-            "importance": 7
+            "feature": "rule_level",
+            "importance": 3
           },
           {
-            "feature": "src_port",
-            "importance": 6
+            "feature": "url_len",
+            "importance": 2
           },
           {
             "feature": "url_entropy",
-            "importance": 3
-          },
-          {
-            "feature": "dstuser",
-            "importance": 3
-          },
-          {
-            "feature": "group_accesslog",
             "importance": 2
           },
           {
-            "feature": "decoder",
-            "importance": 2
-          },
-          {
-            "feature": "decoder_parent",
+            "feature": "src_port",
             "importance": 1
+          },
+          {
+            "feature": "group_web",
+            "importance": 1
+          },
+          {
+            "feature": "sig_key",
+            "importance": 1
+          },
+          {
+            "feature": "url_parts",
+            "importance": 0
           },
           {
             "feature": "url_query",
@@ -2848,11 +2792,23 @@
             "importance": 0
           },
           {
+            "feature": "group_accesslog",
+            "importance": 0
+          },
+          {
+            "feature": "group_syslog",
+            "importance": 0
+          },
+          {
             "feature": "group_audit",
             "importance": 0
           },
           {
             "feature": "group_mitre",
+            "importance": 0
+          },
+          {
+            "feature": "is_aggregated",
             "importance": 0
           },
           {
@@ -2873,6 +2829,50 @@
           },
           {
             "feature": "urlflag_xmlrpc",
+            "importance": 0
+          },
+          {
+            "feature": "urlflag_wpconfig",
+            "importance": 0
+          },
+          {
+            "feature": "urlflag_phpmyadmin",
+            "importance": 0
+          },
+          {
+            "feature": "urlflag_backup",
+            "importance": 0
+          },
+          {
+            "feature": "urlflag_dump",
+            "importance": 0
+          },
+          {
+            "feature": "urlflag_config",
+            "importance": 0
+          },
+          {
+            "feature": "urlflag_git",
+            "importance": 0
+          },
+          {
+            "feature": "urlflag_sql",
+            "importance": 0
+          },
+          {
+            "feature": "urlflag_readme",
+            "importance": 0
+          },
+          {
+            "feature": "urlflag_license",
+            "importance": 0
+          },
+          {
+            "feature": "urlflag_test",
+            "importance": 0
+          },
+          {
+            "feature": "urlflag_dev",
             "importance": 0
           }
         ]

@@ -2,55 +2,55 @@
   "protocol": "chronologic_expanding_window",
   "config": "lgb_text",
   "seed": 42,
-  "fit_total_seconds": 140.0,
-  "deployment_threshold": 0.408387,
+  "fit_total_seconds": 65.4,
+  "deployment_threshold": 0.273388,
   "aggregate_model": {
     "n": 574881,
     "n_attack": 468770,
     "n_background": 106111,
-    "n_predicted_attack": 464394,
-    "tn": 105750,
-    "fp": 361,
-    "fn": 4737,
-    "tp": 464033,
-    "threshold": 0.408387,
-    "accuracy": 0.9911,
+    "n_predicted_attack": 469341,
+    "tn": 101111,
+    "fp": 5000,
+    "fn": 4429,
+    "tp": 464341,
+    "threshold": 0.273388,
+    "accuracy": 0.9836,
     "base_rate_attack": 0.8154,
-    "predicted_attack_share": 0.8078,
-    "precision_attack": 0.9992,
-    "recall_attack": 0.9899,
-    "f1_attack": 0.9945,
-    "macro_f1": 0.9855,
-    "background_filtered_share": 0.9966,
-    "background_filtered_pct": 99.66,
-    "false_positive_rate": 0.0034,
-    "false_positives_per_million_alerts": 628.0,
-    "false_positives_per_million_background": 3402.1,
-    "alert_reduction_rate": 0.9911,
-    "noise_reduction_rate": 0.9966,
-    "alerts_kept_for_review": 464394,
-    "pr_auc_attack": 0.9993,
-    "roc_auc": 0.9965,
+    "predicted_attack_share": 0.8164,
+    "precision_attack": 0.9893,
+    "recall_attack": 0.9906,
+    "f1_attack": 0.9899,
+    "macro_f1": 0.9727,
+    "background_filtered_share": 0.9529,
+    "background_filtered_pct": 95.29,
+    "false_positive_rate": 0.0471,
+    "false_positives_per_million_alerts": 8697.5,
+    "false_positives_per_million_background": 47120.5,
+    "alert_reduction_rate": 0.9836,
+    "noise_reduction_rate": 0.9529,
+    "alerts_kept_for_review": 469341,
+    "pr_auc_attack": 0.9992,
+    "roc_auc": 0.9962,
     "budget_fp_per_m_5000": {
-      "recall_at_budget": 0.9908,
-      "threshold": 0.345539,
-      "false_positives": 2947,
-      "true_positives": 464455,
-      "predicted_positives": 467402
+      "recall_at_budget": 0.9904,
+      "threshold": 0.279756,
+      "false_positives": 2874,
+      "true_positives": 464267,
+      "predicted_positives": 467141
     },
     "budget_fp_per_m_20000": {
-      "recall_at_budget": 0.9919,
-      "threshold": 0.335492,
-      "false_positives": 11990,
-      "true_positives": 464959,
-      "predicted_positives": 476949
+      "recall_at_budget": 0.9928,
+      "threshold": 0.266902,
+      "false_positives": 12329,
+      "true_positives": 465405,
+      "predicted_positives": 477734
     },
     "budget_fp_per_m_50000": {
-      "recall_at_budget": 0.9935,
-      "threshold": 0.123845,
-      "false_positives": 28745,
-      "true_positives": 465707,
-      "predicted_positives": 494452
+      "recall_at_budget": 0.9946,
+      "threshold": 0.264457,
+      "false_positives": 28958,
+      "true_positives": 466244,
+      "predicted_positives": 495202
     }
   },
   "steps": [
@@ -59,106 +59,106 @@
       "train_rows": 448998,
       "cal_rows": 229265,
       "test_rows": 229720,
-      "best_iteration": 8,
-      "fit_seconds": 5.81,
-      "threshold_model": 0.491281,
+      "best_iteration": 88,
+      "fit_seconds": 7.92,
+      "threshold_model": 0.299106,
       "threshold_prior_baseline": 0.994956,
       "model_metrics": {
         "n": 229720,
         "n_attack": 213450,
         "n_background": 16270,
-        "n_predicted_attack": 212653,
-        "tn": 16176,
-        "fp": 94,
-        "fn": 891,
-        "tp": 212559,
-        "threshold": 0.491281,
-        "accuracy": 0.9957,
+        "n_predicted_attack": 212857,
+        "tn": 16021,
+        "fp": 249,
+        "fn": 842,
+        "tp": 212608,
+        "threshold": 0.299106,
+        "accuracy": 0.9953,
         "base_rate_attack": 0.9292,
-        "predicted_attack_share": 0.9257,
-        "precision_attack": 0.9996,
-        "recall_attack": 0.9958,
-        "f1_attack": 0.9977,
-        "macro_f1": 0.9841,
-        "background_filtered_share": 0.9942,
-        "background_filtered_pct": 99.42,
-        "false_positive_rate": 0.0058,
-        "false_positives_per_million_alerts": 409.2,
-        "false_positives_per_million_background": 5777.5,
-        "alert_reduction_rate": 0.9957,
-        "noise_reduction_rate": 0.9942,
-        "alerts_kept_for_review": 212653,
+        "predicted_attack_share": 0.9266,
+        "precision_attack": 0.9988,
+        "recall_attack": 0.9961,
+        "f1_attack": 0.9974,
+        "macro_f1": 0.9823,
+        "background_filtered_share": 0.9847,
+        "background_filtered_pct": 98.47,
+        "false_positive_rate": 0.0153,
+        "false_positives_per_million_alerts": 1083.9,
+        "false_positives_per_million_background": 15304.2,
+        "alert_reduction_rate": 0.9953,
+        "noise_reduction_rate": 0.9847,
+        "alerts_kept_for_review": 212857,
         "pr_auc_attack": 0.9999,
-        "roc_auc": 0.9991,
+        "roc_auc": 0.9989,
         "budget_fp_per_m_5000": {
-          "recall_at_budget": 0.9966,
-          "threshold": 0.349139,
-          "false_positives": 1170,
-          "true_positives": 212717,
-          "predicted_positives": 213887
+          "recall_at_budget": 0.9968,
+          "threshold": 0.168457,
+          "false_positives": 1148,
+          "true_positives": 212757,
+          "predicted_positives": 213905
         },
         "budget_fp_per_m_20000": {
-          "recall_at_budget": 0.9982,
-          "threshold": 0.340827,
-          "false_positives": 4679,
-          "true_positives": 213074,
-          "predicted_positives": 217753
+          "recall_at_budget": 0.9978,
+          "threshold": 0.118111,
+          "false_positives": 4595,
+          "true_positives": 212982,
+          "predicted_positives": 217577
         },
         "budget_fp_per_m_50000": {
-          "recall_at_budget": 1.0,
-          "threshold": 0.335344,
-          "false_positives": 12103,
-          "true_positives": 213446,
-          "predicted_positives": 225549
+          "recall_at_budget": 0.9999,
+          "threshold": 0.093838,
+          "false_positives": 11486,
+          "true_positives": 213435,
+          "predicted_positives": 224921
         }
       },
       "model_metrics_cal": {
         "n": 229265,
         "n_attack": 207303,
         "n_background": 21962,
-        "n_predicted_attack": 207007,
+        "n_predicted_attack": 207063,
         "tn": 21962,
         "fp": 0,
-        "fn": 296,
-        "tp": 207007,
-        "threshold": 0.491281,
-        "accuracy": 0.9987,
+        "fn": 240,
+        "tp": 207063,
+        "threshold": 0.299106,
+        "accuracy": 0.999,
         "base_rate_attack": 0.9042,
-        "predicted_attack_share": 0.9029,
+        "predicted_attack_share": 0.9032,
         "precision_attack": 1.0,
-        "recall_attack": 0.9986,
-        "f1_attack": 0.9993,
-        "macro_f1": 0.9963,
+        "recall_attack": 0.9988,
+        "f1_attack": 0.9994,
+        "macro_f1": 0.997,
         "background_filtered_share": 1.0,
         "background_filtered_pct": 100.0,
         "false_positive_rate": 0.0,
         "false_positives_per_million_alerts": 0.0,
         "false_positives_per_million_background": 0.0,
-        "alert_reduction_rate": 0.9987,
+        "alert_reduction_rate": 0.999,
         "noise_reduction_rate": 1.0,
-        "alerts_kept_for_review": 207007,
+        "alerts_kept_for_review": 207063,
         "pr_auc_attack": 1.0,
         "roc_auc": 0.9997,
         "budget_fp_per_m_5000": {
-          "recall_at_budget": 0.999,
-          "threshold": 0.344324,
-          "false_positives": 1248,
-          "true_positives": 207099,
-          "predicted_positives": 208347
+          "recall_at_budget": 0.9991,
+          "threshold": 0.151628,
+          "false_positives": 1146,
+          "true_positives": 207119,
+          "predicted_positives": 208265
         },
         "budget_fp_per_m_20000": {
-          "recall_at_budget": 0.9995,
-          "threshold": 0.335078,
-          "false_positives": 4934,
-          "true_positives": 207198,
-          "predicted_positives": 212132
+          "recall_at_budget": 0.9996,
+          "threshold": 0.094898,
+          "false_positives": 4586,
+          "true_positives": 207213,
+          "predicted_positives": 211799
         },
         "budget_fp_per_m_50000": {
-          "recall_at_budget": 0.9999,
-          "threshold": 0.334199,
-          "false_positives": 12452,
-          "true_positives": 207287,
-          "predicted_positives": 219739
+          "recall_at_budget": 0.9998,
+          "threshold": 0.091584,
+          "false_positives": 11466,
+          "true_positives": 207265,
+          "predicted_positives": 218731
         }
       },
       "baseline_detector_prior": {
@@ -261,6 +261,20 @@
       },
       "detector_top_errors": [
         {
+          "sig_key": "Dovecot Authentication Success.",
+          "source": "wazuh",
+          "detector": "Dovecot Authentication Success.",
+          "n": 9402,
+          "attack_true": 585,
+          "predicted_attack": 114,
+          "tp": 0,
+          "fp": 114,
+          "fn": 585,
+          "precision": 0.0,
+          "recall": 0.0,
+          "true_background": 8817
+        },
+        {
           "sig_key": "Multiple IDS alerts for same id.",
           "source": "wazuh",
           "detector": "Multiple IDS alerts for same id.",
@@ -273,6 +287,20 @@
           "precision": 0.0,
           "recall": 0.0,
           "true_background": 184
+        },
+        {
+          "sig_key": "IDS event.",
+          "source": "wazuh",
+          "detector": "IDS event.",
+          "n": 7061,
+          "attack_true": 229,
+          "predicted_attack": 44,
+          "tp": 3,
+          "fp": 41,
+          "fn": 226,
+          "precision": 0.0682,
+          "recall": 0.0131,
+          "true_background": 6832
         },
         {
           "sig_key": "Multiple IDS alerts for same id (ignoring now this id).",
@@ -359,18 +387,18 @@
           "true_background": 22
         },
         {
-          "sig_key": "Apache: Attempt to access forbidden directory index.",
+          "sig_key": "Dovecot Invalid User Login Attempt.",
           "source": "wazuh",
-          "detector": "Apache: Attempt to access forbidden directory index.",
-          "n": 47,
-          "attack_true": 47,
+          "detector": "Dovecot Invalid User Login Attempt.",
+          "n": 68,
+          "attack_true": 6,
           "predicted_attack": 0,
           "tp": 0,
           "fp": 0,
-          "fn": 47,
+          "fn": 6,
           "precision": 0.0,
           "recall": 0.0,
-          "true_background": 0
+          "true_background": 62
         },
         {
           "sig_key": "Dovecot brute force attack (multiple auth failures).",
@@ -387,60 +415,32 @@
           "true_background": 1
         },
         {
-          "sig_key": "Dovecot Invalid User Login Attempt.",
+          "sig_key": "ClamAV database update",
           "source": "wazuh",
-          "detector": "Dovecot Invalid User Login Attempt.",
-          "n": 68,
-          "attack_true": 6,
+          "detector": "ClamAV database update",
+          "n": 171,
+          "attack_true": 8,
           "predicted_attack": 0,
           "tp": 0,
           "fp": 0,
-          "fn": 6,
+          "fn": 8,
           "precision": 0.0,
           "recall": 0.0,
-          "true_background": 62
+          "true_background": 163
         },
         {
-          "sig_key": "Dovecot Authentication Success.",
+          "sig_key": "Apache: Attempt to access forbidden directory index.",
           "source": "wazuh",
-          "detector": "Dovecot Authentication Success.",
-          "n": 9402,
-          "attack_true": 585,
-          "predicted_attack": 0,
-          "tp": 0,
+          "detector": "Apache: Attempt to access forbidden directory index.",
+          "n": 47,
+          "attack_true": 47,
+          "predicted_attack": 46,
+          "tp": 46,
           "fp": 0,
-          "fn": 585,
-          "precision": 0.0,
-          "recall": 0.0,
-          "true_background": 8817
-        },
-        {
-          "sig_key": "Common web attack.",
-          "source": "wazuh",
-          "detector": "Common web attack.",
-          "n": 94,
-          "attack_true": 94,
-          "predicted_attack": 94,
-          "tp": 94,
-          "fp": 0,
-          "fn": 0,
+          "fn": 1,
           "precision": 1.0,
-          "recall": 1.0,
+          "recall": 0.9787,
           "true_background": 0
-        },
-        {
-          "sig_key": "IDS event.",
-          "source": "wazuh",
-          "detector": "IDS event.",
-          "n": 7061,
-          "attack_true": 229,
-          "predicted_attack": 0,
-          "tp": 0,
-          "fp": 0,
-          "fn": 229,
-          "precision": 0.0,
-          "recall": 0.0,
-          "true_background": 6832
         },
         {
           "sig_key": "First time user executed sudo.",
@@ -457,6 +457,20 @@
           "true_background": 1
         },
         {
+          "sig_key": "Common web attack.",
+          "source": "wazuh",
+          "detector": "Common web attack.",
+          "n": 94,
+          "attack_true": 94,
+          "predicted_attack": 94,
+          "tp": 94,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "true_background": 0
+        },
+        {
           "sig_key": "Apache: Attempt to access forbidden file or directory.",
           "source": "wazuh",
           "detector": "Apache: Attempt to access forbidden file or directory.",
@@ -469,20 +483,6 @@
           "precision": 1.0,
           "recall": 1.0,
           "true_background": 0
-        },
-        {
-          "sig_key": "ClamAV database update",
-          "source": "wazuh",
-          "detector": "ClamAV database update",
-          "n": 171,
-          "attack_true": 8,
-          "predicted_attack": 0,
-          "tp": 0,
-          "fp": 0,
-          "fn": 8,
-          "precision": 0.0,
-          "recall": 0.0,
-          "true_background": 163
         },
         {
           "sig_key": "Multiple web server 400 error codes from same source ip.",
@@ -628,14 +628,14 @@
       "phase_errors": {
         "attack|dirb": {
           "n": 211832,
-          "kept_as_attack": 211633,
-          "filtered_out": 199,
+          "kept_as_attack": 211679,
+          "filtered_out": 153,
           "attack_true": 211832
         },
         "attack|dnsteal": {
           "n": 687,
-          "kept_as_attack": 1,
-          "filtered_out": 686,
+          "kept_as_attack": 4,
+          "filtered_out": 683,
           "attack_true": 687
         },
         "attack|network_scans": {
@@ -658,8 +658,8 @@
         },
         "background|background": {
           "n": 16270,
-          "kept_as_attack": 94,
-          "filtered_out": 16176,
+          "kept_as_attack": 249,
+          "filtered_out": 16021,
           "attack_true": 0
         }
       },
@@ -667,324 +667,324 @@
         "gain": [
           {
             "feature": "status_code",
-            "importance": 60666.24
+            "importance": 13963.82
           },
           {
-            "feature": "firedtimes",
-            "importance": 1152.38
+            "feature": "text_svd_2",
+            "importance": 2993.97
           },
           {
             "feature": "hour",
-            "importance": 976.93
+            "importance": 2169.82
           },
           {
-            "feature": "sig_count_prev_600s",
-            "importance": 545.58
-          },
-          {
-            "feature": "sig_count_prev_60s",
-            "importance": 415.21
-          },
-          {
-            "feature": "url_len",
-            "importance": 157.45
-          },
-          {
-            "feature": "text_svd_15",
-            "importance": 61.54
-          },
-          {
-            "feature": "url_tokens",
-            "importance": 58.54
-          },
-          {
-            "feature": "text_svd_19",
-            "importance": 34.87
-          },
-          {
-            "feature": "url_entropy",
-            "importance": 27.83
-          },
-          {
-            "feature": "time_since_last_event",
-            "importance": 16.15
-          },
-          {
-            "feature": "text_svd_23",
-            "importance": 8.03
-          },
-          {
-            "feature": "text_svd_20",
-            "importance": 4.79
-          },
-          {
-            "feature": "text_svd_14",
-            "importance": 3.16
-          },
-          {
-            "feature": "text_svd_21",
-            "importance": 1.5
-          },
-          {
-            "feature": "rule_level",
-            "importance": 0.0
-          },
-          {
-            "feature": "src_port",
-            "importance": 0.0
-          },
-          {
-            "feature": "url_parts",
-            "importance": 0.0
-          },
-          {
-            "feature": "url_query",
-            "importance": 0.0
-          },
-          {
-            "feature": "url_encoded_chars",
-            "importance": 0.0
-          },
-          {
-            "feature": "url_max_token_len",
-            "importance": 0.0
-          },
-          {
-            "feature": "group_ids",
-            "importance": 0.0
-          },
-          {
-            "feature": "group_web",
-            "importance": 0.0
+            "feature": "firedtimes",
+            "importance": 1992.82
           },
           {
             "feature": "group_accesslog",
-            "importance": 0.0
+            "importance": 1887.39
           },
           {
-            "feature": "group_syslog",
-            "importance": 0.0
+            "feature": "sig_count_prev_600s",
+            "importance": 1746.8
           },
           {
-            "feature": "group_audit",
-            "importance": 0.0
+            "feature": "sig_count_prev_60s",
+            "importance": 611.37
           },
           {
-            "feature": "group_mitre",
-            "importance": 0.0
+            "feature": "rule_groups",
+            "importance": 598.71
           },
           {
-            "feature": "is_aggregated",
-            "importance": 0.0
+            "feature": "time_since_last_event",
+            "importance": 123.94
           },
           {
-            "feature": "urlflag_wpadmin",
-            "importance": 0.0
+            "feature": "url_entropy",
+            "importance": 114.68
           },
           {
-            "feature": "urlflag_wpcontent",
-            "importance": 0.0
+            "feature": "url_tokens",
+            "importance": 100.26
           },
           {
-            "feature": "urlflag_wpjson",
-            "importance": 0.0
+            "feature": "rule_level",
+            "importance": 53.83
           },
           {
-            "feature": "urlflag_wplogin",
-            "importance": 0.0
+            "feature": "url_len",
+            "importance": 52.73
           },
           {
-            "feature": "urlflag_xmlrpc",
-            "importance": 0.0
+            "feature": "text_svd_13",
+            "importance": 47.44
           },
           {
-            "feature": "urlflag_wpconfig",
-            "importance": 0.0
+            "feature": "text_svd_11",
+            "importance": 41.3
           },
           {
-            "feature": "urlflag_phpmyadmin",
-            "importance": 0.0
+            "feature": "text_svd_12",
+            "importance": 29.8
           },
           {
-            "feature": "urlflag_backup",
-            "importance": 0.0
+            "feature": "text_svd_0",
+            "importance": 20.52
           },
           {
-            "feature": "urlflag_dump",
-            "importance": 0.0
+            "feature": "text_svd_5",
+            "importance": 17.64
           },
           {
-            "feature": "urlflag_config",
-            "importance": 0.0
+            "feature": "text_svd_19",
+            "importance": 13.17
           },
           {
-            "feature": "urlflag_git",
-            "importance": 0.0
+            "feature": "text_svd_7",
+            "importance": 13.11
           },
           {
-            "feature": "urlflag_sql",
+            "feature": "text_svd_6",
+            "importance": 11.98
+          },
+          {
+            "feature": "text_svd_9",
+            "importance": 11.58
+          },
+          {
+            "feature": "text_svd_22",
+            "importance": 10.38
+          },
+          {
+            "feature": "sig_key",
+            "importance": 9.02
+          },
+          {
+            "feature": "text_svd_23",
+            "importance": 8.92
+          },
+          {
+            "feature": "text_svd_1",
+            "importance": 6.71
+          },
+          {
+            "feature": "text_svd_8",
+            "importance": 6.48
+          },
+          {
+            "feature": "text_svd_18",
+            "importance": 5.98
+          },
+          {
+            "feature": "text_svd_3",
+            "importance": 5.22
+          },
+          {
+            "feature": "src_port",
+            "importance": 4.76
+          },
+          {
+            "feature": "text_svd_14",
+            "importance": 4.29
+          },
+          {
+            "feature": "text_svd_20",
+            "importance": 4.27
+          },
+          {
+            "feature": "text_svd_21",
+            "importance": 3.88
+          },
+          {
+            "feature": "text_svd_4",
+            "importance": 3.69
+          },
+          {
+            "feature": "text_svd_17",
+            "importance": 2.45
+          },
+          {
+            "feature": "text_svd_16",
+            "importance": 2.42
+          },
+          {
+            "feature": "text_svd_15",
+            "importance": 2.36
+          },
+          {
+            "feature": "group_web",
+            "importance": 2.3
+          },
+          {
+            "feature": "text_svd_10",
+            "importance": 1.19
+          },
+          {
+            "feature": "url_parts",
             "importance": 0.0
           }
         ],
         "split": [
           {
             "feature": "firedtimes",
-            "importance": 69
+            "importance": 1189
           },
           {
             "feature": "sig_count_prev_600s",
-            "importance": 58
-          },
-          {
-            "feature": "sig_count_prev_60s",
-            "importance": 50
+            "importance": 1184
           },
           {
             "feature": "hour",
-            "importance": 48
+            "importance": 719
           },
           {
-            "feature": "status_code",
-            "importance": 8
-          },
-          {
-            "feature": "text_svd_19",
-            "importance": 8
-          },
-          {
-            "feature": "url_len",
-            "importance": 4
-          },
-          {
-            "feature": "text_svd_15",
-            "importance": 3
+            "feature": "sig_count_prev_60s",
+            "importance": 532
           },
           {
             "feature": "time_since_last_event",
-            "importance": 2
+            "importance": 148
           },
           {
-            "feature": "url_tokens",
-            "importance": 2
+            "feature": "status_code",
+            "importance": 80
           },
           {
-            "feature": "text_svd_23",
-            "importance": 2
-          },
-          {
-            "feature": "url_entropy",
-            "importance": 1
-          },
-          {
-            "feature": "text_svd_14",
-            "importance": 1
-          },
-          {
-            "feature": "text_svd_20",
-            "importance": 1
-          },
-          {
-            "feature": "text_svd_21",
-            "importance": 1
+            "feature": "text_svd_2",
+            "importance": 43
           },
           {
             "feature": "rule_level",
-            "importance": 0
+            "importance": 32
           },
           {
-            "feature": "src_port",
-            "importance": 0
+            "feature": "text_svd_11",
+            "importance": 28
           },
           {
-            "feature": "url_parts",
-            "importance": 0
+            "feature": "url_entropy",
+            "importance": 26
           },
           {
-            "feature": "url_query",
-            "importance": 0
+            "feature": "text_svd_13",
+            "importance": 23
           },
           {
-            "feature": "url_encoded_chars",
-            "importance": 0
+            "feature": "url_tokens",
+            "importance": 20
           },
           {
-            "feature": "url_max_token_len",
-            "importance": 0
+            "feature": "text_svd_0",
+            "importance": 18
           },
           {
-            "feature": "group_ids",
-            "importance": 0
+            "feature": "text_svd_19",
+            "importance": 16
           },
           {
-            "feature": "group_web",
-            "importance": 0
+            "feature": "url_len",
+            "importance": 13
           },
           {
             "feature": "group_accesslog",
-            "importance": 0
+            "importance": 13
           },
           {
-            "feature": "group_syslog",
-            "importance": 0
+            "feature": "text_svd_5",
+            "importance": 12
           },
           {
-            "feature": "group_audit",
-            "importance": 0
+            "feature": "text_svd_12",
+            "importance": 12
           },
           {
-            "feature": "group_mitre",
-            "importance": 0
+            "feature": "text_svd_23",
+            "importance": 12
           },
           {
-            "feature": "is_aggregated",
-            "importance": 0
+            "feature": "text_svd_9",
+            "importance": 11
           },
           {
-            "feature": "urlflag_wpadmin",
-            "importance": 0
+            "feature": "rule_groups",
+            "importance": 10
           },
           {
-            "feature": "urlflag_wpcontent",
-            "importance": 0
+            "feature": "text_svd_6",
+            "importance": 9
           },
           {
-            "feature": "urlflag_wpjson",
-            "importance": 0
+            "feature": "text_svd_7",
+            "importance": 7
           },
           {
-            "feature": "urlflag_wplogin",
-            "importance": 0
+            "feature": "text_svd_1",
+            "importance": 6
           },
           {
-            "feature": "urlflag_xmlrpc",
-            "importance": 0
+            "feature": "text_svd_15",
+            "importance": 6
           },
           {
-            "feature": "urlflag_wpconfig",
-            "importance": 0
+            "feature": "text_svd_20",
+            "importance": 6
           },
           {
-            "feature": "urlflag_phpmyadmin",
-            "importance": 0
+            "feature": "text_svd_22",
+            "importance": 6
           },
           {
-            "feature": "urlflag_backup",
-            "importance": 0
+            "feature": "text_svd_3",
+            "importance": 5
           },
           {
-            "feature": "urlflag_dump",
-            "importance": 0
+            "feature": "text_svd_8",
+            "importance": 5
           },
           {
-            "feature": "urlflag_config",
-            "importance": 0
+            "feature": "text_svd_21",
+            "importance": 5
           },
           {
-            "feature": "urlflag_git",
-            "importance": 0
+            "feature": "sig_key",
+            "importance": 4
           },
           {
-            "feature": "urlflag_sql",
+            "feature": "text_svd_4",
+            "importance": 4
+          },
+          {
+            "feature": "src_port",
+            "importance": 3
+          },
+          {
+            "feature": "text_svd_14",
+            "importance": 3
+          },
+          {
+            "feature": "text_svd_17",
+            "importance": 3
+          },
+          {
+            "feature": "text_svd_18",
+            "importance": 3
+          },
+          {
+            "feature": "text_svd_16",
+            "importance": 2
+          },
+          {
+            "feature": "group_web",
+            "importance": 1
+          },
+          {
+            "feature": "text_svd_10",
+            "importance": 1
+          },
+          {
+            "feature": "url_parts",
             "importance": 0
           }
         ]
@@ -995,54 +995,54 @@
       "train_rows": 493969,
       "cal_rows": 229001,
       "test_rows": 229794,
-      "best_iteration": 77,
-      "fit_seconds": 13.73,
-      "threshold_model": 0.49864,
+      "best_iteration": 46,
+      "fit_seconds": 5.43,
+      "threshold_model": 0.376698,
       "threshold_prior_baseline": 0.5,
       "model_metrics": {
         "n": 229794,
         "n_attack": 219130,
         "n_background": 10664,
-        "n_predicted_attack": 218872,
-        "tn": 10632,
-        "fp": 32,
-        "fn": 290,
-        "tp": 218840,
-        "threshold": 0.49864,
-        "accuracy": 0.9986,
+        "n_predicted_attack": 218825,
+        "tn": 10640,
+        "fp": 24,
+        "fn": 329,
+        "tp": 218801,
+        "threshold": 0.376698,
+        "accuracy": 0.9985,
         "base_rate_attack": 0.9536,
-        "predicted_attack_share": 0.9525,
+        "predicted_attack_share": 0.9523,
         "precision_attack": 0.9999,
-        "recall_attack": 0.9987,
-        "f1_attack": 0.9993,
-        "macro_f1": 0.9922,
-        "background_filtered_share": 0.997,
-        "background_filtered_pct": 99.7,
-        "false_positive_rate": 0.003,
-        "false_positives_per_million_alerts": 139.3,
-        "false_positives_per_million_background": 3000.8,
-        "alert_reduction_rate": 0.9986,
-        "noise_reduction_rate": 0.997,
-        "alerts_kept_for_review": 218872,
+        "recall_attack": 0.9985,
+        "f1_attack": 0.9992,
+        "macro_f1": 0.9914,
+        "background_filtered_share": 0.9977,
+        "background_filtered_pct": 99.77,
+        "false_positive_rate": 0.0023,
+        "false_positives_per_million_alerts": 104.4,
+        "false_positives_per_million_background": 2250.6,
+        "alert_reduction_rate": 0.9985,
+        "noise_reduction_rate": 0.9977,
+        "alerts_kept_for_review": 218825,
         "pr_auc_attack": 1.0,
-        "roc_auc": 0.9994,
+        "roc_auc": 0.9993,
         "budget_fp_per_m_5000": {
-          "recall_at_budget": 0.9987,
-          "threshold": 0.227207,
-          "false_positives": 1148,
-          "true_positives": 218850,
-          "predicted_positives": 219998
+          "recall_at_budget": 0.9988,
+          "threshold": 0.224248,
+          "false_positives": 1153,
+          "true_positives": 218859,
+          "predicted_positives": 220012
         },
         "budget_fp_per_m_20000": {
-          "recall_at_budget": 0.9993,
-          "threshold": 0.110984,
+          "recall_at_budget": 0.999,
+          "threshold": 0.20093,
           "false_positives": 4595,
-          "true_positives": 218973,
-          "predicted_positives": 223568
+          "true_positives": 218908,
+          "predicted_positives": 223503
         },
         "budget_fp_per_m_50000": {
           "recall_at_budget": 1.0,
-          "threshold": 0.026815,
+          "threshold": 0.190131,
           "false_positives": 10664,
           "true_positives": 219130,
           "predicted_positives": 229794
@@ -1052,49 +1052,49 @@
         "n": 229001,
         "n_attack": 212022,
         "n_background": 16979,
-        "n_predicted_attack": 211463,
+        "n_predicted_attack": 211439,
         "tn": 16979,
         "fp": 0,
-        "fn": 559,
-        "tp": 211463,
-        "threshold": 0.49864,
-        "accuracy": 0.9976,
+        "fn": 583,
+        "tp": 211439,
+        "threshold": 0.376698,
+        "accuracy": 0.9975,
         "base_rate_attack": 0.9259,
-        "predicted_attack_share": 0.9234,
+        "predicted_attack_share": 0.9233,
         "precision_attack": 1.0,
-        "recall_attack": 0.9974,
-        "f1_attack": 0.9987,
-        "macro_f1": 0.9912,
+        "recall_attack": 0.9973,
+        "f1_attack": 0.9986,
+        "macro_f1": 0.9909,
         "background_filtered_share": 1.0,
         "background_filtered_pct": 100.0,
         "false_positive_rate": 0.0,
         "false_positives_per_million_alerts": 0.0,
         "false_positives_per_million_background": 0.0,
-        "alert_reduction_rate": 0.9976,
+        "alert_reduction_rate": 0.9975,
         "noise_reduction_rate": 1.0,
-        "alerts_kept_for_review": 211463,
+        "alerts_kept_for_review": 211439,
         "pr_auc_attack": 0.9999,
-        "roc_auc": 0.9985,
+        "roc_auc": 0.9986,
         "budget_fp_per_m_5000": {
           "recall_at_budget": 0.9974,
-          "threshold": 0.203844,
-          "false_positives": 1145,
-          "true_positives": 211472,
-          "predicted_positives": 212617
+          "threshold": 0.216609,
+          "false_positives": 1187,
+          "true_positives": 211477,
+          "predicted_positives": 212664
         },
         "budget_fp_per_m_20000": {
           "recall_at_budget": 0.9978,
-          "threshold": 0.080375,
-          "false_positives": 4580,
-          "true_positives": 211553,
-          "predicted_positives": 216133
+          "threshold": 0.193565,
+          "false_positives": 4583,
+          "true_positives": 211557,
+          "predicted_positives": 216140
         },
         "budget_fp_per_m_50000": {
-          "recall_at_budget": 0.9989,
-          "threshold": 0.033534,
-          "false_positives": 11450,
-          "true_positives": 211787,
-          "predicted_positives": 223237
+          "recall_at_budget": 0.9993,
+          "threshold": 0.189801,
+          "false_positives": 12410,
+          "true_positives": 211865,
+          "predicted_positives": 224275
         }
       },
       "baseline_detector_prior": {
@@ -1197,20 +1197,6 @@
       },
       "detector_top_errors": [
         {
-          "sig_key": "IDS event.",
-          "source": "wazuh",
-          "detector": "IDS event.",
-          "n": 5723,
-          "attack_true": 137,
-          "predicted_attack": 42,
-          "tp": 27,
-          "fp": 15,
-          "fn": 110,
-          "precision": 0.6429,
-          "recall": 0.1971,
-          "true_background": 5586
-        },
-        {
           "sig_key": "ClamAV database update",
           "source": "wazuh",
           "detector": "ClamAV database update",
@@ -1223,6 +1209,20 @@
           "precision": 0.0833,
           "recall": 0.125,
           "true_background": 171
+        },
+        {
+          "sig_key": "IDS event.",
+          "source": "wazuh",
+          "detector": "IDS event.",
+          "n": 5723,
+          "attack_true": 137,
+          "predicted_attack": 28,
+          "tp": 21,
+          "fp": 7,
+          "fn": 116,
+          "precision": 0.75,
+          "recall": 0.1533,
+          "true_background": 5586
         },
         {
           "sig_key": "Multiple IDS alerts for same id (ignoring now this id).",
@@ -1300,12 +1300,12 @@
           "detector": "Apache: Attempt to access forbidden directory index.",
           "n": 47,
           "attack_true": 47,
-          "predicted_attack": 47,
-          "tp": 47,
+          "predicted_attack": 23,
+          "tp": 23,
           "fp": 0,
-          "fn": 0,
+          "fn": 24,
           "precision": 1.0,
-          "recall": 1.0,
+          "recall": 0.4894,
           "true_background": 0
         },
         {
@@ -1538,12 +1538,12 @@
           "detector": "sshd: insecure connection attempt (scan).",
           "n": 9,
           "attack_true": 9,
-          "predicted_attack": 9,
-          "tp": 9,
+          "predicted_attack": 0,
+          "tp": 0,
           "fp": 0,
-          "fn": 0,
-          "precision": 1.0,
-          "recall": 1.0,
+          "fn": 9,
+          "precision": 0.0,
+          "recall": 0.0,
           "true_background": 0
         },
         {
@@ -1570,8 +1570,8 @@
         },
         "attack|dirb": {
           "n": 215122,
-          "kept_as_attack": 214948,
-          "filtered_out": 174,
+          "kept_as_attack": 214920,
+          "filtered_out": 202,
           "attack_true": 215122
         },
         "attack|network_scans": {
@@ -1588,8 +1588,8 @@
         },
         "attack|service_scans": {
           "n": 94,
-          "kept_as_attack": 75,
-          "filtered_out": 19,
+          "kept_as_attack": 66,
+          "filtered_out": 28,
           "attack_true": 94
         },
         "attack|webshell": {
@@ -1600,14 +1600,14 @@
         },
         "attack|wpscan": {
           "n": 3830,
-          "kept_as_attack": 3815,
-          "filtered_out": 15,
+          "kept_as_attack": 3813,
+          "filtered_out": 17,
           "attack_true": 3830
         },
         "background|background": {
           "n": 10664,
-          "kept_as_attack": 32,
-          "filtered_out": 10632,
+          "kept_as_attack": 24,
+          "filtered_out": 10640,
           "attack_true": 0
         }
       },
@@ -1615,240 +1615,212 @@
         "gain": [
           {
             "feature": "status_code",
-            "importance": 88881.66
-          },
-          {
-            "feature": "hour",
-            "importance": 11400.96
-          },
-          {
-            "feature": "firedtimes",
-            "importance": 10198.64
-          },
-          {
-            "feature": "sig_count_prev_600s",
-            "importance": 8480.02
-          },
-          {
-            "feature": "rule_groups",
-            "importance": 7818.21
-          },
-          {
-            "feature": "sig_count_prev_60s",
-            "importance": 2994.36
-          },
-          {
-            "feature": "sig_key",
-            "importance": 2717.4
-          },
-          {
-            "feature": "rule_level",
-            "importance": 724.6
-          },
-          {
-            "feature": "time_since_last_event",
-            "importance": 556.71
-          },
-          {
-            "feature": "text_svd_21",
-            "importance": 455.83
-          },
-          {
-            "feature": "url_entropy",
-            "importance": 430.33
-          },
-          {
-            "feature": "text_svd_1",
-            "importance": 350.2
-          },
-          {
-            "feature": "text_svd_0",
-            "importance": 333.6
-          },
-          {
-            "feature": "group_web",
-            "importance": 329.75
-          },
-          {
-            "feature": "url_tokens",
-            "importance": 283.63
-          },
-          {
-            "feature": "text_svd_2",
-            "importance": 157.17
-          },
-          {
-            "feature": "text_svd_11",
-            "importance": 113.2
-          },
-          {
-            "feature": "text_svd_6",
-            "importance": 113.13
-          },
-          {
-            "feature": "text_svd_20",
-            "importance": 80.6
+            "importance": 21322.53
           },
           {
             "feature": "group_accesslog",
-            "importance": 80.02
+            "importance": 2203.15
           },
           {
-            "feature": "text_svd_14",
-            "importance": 79.48
+            "feature": "firedtimes",
+            "importance": 1020.8
           },
           {
-            "feature": "log_resource_class",
-            "importance": 78.66
+            "feature": "hour",
+            "importance": 792.34
           },
           {
-            "feature": "text_svd_23",
-            "importance": 69.23
+            "feature": "sig_count_prev_600s",
+            "importance": 774.62
           },
           {
-            "feature": "text_svd_3",
-            "importance": 68.01
+            "feature": "sig_key",
+            "importance": 689.12
+          },
+          {
+            "feature": "rule_groups",
+            "importance": 514.95
+          },
+          {
+            "feature": "url_entropy",
+            "importance": 281.88
+          },
+          {
+            "feature": "sig_count_prev_60s",
+            "importance": 271.93
+          },
+          {
+            "feature": "url_tokens",
+            "importance": 192.81
+          },
+          {
+            "feature": "rule_level",
+            "importance": 26.91
+          },
+          {
+            "feature": "time_since_last_event",
+            "importance": 25.44
+          },
+          {
+            "feature": "text_svd_2",
+            "importance": 21.94
+          },
+          {
+            "feature": "text_svd_11",
+            "importance": 21.08
           },
           {
             "feature": "text_svd_17",
-            "importance": 59.6
+            "importance": 18.03
           },
           {
-            "feature": "text_svd_5",
-            "importance": 53.34
+            "feature": "text_svd_0",
+            "importance": 14.82
           },
           {
-            "feature": "text_svd_4",
-            "importance": 52.98
+            "feature": "src_port",
+            "importance": 12.74
+          },
+          {
+            "feature": "text_svd_9",
+            "importance": 11.98
+          },
+          {
+            "feature": "text_svd_21",
+            "importance": 11.78
           },
           {
             "feature": "urlflag_remote",
-            "importance": 51.12
+            "importance": 10.73
           },
           {
-            "feature": "text_svd_13",
-            "importance": 45.36
+            "feature": "text_svd_6",
+            "importance": 8.7
           },
           {
             "feature": "text_svd_7",
-            "importance": 44.23
+            "importance": 7.87
           },
           {
             "feature": "url_len",
-            "importance": 39.73
+            "importance": 7.67
+          },
+          {
+            "feature": "text_svd_20",
+            "importance": 7.09
           },
           {
             "feature": "group_ids",
-            "importance": 36.47
+            "importance": 7.01
           },
           {
-            "feature": "url_parts",
-            "importance": 30.38
+            "feature": "text_svd_1",
+            "importance": 5.64
           },
           {
-            "feature": "url_query",
-            "importance": 27.36
+            "feature": "text_svd_18",
+            "importance": 4.3
           },
           {
-            "feature": "text_svd_22",
-            "importance": 19.64
+            "feature": "text_svd_13",
+            "importance": 4.14
           },
           {
-            "feature": "text_svd_19",
-            "importance": 18.02
+            "feature": "text_svd_5",
+            "importance": 3.86
           },
           {
             "feature": "text_svd_8",
-            "importance": 15.29
+            "importance": 3.11
+          },
+          {
+            "feature": "text_svd_23",
+            "importance": 2.33
+          },
+          {
+            "feature": "text_svd_19",
+            "importance": 2.06
+          },
+          {
+            "feature": "text_svd_4",
+            "importance": 1.34
+          },
+          {
+            "feature": "text_svd_10",
+            "importance": 0.31
           },
           {
             "feature": "text_svd_16",
-            "importance": 14.65
+            "importance": 0.15
           },
           {
-            "feature": "ua_wpscan",
-            "importance": 14.23
+            "feature": "text_svd_22",
+            "importance": 0.05
           },
           {
-            "feature": "text_svd_15",
-            "importance": 7.4
+            "feature": "url_parts",
+            "importance": 0.0
+          },
+          {
+            "feature": "url_query",
+            "importance": 0.0
+          },
+          {
+            "feature": "url_encoded_chars",
+            "importance": 0.0
+          },
+          {
+            "feature": "url_max_token_len",
+            "importance": 0.0
           }
         ],
         "split": [
           {
             "feature": "firedtimes",
-            "importance": 1350
+            "importance": 556
           },
           {
             "feature": "sig_count_prev_600s",
-            "importance": 1175
+            "importance": 421
           },
           {
             "feature": "hour",
-            "importance": 664
+            "importance": 234
           },
           {
             "feature": "sig_count_prev_60s",
-            "importance": 589
+            "importance": 206
           },
           {
             "feature": "time_since_last_event",
-            "importance": 248
+            "importance": 45
           },
           {
             "feature": "status_code",
-            "importance": 110
-          },
-          {
-            "feature": "rule_level",
-            "importance": 74
-          },
-          {
-            "feature": "text_svd_1",
-            "importance": 44
-          },
-          {
-            "feature": "text_svd_0",
-            "importance": 39
-          },
-          {
-            "feature": "text_svd_2",
-            "importance": 21
-          },
-          {
-            "feature": "text_svd_6",
-            "importance": 17
-          },
-          {
-            "feature": "group_web",
-            "importance": 16
-          },
-          {
-            "feature": "text_svd_23",
-            "importance": 15
-          },
-          {
-            "feature": "text_svd_13",
-            "importance": 14
+            "importance": 35
           },
           {
             "feature": "url_entropy",
-            "importance": 13
+            "importance": 23
           },
           {
-            "feature": "text_svd_21",
-            "importance": 13
-          },
-          {
-            "feature": "url_len",
-            "importance": 10
-          },
-          {
-            "feature": "url_query",
-            "importance": 10
+            "feature": "text_svd_2",
+            "importance": 19
           },
           {
             "feature": "url_tokens",
+            "importance": 18
+          },
+          {
+            "feature": "text_svd_6",
+            "importance": 11
+          },
+          {
+            "feature": "text_svd_17",
+            "importance": 11
+          },
+          {
+            "feature": "rule_level",
             "importance": 10
           },
           {
@@ -1856,71 +1828,35 @@
             "importance": 10
           },
           {
-            "feature": "text_svd_17",
-            "importance": 9
-          },
-          {
-            "feature": "text_svd_20",
-            "importance": 9
-          },
-          {
-            "feature": "url_parts",
-            "importance": 8
-          },
-          {
-            "feature": "group_ids",
-            "importance": 8
-          },
-          {
-            "feature": "text_svd_4",
-            "importance": 8
-          },
-          {
             "feature": "text_svd_7",
-            "importance": 8
+            "importance": 9
           },
           {
-            "feature": "sig_key",
-            "importance": 7
-          },
-          {
-            "feature": "log_resource_class",
-            "importance": 7
-          },
-          {
-            "feature": "text_svd_3",
-            "importance": 7
-          },
-          {
-            "feature": "text_svd_22",
-            "importance": 7
+            "feature": "text_svd_23",
+            "importance": 9
           },
           {
             "feature": "text_svd_5",
             "importance": 6
           },
           {
-            "feature": "text_svd_14",
+            "feature": "text_svd_20",
             "importance": 6
-          },
-          {
-            "feature": "urlflag_remote",
-            "importance": 5
           },
           {
             "feature": "rule_groups",
             "importance": 5
           },
           {
-            "feature": "text_svd_8",
+            "feature": "text_svd_0",
             "importance": 5
           },
           {
-            "feature": "text_svd_15",
+            "feature": "text_svd_1",
             "importance": 5
           },
           {
-            "feature": "text_svd_16",
+            "feature": "text_svd_13",
             "importance": 5
           },
           {
@@ -1928,12 +1864,76 @@
             "importance": 5
           },
           {
+            "feature": "text_svd_21",
+            "importance": 5
+          },
+          {
+            "feature": "group_ids",
+            "importance": 3
+          },
+          {
             "feature": "group_accesslog",
+            "importance": 3
+          },
+          {
+            "feature": "urlflag_remote",
+            "importance": 3
+          },
+          {
+            "feature": "sig_key",
+            "importance": 3
+          },
+          {
+            "feature": "src_port",
             "importance": 2
           },
           {
-            "feature": "ua_wpscan",
+            "feature": "url_len",
             "importance": 2
+          },
+          {
+            "feature": "text_svd_8",
+            "importance": 2
+          },
+          {
+            "feature": "text_svd_9",
+            "importance": 2
+          },
+          {
+            "feature": "text_svd_18",
+            "importance": 2
+          },
+          {
+            "feature": "text_svd_4",
+            "importance": 1
+          },
+          {
+            "feature": "text_svd_10",
+            "importance": 1
+          },
+          {
+            "feature": "text_svd_16",
+            "importance": 1
+          },
+          {
+            "feature": "text_svd_22",
+            "importance": 1
+          },
+          {
+            "feature": "url_parts",
+            "importance": 0
+          },
+          {
+            "feature": "url_query",
+            "importance": 0
+          },
+          {
+            "feature": "url_encoded_chars",
+            "importance": 0
+          },
+          {
+            "feature": "url_max_token_len",
+            "importance": 0
           }
         ]
       }
@@ -1943,106 +1943,106 @@
       "train_rows": 535734,
       "cal_rows": 114658,
       "test_rows": 115367,
-      "best_iteration": 150,
-      "fit_seconds": 19.59,
-      "threshold_model": 0.360205,
+      "best_iteration": 29,
+      "fit_seconds": 4.35,
+      "threshold_model": 0.273388,
       "threshold_prior_baseline": 0.0375,
       "model_metrics": {
         "n": 115367,
         "n_attack": 36190,
         "n_background": 79177,
-        "n_predicted_attack": 33476,
-        "tn": 78371,
-        "fp": 806,
-        "fn": 3520,
-        "tp": 32670,
-        "threshold": 0.360205,
-        "accuracy": 0.9625,
+        "n_predicted_attack": 37645,
+        "tn": 74421,
+        "fp": 4756,
+        "fn": 3301,
+        "tp": 32889,
+        "threshold": 0.273388,
+        "accuracy": 0.9302,
         "base_rate_attack": 0.3137,
-        "predicted_attack_share": 0.2902,
-        "precision_attack": 0.9759,
-        "recall_attack": 0.9027,
-        "f1_attack": 0.9379,
-        "macro_f1": 0.9555,
-        "background_filtered_share": 0.9898,
-        "background_filtered_pct": 98.98,
-        "false_positive_rate": 0.0102,
-        "false_positives_per_million_alerts": 6986.4,
-        "false_positives_per_million_background": 10179.7,
-        "alert_reduction_rate": 0.9625,
-        "noise_reduction_rate": 0.9898,
-        "alerts_kept_for_review": 33476,
-        "pr_auc_attack": 0.9651,
-        "roc_auc": 0.972,
+        "predicted_attack_share": 0.3263,
+        "precision_attack": 0.8737,
+        "recall_attack": 0.9088,
+        "f1_attack": 0.8909,
+        "macro_f1": 0.9198,
+        "background_filtered_share": 0.9399,
+        "background_filtered_pct": 93.99,
+        "false_positive_rate": 0.0601,
+        "false_positives_per_million_alerts": 41225.0,
+        "false_positives_per_million_background": 60067.9,
+        "alert_reduction_rate": 0.9302,
+        "noise_reduction_rate": 0.9399,
+        "alerts_kept_for_review": 37645,
+        "pr_auc_attack": 0.9636,
+        "roc_auc": 0.9697,
         "budget_fp_per_m_5000": {
-          "recall_at_budget": 0.9024,
-          "threshold": 0.362646,
-          "false_positives": 576,
-          "true_positives": 32658,
-          "predicted_positives": 33234
+          "recall_at_budget": 0.9053,
+          "threshold": 0.296988,
+          "false_positives": 597,
+          "true_positives": 32762,
+          "predicted_positives": 33359
         },
         "budget_fp_per_m_20000": {
-          "recall_at_budget": 0.9083,
-          "threshold": 0.24751,
-          "false_positives": 2307,
-          "true_positives": 32873,
-          "predicted_positives": 35180
+          "recall_at_budget": 0.9065,
+          "threshold": 0.280001,
+          "false_positives": 2351,
+          "true_positives": 32807,
+          "predicted_positives": 35158
         },
         "budget_fp_per_m_50000": {
-          "recall_at_budget": 0.9157,
-          "threshold": 0.156068,
-          "false_positives": 5768,
-          "true_positives": 33140,
-          "predicted_positives": 38908
+          "recall_at_budget": 0.9086,
+          "threshold": 0.273046,
+          "false_positives": 5824,
+          "true_positives": 32881,
+          "predicted_positives": 38705
         }
       },
       "model_metrics_cal": {
         "n": 114658,
         "n_attack": 104068,
         "n_background": 10590,
-        "n_predicted_attack": 101477,
-        "tn": 10551,
-        "fp": 39,
-        "fn": 2630,
-        "tp": 101438,
-        "threshold": 0.360205,
-        "accuracy": 0.9767,
+        "n_predicted_attack": 102352,
+        "tn": 10382,
+        "fp": 208,
+        "fn": 1924,
+        "tp": 102144,
+        "threshold": 0.273388,
+        "accuracy": 0.9814,
         "base_rate_attack": 0.9076,
-        "predicted_attack_share": 0.885,
-        "precision_attack": 0.9996,
-        "recall_attack": 0.9747,
-        "f1_attack": 0.987,
-        "macro_f1": 0.9374,
-        "background_filtered_share": 0.9963,
-        "background_filtered_pct": 99.63,
-        "false_positive_rate": 0.0037,
-        "false_positives_per_million_alerts": 340.1,
-        "false_positives_per_million_background": 3682.7,
-        "alert_reduction_rate": 0.9767,
-        "noise_reduction_rate": 0.9963,
-        "alerts_kept_for_review": 101477,
-        "pr_auc_attack": 0.9993,
-        "roc_auc": 0.9927,
+        "predicted_attack_share": 0.8927,
+        "precision_attack": 0.998,
+        "recall_attack": 0.9815,
+        "f1_attack": 0.9897,
+        "macro_f1": 0.9483,
+        "background_filtered_share": 0.9804,
+        "background_filtered_pct": 98.04,
+        "false_positive_rate": 0.0196,
+        "false_positives_per_million_alerts": 1814.1,
+        "false_positives_per_million_background": 19641.2,
+        "alert_reduction_rate": 0.9814,
+        "noise_reduction_rate": 0.9804,
+        "alerts_kept_for_review": 102352,
+        "pr_auc_attack": 0.9994,
+        "roc_auc": 0.9947,
         "budget_fp_per_m_5000": {
-          "recall_at_budget": 0.9783,
-          "threshold": 0.210441,
-          "false_positives": 573,
-          "true_positives": 101812,
-          "predicted_positives": 102385
+          "recall_at_budget": 0.9844,
+          "threshold": 0.273046,
+          "false_positives": 697,
+          "true_positives": 102444,
+          "predicted_positives": 103141
         },
         "budget_fp_per_m_20000": {
-          "recall_at_budget": 0.9851,
-          "threshold": 0.113002,
-          "false_positives": 2293,
-          "true_positives": 102522,
-          "predicted_positives": 104815
+          "recall_at_budget": 0.9915,
+          "threshold": 0.26478,
+          "false_positives": 2917,
+          "true_positives": 103182,
+          "predicted_positives": 106099
         },
         "budget_fp_per_m_50000": {
-          "recall_at_budget": 0.9967,
-          "threshold": 0.059459,
-          "false_positives": 5732,
-          "true_positives": 103727,
-          "predicted_positives": 109459
+          "recall_at_budget": 0.9976,
+          "threshold": 0.264137,
+          "false_positives": 5804,
+          "true_positives": 103823,
+          "predicted_positives": 109627
         }
       },
       "baseline_detector_prior": {
@@ -2145,32 +2145,32 @@
       },
       "detector_top_errors": [
         {
-          "sig_key": "Dovecot Authentication Success.",
-          "source": "wazuh",
-          "detector": "Dovecot Authentication Success.",
-          "n": 43659,
-          "attack_true": 1911,
-          "predicted_attack": 447,
-          "tp": 49,
-          "fp": 398,
-          "fn": 1862,
-          "precision": 0.1096,
-          "recall": 0.0256,
-          "true_background": 41748
-        },
-        {
           "sig_key": "IDS event.",
           "source": "wazuh",
           "detector": "IDS event.",
           "n": 36283,
           "attack_true": 1597,
-          "predicted_attack": 289,
-          "tp": 51,
-          "fp": 238,
-          "fn": 1546,
-          "precision": 0.1765,
-          "recall": 0.0319,
+          "predicted_attack": 2871,
+          "tp": 71,
+          "fp": 2800,
+          "fn": 1526,
+          "precision": 0.0247,
+          "recall": 0.0445,
           "true_background": 34686
+        },
+        {
+          "sig_key": "Dovecot Authentication Success.",
+          "source": "wazuh",
+          "detector": "Dovecot Authentication Success.",
+          "n": 43659,
+          "attack_true": 1911,
+          "predicted_attack": 1833,
+          "tp": 220,
+          "fp": 1613,
+          "fn": 1691,
+          "precision": 0.12,
+          "recall": 0.1151,
+          "true_background": 41748
         },
         {
           "sig_key": "ClamAV database update",
@@ -2178,27 +2178,13 @@
           "detector": "ClamAV database update",
           "n": 1221,
           "attack_true": 24,
-          "predicted_attack": 67,
+          "predicted_attack": 85,
           "tp": 0,
-          "fp": 67,
+          "fp": 85,
           "fn": 24,
           "precision": 0.0,
           "recall": 0.0,
           "true_background": 1197
-        },
-        {
-          "sig_key": "Multiple IDS alerts for same id.",
-          "source": "wazuh",
-          "detector": "Multiple IDS alerts for same id.",
-          "n": 610,
-          "attack_true": 33,
-          "predicted_attack": 35,
-          "tp": 4,
-          "fp": 31,
-          "fn": 29,
-          "precision": 0.1143,
-          "recall": 0.1212,
-          "true_background": 577
         },
         {
           "sig_key": "Multiple IDS events from same source ip.",
@@ -2206,55 +2192,27 @@
           "detector": "Multiple IDS events from same source ip.",
           "n": 370,
           "attack_true": 7,
-          "predicted_attack": 26,
-          "tp": 0,
-          "fp": 26,
-          "fn": 7,
-          "precision": 0.0,
-          "recall": 0.0,
+          "predicted_attack": 70,
+          "tp": 1,
+          "fp": 69,
+          "fn": 6,
+          "precision": 0.0143,
+          "recall": 0.1429,
           "true_background": 363
         },
         {
-          "sig_key": "Multiple IDS alerts for same id (ignoring now this id).",
+          "sig_key": "Multiple IDS alerts for same id.",
           "source": "wazuh",
-          "detector": "Multiple IDS alerts for same id (ignoring now this id).",
-          "n": 110,
-          "attack_true": 6,
-          "predicted_attack": 16,
+          "detector": "Multiple IDS alerts for same id.",
+          "n": 610,
+          "attack_true": 33,
+          "predicted_attack": 50,
           "tp": 4,
-          "fp": 12,
-          "fn": 2,
-          "precision": 0.25,
-          "recall": 0.6667,
-          "true_background": 104
-        },
-        {
-          "sig_key": "PAM: User login failed.",
-          "source": "wazuh",
-          "detector": "PAM: User login failed.",
-          "n": 46,
-          "attack_true": 2,
-          "predicted_attack": 10,
-          "tp": 1,
-          "fp": 9,
-          "fn": 1,
-          "precision": 0.1,
-          "recall": 0.5,
-          "true_background": 44
-        },
-        {
-          "sig_key": "Multiple IDS events from same source ip (ignoring now this srcip and id).",
-          "source": "wazuh",
-          "detector": "Multiple IDS events from same source ip (ignoring now this srcip and id).",
-          "n": 38,
-          "attack_true": 0,
-          "predicted_attack": 8,
-          "tp": 0,
-          "fp": 8,
-          "fn": 0,
-          "precision": 0.0,
-          "recall": 0.0,
-          "true_background": 38
+          "fp": 46,
+          "fn": 29,
+          "precision": 0.08,
+          "recall": 0.1212,
+          "true_background": 577
         },
         {
           "sig_key": "Web server 400 error code.",
@@ -2262,13 +2220,27 @@
           "detector": "Web server 400 error code.",
           "n": 30186,
           "attack_true": 30144,
-          "predicted_attack": 30152,
+          "predicted_attack": 30186,
           "tp": 30144,
-          "fp": 8,
+          "fp": 42,
           "fn": 0,
-          "precision": 0.9997,
+          "precision": 0.9986,
           "recall": 1.0,
           "true_background": 42
+        },
+        {
+          "sig_key": "Multiple IDS alerts for same id (ignoring now this id).",
+          "source": "wazuh",
+          "detector": "Multiple IDS alerts for same id (ignoring now this id).",
+          "n": 110,
+          "attack_true": 6,
+          "predicted_attack": 25,
+          "tp": 4,
+          "fp": 21,
+          "fn": 2,
+          "precision": 0.16,
+          "recall": 0.6667,
+          "true_background": 104
         },
         {
           "sig_key": "CMS (WordPress or Joomla) login attempt.",
@@ -2276,27 +2248,13 @@
           "detector": "CMS (WordPress or Joomla) login attempt.",
           "n": 84,
           "attack_true": 15,
-          "predicted_attack": 16,
-          "tp": 9,
-          "fp": 7,
-          "fn": 6,
-          "precision": 0.5625,
-          "recall": 0.6,
+          "predicted_attack": 27,
+          "tp": 10,
+          "fp": 17,
+          "fn": 5,
+          "precision": 0.3704,
+          "recall": 0.6667,
           "true_background": 69
-        },
-        {
-          "sig_key": "PAM: Login session closed.",
-          "source": "wazuh",
-          "detector": "PAM: Login session closed.",
-          "n": 12,
-          "attack_true": 7,
-          "predicted_attack": 2,
-          "tp": 0,
-          "fp": 2,
-          "fn": 7,
-          "precision": 0.0,
-          "recall": 0.0,
-          "true_background": 5
         },
         {
           "sig_key": "Dovecot Invalid User Login Attempt.",
@@ -2304,13 +2262,139 @@
           "detector": "Dovecot Invalid User Login Attempt.",
           "n": 138,
           "attack_true": 6,
-          "predicted_attack": 0,
+          "predicted_attack": 15,
           "tp": 0,
-          "fp": 0,
+          "fp": 15,
           "fn": 6,
           "precision": 0.0,
           "recall": 0.0,
           "true_background": 132
+        },
+        {
+          "sig_key": "Multiple IDS events from same source ip (ignoring now this srcip and id).",
+          "source": "wazuh",
+          "detector": "Multiple IDS events from same source ip (ignoring now this srcip and id).",
+          "n": 38,
+          "attack_true": 0,
+          "predicted_attack": 13,
+          "tp": 0,
+          "fp": 13,
+          "fn": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "true_background": 38
+        },
+        {
+          "sig_key": "PAM: User login failed.",
+          "source": "wazuh",
+          "detector": "PAM: User login failed.",
+          "n": 46,
+          "attack_true": 2,
+          "predicted_attack": 11,
+          "tp": 1,
+          "fp": 10,
+          "fn": 1,
+          "precision": 0.0909,
+          "recall": 0.5,
+          "true_background": 44
+        },
+        {
+          "sig_key": "syslog: User authentication failure.",
+          "source": "wazuh",
+          "detector": "syslog: User authentication failure.",
+          "n": 92,
+          "attack_true": 4,
+          "predicted_attack": 10,
+          "tp": 0,
+          "fp": 10,
+          "fn": 4,
+          "precision": 0.0,
+          "recall": 0.0,
+          "true_background": 88
+        },
+        {
+          "sig_key": "First time this IDS alert is generated.",
+          "source": "wazuh",
+          "detector": "First time this IDS alert is generated.",
+          "n": 87,
+          "attack_true": 5,
+          "predicted_attack": 8,
+          "tp": 0,
+          "fp": 8,
+          "fn": 5,
+          "precision": 0.0,
+          "recall": 0.0,
+          "true_background": 82
+        },
+        {
+          "sig_key": "PAM: Login session closed.",
+          "source": "wazuh",
+          "detector": "PAM: Login session closed.",
+          "n": 12,
+          "attack_true": 7,
+          "predicted_attack": 12,
+          "tp": 7,
+          "fp": 5,
+          "fn": 0,
+          "precision": 0.5833,
+          "recall": 1.0,
+          "true_background": 5
+        },
+        {
+          "sig_key": "Web server 500 error code (Internal Error).",
+          "source": "wazuh",
+          "detector": "Web server 500 error code (Internal Error).",
+          "n": 2,
+          "attack_true": 0,
+          "predicted_attack": 2,
+          "tp": 0,
+          "fp": 2,
+          "fn": 0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "true_background": 2
+        },
+        {
+          "sig_key": "Apache: Attempt to access forbidden file or directory.",
+          "source": "wazuh",
+          "detector": "Apache: Attempt to access forbidden file or directory.",
+          "n": 33,
+          "attack_true": 33,
+          "predicted_attack": 33,
+          "tp": 33,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "true_background": 0
+        },
+        {
+          "sig_key": "Multiple web server 400 error codes from same source ip.",
+          "source": "wazuh",
+          "detector": "Multiple web server 400 error codes from same source ip.",
+          "n": 2326,
+          "attack_true": 2326,
+          "predicted_attack": 2326,
+          "tp": 2326,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "true_background": 0
+        },
+        {
+          "sig_key": "First time user executed sudo.",
+          "source": "wazuh",
+          "detector": "First time user executed sudo.",
+          "n": 2,
+          "attack_true": 2,
+          "predicted_attack": 2,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "true_background": 0
         },
         {
           "sig_key": "Apache: Attempt to access forbidden directory index.",
@@ -2341,20 +2425,6 @@
           "true_background": 0
         },
         {
-          "sig_key": "Apache: Attempt to access forbidden file or directory.",
-          "source": "wazuh",
-          "detector": "Apache: Attempt to access forbidden file or directory.",
-          "n": 33,
-          "attack_true": 33,
-          "predicted_attack": 33,
-          "tp": 33,
-          "fp": 0,
-          "fn": 0,
-          "precision": 1.0,
-          "recall": 1.0,
-          "true_background": 0
-        },
-        {
           "sig_key": "CMS (WordPress or Joomla) brute force attempt.",
           "source": "wazuh",
           "detector": "CMS (WordPress or Joomla) brute force attempt.",
@@ -2369,83 +2439,13 @@
           "true_background": 0
         },
         {
-          "sig_key": "Multiple web server 400 error codes from same source ip.",
-          "source": "wazuh",
-          "detector": "Multiple web server 400 error codes from same source ip.",
-          "n": 2326,
-          "attack_true": 2326,
-          "predicted_attack": 2326,
-          "tp": 2326,
-          "fp": 0,
-          "fn": 0,
-          "precision": 1.0,
-          "recall": 1.0,
-          "true_background": 0
-        },
-        {
-          "sig_key": "First time this IDS alert is generated.",
-          "source": "wazuh",
-          "detector": "First time this IDS alert is generated.",
-          "n": 87,
-          "attack_true": 5,
-          "predicted_attack": 0,
-          "tp": 0,
-          "fp": 0,
-          "fn": 5,
-          "precision": 0.0,
-          "recall": 0.0,
-          "true_background": 82
-        },
-        {
-          "sig_key": "First time user executed sudo.",
-          "source": "wazuh",
-          "detector": "First time user executed sudo.",
-          "n": 2,
-          "attack_true": 2,
-          "predicted_attack": 0,
-          "tp": 0,
-          "fp": 0,
-          "fn": 2,
-          "precision": 0.0,
-          "recall": 0.0,
-          "true_background": 0
-        },
-        {
-          "sig_key": "PAM: Login session opened.",
-          "source": "wazuh",
-          "detector": "PAM: Login session opened.",
-          "n": 12,
-          "attack_true": 12,
-          "predicted_attack": 0,
-          "tp": 0,
-          "fp": 0,
-          "fn": 12,
-          "precision": 0.0,
-          "recall": 0.0,
-          "true_background": 0
-        },
-        {
           "sig_key": "Successful sudo to ROOT executed.",
           "source": "wazuh",
           "detector": "Successful sudo to ROOT executed.",
           "n": 8,
           "attack_true": 8,
-          "predicted_attack": 3,
-          "tp": 3,
-          "fp": 0,
-          "fn": 5,
-          "precision": 1.0,
-          "recall": 0.375,
-          "true_background": 0
-        },
-        {
-          "sig_key": "Suspicious URL access.",
-          "source": "wazuh",
-          "detector": "Suspicious URL access.",
-          "n": 28,
-          "attack_true": 28,
-          "predicted_attack": 28,
-          "tp": 28,
+          "predicted_attack": 8,
+          "tp": 8,
           "fp": 0,
           "fn": 0,
           "precision": 1.0,
@@ -2467,63 +2467,63 @@
           "true_background": 0
         },
         {
-          "sig_key": "Web server 500 error code (Internal Error).",
+          "sig_key": "PAM: Login session opened.",
           "source": "wazuh",
-          "detector": "Web server 500 error code (Internal Error).",
-          "n": 2,
-          "attack_true": 0,
-          "predicted_attack": 0,
-          "tp": 0,
+          "detector": "PAM: Login session opened.",
+          "n": 12,
+          "attack_true": 12,
+          "predicted_attack": 12,
+          "tp": 12,
           "fp": 0,
           "fn": 0,
-          "precision": 0.0,
-          "recall": 0.0,
-          "true_background": 2
+          "precision": 1.0,
+          "recall": 1.0,
+          "true_background": 0
         },
         {
-          "sig_key": "syslog: User authentication failure.",
+          "sig_key": "Suspicious URL access.",
           "source": "wazuh",
-          "detector": "syslog: User authentication failure.",
-          "n": 92,
-          "attack_true": 4,
-          "predicted_attack": 0,
-          "tp": 0,
+          "detector": "Suspicious URL access.",
+          "n": 28,
+          "attack_true": 28,
+          "predicted_attack": 28,
+          "tp": 28,
           "fp": 0,
-          "fn": 4,
-          "precision": 0.0,
-          "recall": 0.0,
-          "true_background": 88
+          "fn": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "true_background": 0
         }
       ],
       "phase_errors": {
         "attack|cracking": {
           "n": 1164,
-          "kept_as_attack": 52,
-          "filtered_out": 1112,
+          "kept_as_attack": 78,
+          "filtered_out": 1086,
           "attack_true": 1164
         },
         "attack|dirb": {
           "n": 25997,
-          "kept_as_attack": 25979,
-          "filtered_out": 18,
+          "kept_as_attack": 25991,
+          "filtered_out": 6,
           "attack_true": 25997
         },
         "attack|dnsteal": {
           "n": 2303,
-          "kept_as_attack": 39,
-          "filtered_out": 2264,
+          "kept_as_attack": 158,
+          "filtered_out": 2145,
           "attack_true": 2303
         },
         "attack|privilege_escalation": {
           "n": 68,
-          "kept_as_attack": 5,
-          "filtered_out": 63,
+          "kept_as_attack": 30,
+          "filtered_out": 38,
           "attack_true": 68
         },
         "attack|reverse_shell": {
           "n": 25,
-          "kept_as_attack": 0,
-          "filtered_out": 25,
+          "kept_as_attack": 1,
+          "filtered_out": 24,
           "attack_true": 25
         },
         "attack|service_stop": {
@@ -2534,20 +2534,20 @@
         },
         "attack|webshell": {
           "n": 27,
-          "kept_as_attack": 7,
-          "filtered_out": 20,
+          "kept_as_attack": 27,
+          "filtered_out": 0,
           "attack_true": 27
         },
         "attack|wpscan": {
           "n": 6604,
-          "kept_as_attack": 6588,
-          "filtered_out": 16,
+          "kept_as_attack": 6604,
+          "filtered_out": 0,
           "attack_true": 6604
         },
         "background|background": {
           "n": 79177,
-          "kept_as_attack": 806,
-          "filtered_out": 78371,
+          "kept_as_attack": 4756,
+          "filtered_out": 74421,
           "attack_true": 0
         }
       },
@@ -2555,325 +2555,325 @@
         "gain": [
           {
             "feature": "status_code",
-            "importance": 105713.19
-          },
-          {
-            "feature": "sig_key",
-            "importance": 35423.37
-          },
-          {
-            "feature": "firedtimes",
-            "importance": 14330.2
-          },
-          {
-            "feature": "hour",
-            "importance": 11655.52
-          },
-          {
-            "feature": "sig_count_prev_600s",
-            "importance": 11213.8
-          },
-          {
-            "feature": "rule_groups",
-            "importance": 10663.64
-          },
-          {
-            "feature": "sig_count_prev_60s",
-            "importance": 3972.26
-          },
-          {
-            "feature": "rule_level",
-            "importance": 1118.26
-          },
-          {
-            "feature": "time_since_last_event",
-            "importance": 828.64
-          },
-          {
-            "feature": "url_tokens",
-            "importance": 711.48
+            "importance": 28873.34
           },
           {
             "feature": "text_svd_2",
-            "importance": 306.93
+            "importance": 3571.8
           },
           {
-            "feature": "text_svd_1",
-            "importance": 283.21
+            "feature": "sig_key",
+            "importance": 3247.15
+          },
+          {
+            "feature": "url_tokens",
+            "importance": 471.59
+          },
+          {
+            "feature": "firedtimes",
+            "importance": 351.62
+          },
+          {
+            "feature": "hour",
+            "importance": 239.94
+          },
+          {
+            "feature": "sig_count_prev_600s",
+            "importance": 186.08
           },
           {
             "feature": "url_len",
-            "importance": 240.86
+            "importance": 109.64
           },
           {
-            "feature": "text_svd_21",
-            "importance": 217.91
-          },
-          {
-            "feature": "text_svd_0",
-            "importance": 181.39
-          },
-          {
-            "feature": "text_svd_6",
-            "importance": 157.74
-          },
-          {
-            "feature": "text_svd_11",
-            "importance": 129.51
-          },
-          {
-            "feature": "urlflag_remote",
-            "importance": 120.2
-          },
-          {
-            "feature": "ua_nmap",
-            "importance": 107.14
-          },
-          {
-            "feature": "text_svd_7",
-            "importance": 92.47
-          },
-          {
-            "feature": "text_svd_17",
-            "importance": 84.5
-          },
-          {
-            "feature": "group_web",
-            "importance": 84.23
-          },
-          {
-            "feature": "text_svd_10",
-            "importance": 53.63
-          },
-          {
-            "feature": "text_svd_13",
-            "importance": 45.95
+            "feature": "sig_count_prev_60s",
+            "importance": 79.46
           },
           {
             "feature": "url_entropy",
-            "importance": 45.69
-          },
-          {
-            "feature": "text_svd_15",
-            "importance": 44.85
-          },
-          {
-            "feature": "group_ids",
-            "importance": 42.89
-          },
-          {
-            "feature": "text_svd_9",
-            "importance": 38.92
-          },
-          {
-            "feature": "text_svd_8",
-            "importance": 38.07
-          },
-          {
-            "feature": "text_svd_3",
-            "importance": 37.6
-          },
-          {
-            "feature": "text_svd_16",
-            "importance": 33.29
-          },
-          {
-            "feature": "text_svd_19",
-            "importance": 32.92
+            "importance": 27.46
           },
           {
             "feature": "text_svd_22",
-            "importance": 32.26
+            "importance": 16.96
           },
           {
-            "feature": "url_parts",
-            "importance": 26.94
+            "feature": "time_since_last_event",
+            "importance": 15.35
           },
           {
-            "feature": "text_svd_4",
-            "importance": 26.89
+            "feature": "text_svd_6",
+            "importance": 12.9
           },
           {
-            "feature": "text_svd_5",
-            "importance": 21.11
+            "feature": "text_svd_19",
+            "importance": 12.5
+          },
+          {
+            "feature": "rule_level",
+            "importance": 5.64
           },
           {
             "feature": "text_svd_23",
-            "importance": 18.5
+            "importance": 5.17
           },
           {
-            "feature": "text_svd_14",
-            "importance": 17.9
+            "feature": "text_svd_17",
+            "importance": 4.31
           },
           {
-            "feature": "ua_wpscan",
-            "importance": 13.13
+            "feature": "text_svd_21",
+            "importance": 3.65
+          },
+          {
+            "feature": "text_svd_11",
+            "importance": 3.13
+          },
+          {
+            "feature": "text_svd_1",
+            "importance": 2.12
+          },
+          {
+            "feature": "text_svd_7",
+            "importance": 1.95
           },
           {
             "feature": "text_svd_12",
-            "importance": 8.84
+            "importance": 1.49
+          },
+          {
+            "feature": "text_svd_14",
+            "importance": 0.91
+          },
+          {
+            "feature": "text_svd_15",
+            "importance": 0.25
+          },
+          {
+            "feature": "text_svd_16",
+            "importance": 0.16
+          },
+          {
+            "feature": "group_web",
+            "importance": 0.06
+          },
+          {
+            "feature": "src_port",
+            "importance": 0.0
+          },
+          {
+            "feature": "url_parts",
+            "importance": 0.0
+          },
+          {
+            "feature": "url_query",
+            "importance": 0.0
+          },
+          {
+            "feature": "url_encoded_chars",
+            "importance": 0.0
+          },
+          {
+            "feature": "url_max_token_len",
+            "importance": 0.0
+          },
+          {
+            "feature": "group_ids",
+            "importance": 0.0
+          },
+          {
+            "feature": "group_accesslog",
+            "importance": 0.0
+          },
+          {
+            "feature": "group_syslog",
+            "importance": 0.0
+          },
+          {
+            "feature": "group_audit",
+            "importance": 0.0
+          },
+          {
+            "feature": "group_mitre",
+            "importance": 0.0
+          },
+          {
+            "feature": "is_aggregated",
+            "importance": 0.0
+          },
+          {
+            "feature": "urlflag_wpadmin",
+            "importance": 0.0
+          },
+          {
+            "feature": "urlflag_wpcontent",
+            "importance": 0.0
+          },
+          {
+            "feature": "urlflag_wpjson",
+            "importance": 0.0
           }
         ],
         "split": [
           {
             "feature": "firedtimes",
-            "importance": 2794
-          },
-          {
-            "feature": "sig_count_prev_600s",
-            "importance": 2305
+            "importance": 208
           },
           {
             "feature": "hour",
-            "importance": 1325
+            "importance": 98
+          },
+          {
+            "feature": "sig_count_prev_600s",
+            "importance": 88
           },
           {
             "feature": "sig_count_prev_60s",
-            "importance": 1176
-          },
-          {
-            "feature": "time_since_last_event",
-            "importance": 603
-          },
-          {
-            "feature": "status_code",
-            "importance": 154
-          },
-          {
-            "feature": "rule_level",
-            "importance": 134
-          },
-          {
-            "feature": "text_svd_1",
-            "importance": 72
-          },
-          {
-            "feature": "text_svd_0",
             "importance": 42
           },
           {
-            "feature": "sig_key",
-            "importance": 39
-          },
-          {
-            "feature": "text_svd_6",
-            "importance": 35
-          },
-          {
-            "feature": "text_svd_11",
-            "importance": 29
-          },
-          {
-            "feature": "text_svd_2",
-            "importance": 28
-          },
-          {
-            "feature": "text_svd_21",
-            "importance": 23
-          },
-          {
-            "feature": "text_svd_13",
-            "importance": 22
-          },
-          {
-            "feature": "text_svd_7",
-            "importance": 16
-          },
-          {
-            "feature": "urlflag_remote",
-            "importance": 15
-          },
-          {
-            "feature": "text_svd_8",
-            "importance": 15
-          },
-          {
-            "feature": "text_svd_14",
-            "importance": 15
-          },
-          {
-            "feature": "text_svd_15",
-            "importance": 15
-          },
-          {
-            "feature": "text_svd_16",
-            "importance": 15
-          },
-          {
-            "feature": "text_svd_5",
-            "importance": 14
-          },
-          {
-            "feature": "text_svd_10",
-            "importance": 14
+            "feature": "status_code",
+            "importance": 26
           },
           {
             "feature": "url_tokens",
-            "importance": 12
+            "importance": 23
           },
           {
-            "feature": "ua_wpscan",
-            "importance": 12
-          },
-          {
-            "feature": "text_svd_17",
-            "importance": 12
-          },
-          {
-            "feature": "text_svd_3",
-            "importance": 11
+            "feature": "time_since_last_event",
+            "importance": 18
           },
           {
             "feature": "text_svd_22",
-            "importance": 11
-          },
-          {
-            "feature": "url_len",
-            "importance": 10
-          },
-          {
-            "feature": "group_ids",
-            "importance": 10
-          },
-          {
-            "feature": "location",
-            "importance": 10
-          },
-          {
-            "feature": "log_resource_class",
-            "importance": 10
-          },
-          {
-            "feature": "ua_nmap",
-            "importance": 9
-          },
-          {
-            "feature": "text_svd_9",
-            "importance": 9
-          },
-          {
-            "feature": "text_svd_12",
-            "importance": 8
+            "importance": 18
           },
           {
             "feature": "text_svd_23",
-            "importance": 8
+            "importance": 11
           },
           {
-            "feature": "url_parts",
-            "importance": 7
+            "feature": "rule_level",
+            "importance": 5
           },
           {
-            "feature": "text_svd_4",
-            "importance": 7
+            "feature": "text_svd_2",
+            "importance": 5
           },
           {
-            "feature": "text_svd_18",
-            "importance": 7
+            "feature": "text_svd_6",
+            "importance": 5
           },
           {
             "feature": "text_svd_19",
-            "importance": 7
+            "importance": 5
+          },
+          {
+            "feature": "url_len",
+            "importance": 3
+          },
+          {
+            "feature": "url_entropy",
+            "importance": 3
+          },
+          {
+            "feature": "text_svd_7",
+            "importance": 3
+          },
+          {
+            "feature": "text_svd_17",
+            "importance": 3
+          },
+          {
+            "feature": "sig_key",
+            "importance": 2
+          },
+          {
+            "feature": "text_svd_1",
+            "importance": 2
+          },
+          {
+            "feature": "text_svd_11",
+            "importance": 2
+          },
+          {
+            "feature": "text_svd_15",
+            "importance": 2
+          },
+          {
+            "feature": "text_svd_21",
+            "importance": 2
+          },
+          {
+            "feature": "group_web",
+            "importance": 1
+          },
+          {
+            "feature": "text_svd_12",
+            "importance": 1
+          },
+          {
+            "feature": "text_svd_14",
+            "importance": 1
+          },
+          {
+            "feature": "text_svd_16",
+            "importance": 1
+          },
+          {
+            "feature": "src_port",
+            "importance": 0
+          },
+          {
+            "feature": "url_parts",
+            "importance": 0
+          },
+          {
+            "feature": "url_query",
+            "importance": 0
+          },
+          {
+            "feature": "url_encoded_chars",
+            "importance": 0
+          },
+          {
+            "feature": "url_max_token_len",
+            "importance": 0
+          },
+          {
+            "feature": "group_ids",
+            "importance": 0
+          },
+          {
+            "feature": "group_accesslog",
+            "importance": 0
+          },
+          {
+            "feature": "group_syslog",
+            "importance": 0
+          },
+          {
+            "feature": "group_audit",
+            "importance": 0
+          },
+          {
+            "feature": "group_mitre",
+            "importance": 0
+          },
+          {
+            "feature": "is_aggregated",
+            "importance": 0
+          },
+          {
+            "feature": "urlflag_wpadmin",
+            "importance": 0
+          },
+          {
+            "feature": "urlflag_wpcontent",
+            "importance": 0
+          },
+          {
+            "feature": "urlflag_wpjson",
+            "importance": 0
           }
         ]
       }

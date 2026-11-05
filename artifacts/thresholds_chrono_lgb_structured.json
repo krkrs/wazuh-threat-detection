@@ -2,25 +2,25 @@
   "thresholds": [
     {
       "fold": "chrono_walk50",
-      "threshold_model": 0.491122,
+      "threshold_model": 0.287192,
       "threshold_prior_baseline": 0.994956,
-      "best_iteration": 10
+      "best_iteration": 83
     },
     {
       "fold": "chrono_walk70",
-      "threshold_model": 0.472843,
+      "threshold_model": 0.287184,
       "threshold_prior_baseline": 0.5,
-      "best_iteration": 125
+      "best_iteration": 38
     },
     {
       "fold": "chrono_walk90",
-      "threshold_model": 0.319744,
+      "threshold_model": 0.263867,
       "threshold_prior_baseline": 0.0375,
-      "best_iteration": 408
+      "best_iteration": 32
     },
     {
       "fold": "deployment_chrono_lgb_structured",
-      "threshold_model": 0.450371,
+      "threshold_model": 0.264792,
       "threshold_prior_baseline": null,
       "best_iteration": null
     }

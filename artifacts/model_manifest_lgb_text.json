@@ -1,70 +1,70 @@
 {
   "task": "alert triage attack vs background (AIT-ADS)",
-  "created_utc": "2026-11-04T13:50:44Z",
+  "created_utc": "2026-11-05T00:52:03Z",
   "config": "lgb_text",
   "uses_text": true,
   "trained_on": "all 8 AIT-ADS scenarios",
   "dataset": "AIT Alert Data Set, DOI 10.5281/zenodo.8263181",
   "split": "random 90/10 row split (seed 42); early stopping evaluated on the same 10% holdout, so the holdout metrics below are optimistic; unbiased estimates are the LOS/chrono metrics in artifacts/",
-  "n_rows_trained": 2064266,
+  "n_rows_trained": 578507,
   "n_rows_holdout": 229362,
-  "deployment_threshold": 0.755345,
+  "deployment_threshold": 0.475205,
   "thresholds": {
-    "los_deployment_threshold": 0.755345,
+    "los_deployment_threshold": 0.475205,
     "los": {
       "thresholds": [
         {
           "fold": "los_fox",
-          "threshold_model": 0.683188,
+          "threshold_model": 0.512262,
           "threshold_prior_baseline": 0.555556,
-          "best_iteration": 120
+          "best_iteration": 5
         },
         {
           "fold": "los_harrison",
-          "threshold_model": 0.610629,
+          "threshold_model": 0.562155,
           "threshold_prior_baseline": 0.4,
-          "best_iteration": 23
+          "best_iteration": 166
         },
         {
           "fold": "los_russellmitchell",
-          "threshold_model": 0.818529,
-          "threshold_prior_baseline": 0.672727,
-          "best_iteration": 57
+          "threshold_model": 0.433926,
+          "threshold_prior_baseline": 0.526316,
+          "best_iteration": 12
         },
         {
           "fold": "los_santos",
-          "threshold_model": 0.537766,
+          "threshold_model": 0.482661,
           "threshold_prior_baseline": 0.192982,
-          "best_iteration": 85
+          "best_iteration": 93
         },
         {
           "fold": "los_shaw",
-          "threshold_model": 0.511502,
-          "threshold_prior_baseline": 0.71875,
-          "best_iteration": 47
+          "threshold_model": 0.431655,
+          "threshold_prior_baseline": 0.571429,
+          "best_iteration": 48
         },
         {
           "fold": "los_wardbeck",
-          "threshold_model": 0.538388,
+          "threshold_model": 0.363879,
           "threshold_prior_baseline": 0.866667,
-          "best_iteration": 19
-        },
-        {
-          "fold": "los_wheeler",
-          "threshold_model": 0.751902,
-          "threshold_prior_baseline": 0.181818,
           "best_iteration": 56
         },
         {
+          "fold": "los_wheeler",
+          "threshold_model": 0.392374,
+          "threshold_prior_baseline": 0.11828,
+          "best_iteration": 21
+        },
+        {
           "fold": "los_wilson",
-          "threshold_model": 0.817311,
+          "threshold_model": 0.484733,
           "threshold_prior_baseline": 0.190476,
-          "best_iteration": 85
+          "best_iteration": 101
         },
         {
           "fold": "deployment_los_lgb_text",
-          "threshold_model": 0.755345,
-          "threshold_prior_baseline": 0.64,
+          "threshold_model": 0.475205,
+          "threshold_prior_baseline": 0.363636,
           "best_iteration": null
         }
       ]
@@ -73,35 +73,35 @@
       "thresholds": [
         {
           "fold": "chrono_walk50",
-          "threshold_model": 0.356364,
-          "threshold_prior_baseline": 0.99987,
-          "best_iteration": 30
+          "threshold_model": 0.299106,
+          "threshold_prior_baseline": 0.994956,
+          "best_iteration": 88
         },
         {
           "fold": "chrono_walk70",
-          "threshold_model": 0.506778,
-          "threshold_prior_baseline": 0.698113,
-          "best_iteration": 8
+          "threshold_model": 0.376698,
+          "threshold_prior_baseline": 0.5,
+          "best_iteration": 46
         },
         {
           "fold": "chrono_walk90",
-          "threshold_model": 0.490646,
+          "threshold_model": 0.273388,
           "threshold_prior_baseline": 0.0375,
-          "best_iteration": 9
+          "best_iteration": 29
         },
         {
           "fold": "deployment_chrono_lgb_text",
-          "threshold_model": 0.490646,
+          "threshold_model": 0.273388,
           "threshold_prior_baseline": null,
           "best_iteration": null
         }
       ]
     }
   },
-  "best_iteration_full_data": 18,
-  "interim_fit_seconds": 10.6,
-  "final_fit_seconds": 8.54,
-  "deploy_seconds": 88.9,
+  "best_iteration_full_data": 500,
+  "interim_fit_seconds": 40.64,
+  "final_fit_seconds": 37.08,
+  "deploy_seconds": 94.5,
   "features": {
     "numeric": 55,
     "categorical": 11,
@@ -183,85 +183,85 @@
     "n": 229362,
     "n_attack": 171321,
     "n_background": 58041,
-    "n_predicted_attack": 169981,
-    "tn": 58040,
-    "fp": 1,
-    "fn": 1341,
-    "tp": 169980,
-    "threshold": 0.755345,
-    "accuracy": 0.9941,
+    "n_predicted_attack": 170154,
+    "tn": 58037,
+    "fp": 4,
+    "fn": 1171,
+    "tp": 170150,
+    "threshold": 0.475205,
+    "accuracy": 0.9949,
     "base_rate_attack": 0.7469,
-    "predicted_attack_share": 0.7411,
+    "predicted_attack_share": 0.7419,
     "precision_attack": 1.0,
-    "recall_attack": 0.9922,
-    "f1_attack": 0.9961,
-    "macro_f1": 0.9923,
-    "background_filtered_share": 1.0,
-    "background_filtered_pct": 100.0,
-    "false_positive_rate": 0.0,
-    "false_positives_per_million_alerts": 4.4,
-    "false_positives_per_million_background": 17.2,
-    "alert_reduction_rate": 0.9941,
-    "noise_reduction_rate": 1.0,
-    "alerts_kept_for_review": 169981,
-    "pr_auc_attack": 0.9997,
-    "roc_auc": 0.999,
+    "recall_attack": 0.9932,
+    "f1_attack": 0.9966,
+    "macro_f1": 0.9933,
+    "background_filtered_share": 0.9999,
+    "background_filtered_pct": 99.99,
+    "false_positive_rate": 0.0001,
+    "false_positives_per_million_alerts": 17.4,
+    "false_positives_per_million_background": 68.9,
+    "alert_reduction_rate": 0.9949,
+    "noise_reduction_rate": 0.9999,
+    "alerts_kept_for_review": 170154,
+    "pr_auc_attack": 0.9999,
+    "roc_auc": 0.9997,
     "budget_fp_per_m_5000": {
-      "recall_at_budget": 0.9947,
-      "threshold": 0.357946,
+      "recall_at_budget": 0.9969,
+      "threshold": 0.263892,
       "false_positives": 1146,
-      "true_positives": 170418,
-      "predicted_positives": 171564
+      "true_positives": 170797,
+      "predicted_positives": 171943
     },
     "budget_fp_per_m_20000": {
-      "recall_at_budget": 0.9964,
-      "threshold": 0.325295,
-      "false_positives": 4590,
-      "true_positives": 170708,
-      "predicted_positives": 175298
+      "recall_at_budget": 0.999,
+      "threshold": 0.192954,
+      "false_positives": 4587,
+      "true_positives": 171155,
+      "predicted_positives": 175742
     },
     "budget_fp_per_m_50000": {
-      "recall_at_budget": 0.9982,
-      "threshold": 0.315811,
-      "false_positives": 11469,
-      "true_positives": 171012,
-      "predicted_positives": 182481
+      "recall_at_budget": 0.9997,
+      "threshold": 0.135818,
+      "false_positives": 11468,
+      "true_positives": 171264,
+      "predicted_positives": 182732
     }
   },
   "budgets": {
     "budget_fp_per_m_5000": {
-      "recall_at_budget": 0.9947,
-      "threshold": 0.357946,
+      "recall_at_budget": 0.9969,
+      "threshold": 0.263892,
       "false_positives": 1146,
-      "true_positives": 170418,
-      "predicted_positives": 171564
+      "true_positives": 170797,
+      "predicted_positives": 171943
     },
     "budget_fp_per_m_20000": {
-      "recall_at_budget": 0.9964,
-      "threshold": 0.325295,
-      "false_positives": 4590,
-      "true_positives": 170708,
-      "predicted_positives": 175298
+      "recall_at_budget": 0.999,
+      "threshold": 0.192954,
+      "false_positives": 4587,
+      "true_positives": 171155,
+      "predicted_positives": 175742
     },
     "budget_fp_per_m_50000": {
-      "recall_at_budget": 0.9982,
-      "threshold": 0.315811,
-      "false_positives": 11469,
-      "true_positives": 171012,
-      "predicted_positives": 182481
+      "recall_at_budget": 0.9997,
+      "threshold": 0.135818,
+      "false_positives": 11468,
+      "true_positives": 171264,
+      "predicted_positives": 182732
     }
   },
   "environment": {
-    "python": "3.14.2",
+    "python": "3.15.1",
     "lightgbm": "4.7.0",
     "scikit_learn": "1.9.1",
-    "pandas": "3.1.0",
+    "pandas": "3.1.1",
     "numpy": "2.5.4",
     "joblib": "1.6.0"
   },
   "seed": 42,
-  "sha256": "92154a99823072f31ff6cef3e5e6bca6822a322a168aca0f78627f86edab9995",
-  "zip_bytes": 168181,
+  "sha256": "1d60e69aacf2a5387d9b2476264e028dc79c9d28fbddb7878fdb2adc336f24ce",
+  "zip_bytes": 1406028,
   "zip_path": "model\\model_lgb_text.zip",
   "primary": false
 }
