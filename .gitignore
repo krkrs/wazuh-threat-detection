@@ -1,11 +1,18 @@
 # user added
+data/*
+report/figures/*
+artifacts/*
+.idea/
 *.pptx
 *.zip
-data/ait_ads/*
-artifactsg/*
-.idea/
-.flow
+*.json
+*.joblib
+*.err
 session.txt
+
+## Do Not Track
+dnt-*/
+*.dnt.*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
