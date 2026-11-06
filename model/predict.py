@@ -113,14 +113,6 @@ if missing:
 matrix = build_matrix(frame, plan, model, meta)
 prob = positive_probabilities(model, matrix)
 
-# The saved feature tables do not carry ts_id/phase/label; scoring rows get stable values.
-if "ts_id" not in frame.columns:
-    frame["ts_id"] = np.arange(1, len(frame) + 1, dtype=np.int64)
-if "phase" not in frame.columns:
-    frame["phase"] = "unknown"
-if "label" not in frame.columns:
-    frame["label"] = "unknown"
-
 novelty_forest = payload.get("novelty_forest")
 novelty_cols = list(payload.get("novelty_cols") or [])
 novelty_raw = meta.get("novelty")

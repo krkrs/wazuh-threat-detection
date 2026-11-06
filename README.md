@@ -18,7 +18,7 @@ bash run_all.sh            # caly pipeline, logi w logs/run_all.log
 Poszczegolne etapy (kolejnosc jest calosciowa, dane wejsciowe to `data/ait_ads/*.json` plus `labels.csv`):
 
 ```bash
-.venv/bin/python -u research/build_features.py data/features      # JSON -> Parquet (2 293 628 wierszy, 102 kolumny)
+.venv/bin/python -u research/build_features.py data/features      # JSON -> Parquet (2 293 628 wierszy, 78 kolumny)
 .venv/bin/python -u research/report_stats.py                       # statystyki do tabel raportu
 .venv/bin/python -u research/compute_stats.py                      # statystyki zrodlowe (research/ads_stats.json)
 .venv/bin/python -u research/train.py --protocols los,chrono \

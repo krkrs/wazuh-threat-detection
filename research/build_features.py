@@ -17,26 +17,16 @@ import pyarrow.parquet as pq
 
 SCENARIOS = ["fox", "harrison", "russellmitchell", "santos", "shaw", "wardbeck", "wheeler", "wilson"]
 
+# Wazuh-only stream: only these tool tokens are observed in full_log/http_user_agent.
+# nikto/sqlmap/curl/python/golang/apt/java/openvas/masscan/zmap/scrapy/apachebench/persistent
+# have 0 rows in this dataset (apt rows exist only in Suricata, which is not part of this stream).
 UA_PATTERNS = {
     "ua_dirb": "dirb",
     "ua_wpscan": "wpscan",
     "ua_nmap": "nmap",
-    "ua_nikto": "nikto",
-    "ua_sqlmap": "sqlmap",
     "ua_ncat": "ncat",
-    "ua_curl": "curl/",
-    "ua_python": "python-requests",
     "ua_wget": "wget",
-    "ua_golang": "Go-http-client",
-    "ua_apt": "APT-HTTP",
     "ua_headless": "HeadlessChrome",
-    "ua_java": "Java/",
-    "ua_openvas": "OpenVAS",
-    "ua_masscan": "masscan",
-    "ua_zmap": "zmap",
-    "ua_scrapy": "Scrapy",
-    "ua_apachebench": "ApacheBench",
-    "ua_persistent": "persistent",
 }
 URL_FLAGS = {
     "urlflag_wpadmin": "wp-admin",
@@ -49,7 +39,6 @@ URL_FLAGS = {
     "urlflag_backup": "backup",
     "urlflag_dump": "dump",
     "urlflag_config": "config",
-    "urlflag_env": ".env",
     "urlflag_git": ".git",
     "urlflag_sql": "sql",
     "urlflag_readme": "readme",
@@ -69,12 +58,10 @@ URL_FLAGS = {
     "urlflag_php": ".php",
     "urlflag_txt": ".txt",
     "urlflag_zip": ".zip",
-    "urlflag_json": ".json",
 }
 EXT_RX = re.compile(r"\.([A-Za-z0-9]{1,5})(?:\?|$)")
 TOKEN_RX = re.compile(r"[A-Za-z0-9+/=%_.-]{8,}")
 REQ_RX = re.compile(r'"([A-Z]+)\s+(\S+)\s+HTTP/[0-9.]"\s+(\d{3})')
-DNS_QUERY_RX = re.compile(r"query\[[A-Za-z]+\]\s+(\S+)")
 AUDIT_TYPE_RX = re.compile(r"type=([A-Z_]+)")
 RANGE_LO = "range_lo"
 
@@ -245,8 +232,6 @@ def url_features(url: object, scan_text: str) -> dict[str, float]:
         "url_query": float("?" in text),
         "url_tokens": float(len(re.findall(r"[A-Za-z0-9]+", lowered))),
         "url_encoded_chars": float(lowered.count("%")),
-        "url_semicolon": float(lowered.count(";")),
-        "url_traversal": float("../" in lowered or "%2e%2e" in lowered),
         "url_entropy": entropy_of(text),
         "url_max_token_len": float(max((len(t) for t in TOKEN_RX.findall(text)), default=0)),
     }
@@ -254,25 +239,8 @@ def url_features(url: object, scan_text: str) -> dict[str, float]:
         out[flag] = float(needle in lowered)
     low_scan = (scan_text or "").lower()
     for flag, needle in UA_PATTERNS.items():
-        out[flag] = float(needle in low_scan)
-    return out
-
-
-def dns_features(text: str) -> dict[str, float]:
-    """DNS entropy features; unused in the Wazuh-only stream (kept for AMiner/Suricata re-add)."""
-    low = text.lower()
-    labels = [label for label in low.split(".") if label]
-    total_len = sum(len(label) for label in labels)
-    out = {
-        "dns_len": float(len(low)),
-        "dns_labels": float(len(labels)),
-        "dns_max_label_len": float(max((len(label) for label in labels), default=0)),
-        "dns_avg_label_len": float(round(total_len / len(labels), 2)) if labels else 0.0,
-        "dns_digits": float(sum(ch.isdigit() for ch in low)),
-        "dns_letters": float(sum(ch.isalpha() for ch in low)),
-        "dns_entropy": entropy_of(low),
-    }
-    out["dns_digit_ratio"] = round(out["dns_digits"] / out["dns_len"], 3) if out["dns_len"] else 0.0
+        # needles are case-insensitive here; low_scan is already lowercased
+        out[flag] = float(needle.lower() in low_scan)
     return out
 
 
@@ -285,18 +253,12 @@ def scan_text_for_url(raw: str) -> tuple[str, str, str]:
 
 def log_resource_class(resources: list) -> str:
     text = " ".join(as_str(r) for r in resources).lower()
-    if "audit" in text:
-        return "audit"
-    if "dns" in text:
-        return "dns"
     if "access" in text or "apache" in text:
         return "apache"
     if "metricbeat" in text or "filebeat" in text:
         return "metrics"
     if "syslog" in text or "auth" in text:
         return "syslog"
-    if "mysql" in text:
-        return "mysql"
     return "other"
 
 
@@ -330,8 +292,6 @@ def wazuh_row(obj: dict, scenario: str) -> dict | None:
     full_log = as_str(obj.get("full_log"))
     raw_id = data.get("id")
     status_raw = raw_id if raw_id is not None else http_block.get("status")
-    port_raw = data.get("dstport") if data.get("dstport") is not None else data.get("dest_port")
-    port_value = to_num(port_raw)
     src_port = to_num(data.get("src_port") if data.get("src_port") is not None else data.get("srcport"))
     user_agent = as_str(http_block.get("http_user_agent"))
     url = data.get("url") if data.get("url") is not None else http_block.get("url")
@@ -364,39 +324,19 @@ def wazuh_row(obj: dict, scenario: str) -> dict | None:
         #        "agent_id": as_str(agent.get("id")),  # host leakage
         #        "agent_name": as_str(agent.get("name")),  # host leakage
         #        "agent_ip": as_str(agent.get("ip")),  # host leakage
-        #        "program_name": as_str(predecoder.get("program_name")),
-        #        "hostname_ctx": as_str(predecoder.get("hostname")),  # host leakage
-        "mitre_tactic": as_str(rule.get("mitre_tactic")),
-        "mitre_technique": as_str(rule.get("mitre_technique_id")),
         "http_method": http_method,
         "status_code": status_code,
-        "dst_port": as_str(port_value if port_value is not None else ""),
         "src_port": src_port,
         "src_ip_ctx": as_str(data.get("srcip") or data.get("src_ip")),
         "dst_ip_ctx": as_str(data.get("dstip") or data.get("dest_ip")),
         "srcuser": as_str(data.get("srcuser")),
         "dstuser": as_str(data.get("dstuser")),
-        "db_name": as_str(data.get("database_name") or data.get("schema")),
-        "syscall": as_str(data.get("syscall")),
-        "rule_md5": as_str(data.get("rule_md5")),
-        "sha256_present": float(bool(data.get("sha256") or data.get("md5"))),
         "log_resource_class": log_resource_class([obj.get("location")]),
         "log_head": full_log[:400],
         "firedtimes": to_num(rule.get("firedtimes")),
     }
     row.update(url_features(url, user_agent or full_log))
-
-    # --- DODANE: Wydobycie DNS z full_log ---
-    dns_query = auto_dns(full_log)
-    row.update(dns_features(dns_query))
-    # ----------------------------------------
-    
     return row
-
-
-def auto_dns(full_log: str) -> str:
-    match = DNS_QUERY_RX.search(full_log)
-    return match.group(1) if match else ""
 
 
 COLS_STR = [
@@ -411,19 +351,12 @@ COLS_STR = [
     "decoder",
     "decoder_parent",
     "location",
-    "program_name",
-    "mitre_tactic",
-    "mitre_technique",
     "http_method",
     "status_code",
-    "dst_port",
     "src_ip_ctx",
     "dst_ip_ctx",
     "srcuser",
     "dstuser",
-    "db_name",
-    "syscall",
-    "rule_md5",
     "log_resource_class",
     "log_head",
 ]
@@ -439,20 +372,8 @@ COLS_NUM = (
         "url_query",
         "url_tokens",
         "url_encoded_chars",
-        "url_semicolon",
-        "url_traversal",
         "url_entropy",
         "url_max_token_len",
-        # --- DODANE CECHY DNS (aby model widział dnsteal) ---
-        "dns_len",
-        "dns_labels",
-        "dns_max_label_len",
-        "dns_avg_label_len",
-        "dns_digits",
-        "dns_letters",
-        "dns_digit_ratio",
-        "dns_entropy",
-        # ----------------------------------------------------
         "hour",
         "weekday",
         "seconds_from_start",
@@ -465,7 +386,6 @@ COLS_NUM = (
         "group_audit",
         "group_mitre",
         "is_aggregated",
-        "sha256_present",
     ]
     + list(URL_FLAGS)
     + list(UA_PATTERNS)
@@ -553,14 +473,14 @@ def build_scenario(data_dir: Path, out_dir: Path, phases: dict, scenario: str) -
             if total == 0 and start_ts == 0.0:
                 start_ts = row_ts(row)
             enrich(row, scenario, phases, windows, start_ts)
-#--- Obliczanie czasu między zdarzeniami
-            current_ts = row_ts(row) # Gwarantuje float, co usunie błędy operatora '-' w Pylance
+            # --- Obliczanie czasu między zdarzeniami
+            current_ts = row_ts(row)  # Gwarantuje float, co usunie błędy operatora '-' w Pylance
             if last_ts == 0.0:
                 row["time_since_last_event"] = 0.0
             else:
-                row["time_since_last_event"] = max(0.0, current_ts - float(last_ts)) # Rzutowanie do pewności
+                row["time_since_last_event"] = max(0.0, current_ts - float(last_ts))  # Rzutowanie do pewności
             last_ts = current_ts
-#---
+            # ---
             buffer.append(row)
             if len(buffer) >= BATCH_ROWS:
                 writer.write_batch(batch_from_rows(buffer, schema))
