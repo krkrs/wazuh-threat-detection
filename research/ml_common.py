@@ -9,18 +9,17 @@ from typing import Any
 import lightgbm as lgb  # type: ignore[import-not-found]
 import numpy as np  # type: ignore[import-not-found]
 import pandas as pd  # type: ignore[import-not-found]
+from scipy.special import expit  # <--- DODANY IMPORT
 from sklearn.decomposition import TruncatedSVD  # type: ignore[import-not-found]
+from sklearn.ensemble import IsolationForest
 from sklearn.feature_extraction.text import TfidfVectorizer  # type: ignore[import-not-found]
 from sklearn.metrics import (  # type: ignore[import-not-found]
-    
     average_precision_score,
     confusion_matrix,
     f1_score,
     precision_recall_curve,
     roc_auc_score,
 )
-from sklearn.ensemble import IsolationForest
-from scipy.special import expit  # <--- DODANY IMPORT
 
 ROOT = Path(__file__).resolve().parents[1]
 FEATURE_DIR = ROOT / "data" / "features"
@@ -156,6 +155,8 @@ TEXT_PARAMS: dict[str, Any] = {"max_features": 4000, "ngram_range": (1, 2), "min
 TEXT_SVD_DIM = 24
 EARLY_STOP_ROUNDS = 40
 FP_BUDGETS = [5_000, 20_000, 50_000]
+NOVELTY_FP_RATE = 0.005  # novelty arm operating point: at most 0.5% background FP on calibration
+NOVELTY_ESTIMATORS = 200
 QUANTS = [0.5, 0.6, 0.7, 0.8, 0.9, 0.95]
 CHRONO_STEPS = [
     {"name": "walk50", "train_q": 0.5, "cal_q": 0.6, "test_q": 0.7},
@@ -398,6 +399,57 @@ def detector_prior_probabilities(train_df: Any, eval_df: Any) -> np.ndarray:
     return np.asarray([lookup.get(key, global_prior) for key in eval_keys], dtype=np.float64)
 
 
+def novelty_numeric_frame(frame: Any, numeric_cols: list[str]) -> np.ndarray:
+    """Numeric block for the novelty detector (missing values imputed with 0)."""
+    return frame[list(numeric_cols)].fillna(0).to_numpy(dtype=np.float32)
+
+
+def fit_novelty_forest(background_frame: Any, numeric_cols: list[str]) -> IsolationForest:
+    """Unsupervised novelty detector trained only on operational background rows.
+
+    `contamination="auto"` is the form accepted by the sklearn type stubs (float is not
+    assignable to it); the operating point is set downstream by `calibrate_novelty_threshold`,
+    so this parameter does not drive detection.
+    """
+    forest = IsolationForest(
+        n_estimators=NOVELTY_ESTIMATORS,
+        random_state=SEED,
+        contamination="auto",
+        n_jobs=-1,
+    )
+    forest.fit(novelty_numeric_frame(background_frame, numeric_cols))
+    return forest
+
+
+def novelty_scores(forest: IsolationForest, frame: Any, numeric_cols: list[str]) -> np.ndarray:
+    """Anomaly score, higher = more anomalous (negated `score_samples`)."""
+    return -np.asarray(forest.score_samples(novelty_numeric_frame(frame, numeric_cols)), dtype=np.float64)
+
+
+def calibrate_novelty_threshold(background_scores: Any, fp_rate: float = NOVELTY_FP_RATE) -> float:
+    """Operating point at a declared false-positive rate over background rows."""
+    scores = np.asarray(background_scores, dtype=np.float64)
+    if scores.size == 0:
+        return float("inf")
+    return float(np.quantile(scores, 1.0 - fp_rate))
+
+
+def fuse_with_novelty(lgb_prob: Any, novelty_pred: Any, boost: float = 0.999) -> np.ndarray:
+    """Fused ranking for the budget curves: novelty hits are pushed to the top."""
+    return np.where(np.asarray(novelty_pred) == 1, np.maximum(np.asarray(lgb_prob), boost), np.asarray(lgb_prob))
+
+
+def two_pass_background_share(y_true: Any, prob: Any, threshold: float, test_share: float = 1.0) -> float:
+    """Share of the whole alert stream that the filter removes as true background.
+
+    test_share is accepted for call-site compatibility and not used: the metric is a share of
+    the evaluated rows, so it is directly comparable across folds, streams and deployments.
+    """
+    predicted = np.asarray(prob) >= float(threshold)
+    tn, fp, fn, tp = confusion_matrix(np.asarray(y_true), predicted, labels=[0, 1]).ravel()
+    return round(int(tn) / max(len(np.asarray(y_true)), 1), 4)
+
+
 def detector_error_table(test_df: Any, y_pred: Any, limit: int = 40) -> list[dict[str, Any]]:
     keys = [str(key) for key in test_df["sig_key"].to_numpy()]
     y = np.asarray(test_df["y"].to_numpy())
@@ -491,12 +543,64 @@ def compute_phase_weights(df: Any, max_weight: float = 2000.0) -> np.ndarray:
     unique_phases, counts = np.unique(attack_phases, return_counts=True)
     max_count = np.max(counts)
     
-    for phase, count in zip(unique_phases, counts):
+    for phase, count in zip(unique_phases, counts, strict=True):
         # Skalujemy wagę odwrotnie proporcjonalnie do częstości (max. 100-krotne przebicie)
         w = min(max_weight, float(max_count) / max(1, count))
         weights[(phases == phase) & attack_mask] = w
         
     return weights
+
+def pooled_stream_metrics(
+    predictions: Any,
+    cal_predictions: Any,
+    test_share: float,
+    fp_budgets: list[int] | None = None,
+) -> dict[str, Any]:
+    """Aggregate a full test stream with thresholds calibrated only on calibration rows.
+
+    Single deployment threshold per protocol, model/proir/novelty blocks reported
+    separately, fusion rule "model alarm OR novelty alarm", budgets and two-pass
+    background filtering reported.
+    """
+    cal_y = np.asarray(cal_predictions["y"].to_numpy())
+    model_thr = best_f1_threshold(cal_y, np.asarray(cal_predictions["prob_model"].to_numpy()))
+    prior_thr = best_f1_threshold(cal_y, np.asarray(cal_predictions["prob_prior_baseline"].to_numpy()))
+    novelty_thr = best_f1_threshold(cal_y, np.asarray(cal_predictions["score_novelty"].to_numpy()))
+    test_y = np.asarray(predictions["y"].to_numpy())
+    model_prob = np.asarray(predictions["prob_model"].to_numpy())
+    prior_prob = np.asarray(predictions["prob_prior_baseline"].to_numpy())
+    novelty_score = np.asarray(predictions["score_novelty"].to_numpy())
+    model_pred = np.where(model_prob >= model_thr, 1, 0)
+    novelty_pred = (novelty_score >= novelty_thr).astype(np.int8)
+    prior_pred = np.where(prior_prob >= prior_thr, 1, 0)
+    fused_pred = np.maximum(model_pred, novelty_pred)
+    fused_prob = fuse_with_novelty(model_prob, fused_pred)
+    blocks: dict[str, Any] = {}
+    for name, pred, prob, thr in (
+        ("model", fused_pred, fused_prob, model_thr),
+        ("model_lgb", model_pred, model_prob, model_thr),
+        ("prior_baseline", prior_pred, prior_prob, prior_thr),
+        ("novelty", novelty_pred, novelty_score, novelty_thr),
+    ):
+        block = metrics_block(test_y, pred, prob, thr)
+        block["background_filtered_2nd"] = two_pass_background_share(test_y, prob, thr, test_share)
+        block["fp_per_million_alerts"] = round(int(block["fp"]) / max(len(test_y), 1) * 1_000_000, 1)
+        blocks[name] = block
+    budgets = {
+        f"budget_fp_per_m_{budget}": metrics_under_budget(test_y, fused_prob, budget)
+        for budget in (fp_budgets or FP_BUDGETS)
+    }
+    return {
+        "thresholds": {
+            "model": round(model_thr, 6),
+            "prior": round(prior_thr, 6),
+            "novelty": round(novelty_thr, 6),
+        },
+        "budgets": budgets,
+        "blocks": blocks,
+        "test_share": round(test_share, 4),
+    }
+
 
 def evaluate_fold(
     model_cfg: dict[str, Any], prepared: dict[str, Any], train_df: Any, cal_df: Any, test_df: Any, fold_name: str
@@ -553,22 +657,27 @@ def evaluate_fold(
     # 1. Wynik z bazowego modelu LightGBM
     pred_test_lgb = np.where(prob_test >= threshold, 1, 0)
 
-    # 2. Wynik z modelu Isolation Forest (Anomalie)
-    num_cols = list(prepared["numeric_cols"])
-    x_train_num = train_df[num_cols].fillna(0).to_numpy(dtype=np.float32)
-    x_test_num = test_df[num_cols].fillna(0).to_numpy(dtype=np.float32)
-
-    if (y_train == 0).sum() > 0:
-        iso_forest = IsolationForest(n_estimators=100, random_state=SEED, contamination=0.01)
-        iso_forest.fit(x_train_num[y_train == 0])
-        pred_iso = iso_forest.predict(x_test_num)
-        pred_test_iso = np.where(pred_iso == -1, 1, 0)
+    # 2. Novelty detector (Isolation Forest) fitted on operational background rows only.
+    #    Threshold calibrated at NOVELTY_FP_RATE on the calibration background: the novelty arm
+    #    is no longer an uncalibrated "1% anomalies" flag, and its FP cost is reported separately.
+    novelty_cols = [column for column in prepared["numeric_cols"] if column in train_df.columns]
+    background_train = train_df[y_train == 0]
+    novelty_forest = fit_novelty_forest(background_train, novelty_cols) if len(background_train) > 0 else None
+    if novelty_forest is not None:
+        score_cal = novelty_scores(novelty_forest, cal_df, novelty_cols)
+        score_test = novelty_scores(novelty_forest, test_df, novelty_cols)
+        background_cal_scores = score_cal[y_cal == 0]
+        novelty_threshold = calibrate_novelty_threshold(background_cal_scores)
+        pred_test_novelty = (score_test >= novelty_threshold).astype(np.int8)
     else:
-        pred_test_iso = np.zeros_like(y_test)
+        score_cal = np.zeros(len(cal_df), dtype=np.float64)
+        score_test = np.zeros(len(test_df), dtype=np.float64)
+        novelty_threshold = float("inf")
+        pred_test_novelty = np.zeros(len(test_df), dtype=np.int8)
 
-    # 3. Połączenie wyników (nadpisujemy pred_test, aby potok metryk działał poprawnie)
-    pred_test = np.maximum(pred_test_lgb, pred_test_iso)
-    # ------------------------------------
+    # 3. Decision fusion: model alarm OR calibrated novelty signal.
+    pred_test = np.maximum(pred_test_lgb, pred_test_novelty)
+    prob_fused = fuse_with_novelty(prob_test, pred_test_novelty)
 
     prob_prior_cal = detector_prior_probabilities(train_df, cal_df)
     prior_threshold = best_f1_threshold(y_cal, prob_prior_cal)
@@ -592,17 +701,31 @@ def evaluate_fold(
         "gain": [{"feature": name, "importance": round(value, 2)} for name, value in gain_pairs[:40]],
         "split": [{"feature": name, "importance": value} for name, value in split_pairs[:40]],
     }
+    test_share = len(test_df) / max(len(train_df) + len(cal_df) + len(test_df), 1)
+    model_metrics = metrics_block(y_test, pred_test, prob_fused, threshold)
+    model_metrics["background_filtered_2nd"] = two_pass_background_share(y_test, prob_fused, threshold, test_share)
+    model_metrics_lgb = metrics_block(y_test, pred_test_lgb, prob_test, threshold)
+    novelty_threshold_metric = 1e-9 if not np.isfinite(novelty_threshold) else novelty_threshold
+    novelty_metrics = metrics_block(y_test, pred_test_novelty, score_test, novelty_threshold_metric)
+    prior_metrics = metrics_block(y_test, prior_pred_test, prob_prior_test, prior_threshold)
+    prior_metrics["background_filtered_2nd"] = two_pass_background_share(
+        y_test, prob_prior_test, prior_threshold, test_share
+    )
     test_predictions = test_df[["ts", "ts_id", "scenario", "phase", "sig_key", "label", "y"]].copy()
     test_predictions["prob_model"] = prob_test
     test_predictions["prob_prior_baseline"] = prob_prior_test
     test_predictions["pred_model"] = pred_test
     test_predictions["pred_prior_baseline"] = prior_pred_test
+    test_predictions["pred_novelty"] = pred_test_novelty
+    test_predictions["score_novelty"] = score_test
     test_predictions["threshold_model"] = threshold
     cal_predictions = cal_df[["ts", "ts_id", "scenario", "label", "y"]].copy()
     cal_predictions["prob_model"] = prob_cal
     cal_predictions["prob_prior_baseline"] = prob_prior_cal
     cal_predictions["pred_model"] = np.where(prob_cal >= threshold, 1, 0)
     cal_predictions["pred_prior_baseline"] = np.where(prob_prior_cal >= prior_threshold, 1, 0)
+    cal_predictions["pred_novelty"] = (score_cal >= novelty_threshold).astype(np.int8)
+    cal_predictions["score_novelty"] = score_cal
     cal_predictions["threshold_model"] = threshold
     return {
         "cal_predictions": cal_predictions,
@@ -614,13 +737,21 @@ def evaluate_fold(
         "fit_seconds": fit_seconds,
         "threshold_model": round(threshold, 6),
         "threshold_prior_baseline": round(prior_threshold, 6),
-        "model_metrics": metrics_block(y_test, pred_test, prob_test, threshold),
+        "model_metrics": model_metrics,
         "model_metrics_cal": metrics_block(y_cal, np.where(prob_cal >= threshold, 1, 0), prob_cal, threshold),
-        "baseline_detector_prior": metrics_block(y_test, prior_pred_test, prob_prior_test, prior_threshold),
+        "model_metrics_lgb": model_metrics_lgb,
+        "novelty_metrics": novelty_metrics,
+        "threshold_novelty": round(novelty_threshold, 6) if np.isfinite(novelty_threshold) else None,
+        "baseline_detector_prior": prior_metrics,
         "baseline_const_attack": metrics_block(y_test, np.ones_like(y_test), const_prob, 1.0),
         "detector_top_errors": detector_error_table(test_df, pred_test),
         "phase_errors": phase_error_table(test_df, pred_test),
         "feature_importance": importance,
         "predictions": test_predictions,
-        "model": model,
+        "model": {
+            "booster": model,
+            "novelty_forest": novelty_forest,
+            "novelty_threshold": None if not np.isfinite(novelty_threshold) else round(novelty_threshold, 6),
+            "novelty_cols": novelty_cols,
+        },
     }

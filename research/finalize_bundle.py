@@ -17,6 +17,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import shutil
 import zipfile
 from datetime import UTC, datetime
 from pathlib import Path
@@ -69,12 +70,22 @@ def unpack(config: str) -> dict[str, Any]:
         raise SystemExit(f"missing bundle: {archive}")
     MODEL_DIR.mkdir(exist_ok=True)
     with zipfile.ZipFile(archive) as bundle:
-        bundle.extractall(path=str(MODEL_DIR))
+        # Flatten the "model/" prefix so artifacts sit directly under model/.
+        for info in bundle.infolist():
+            relative = info.filename
+            if relative.startswith("model/"):
+                relative = relative[len("model/") :]
+            if not relative:
+                continue
+            target = MODEL_DIR / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_bytes(bundle.read(info))
         try:
             metadata = json.loads(bundle.read("model/metadata.json").decode("utf-8"))
         except (KeyError, ValueError, UnicodeDecodeError) as error:
             raise SystemExit(f"bundle {name} has no readable metadata.json: {error}") from error
-    log(f"unpacked {name} into {MODEL_DIR}")
+    shutil.rmtree(MODEL_DIR / "model", ignore_errors=True)
+    log(f"unpacked {name} into {MODEL_DIR} (flattened)")
     flat = dict(metadata)
     flat["zip_path"] = f"model/{name}"
     flat["zip_bytes"] = archive.stat().st_size

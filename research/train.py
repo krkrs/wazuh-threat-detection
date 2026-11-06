@@ -67,27 +67,24 @@ def run_los(df: Any, prepared: dict[str, Any], cfg_name: str) -> result_type:
             f"fold={test_scenario} n_test={fold['test_rows']} best_iter={fold['best_iteration']} "
             f"f1={fold['model_metrics']['f1_attack']:.4f} arr={fold['model_metrics']['alert_reduction_rate']:.4f} "
             f"prior_f1={fold['baseline_detector_prior']['f1_attack']:.4f} prior_arr="
-            f"{fold['baseline_detector_prior']['alert_reduction_rate']:.4f}"
+            f"{fold['baseline_detector_prior']['alert_reduction_rate']:.4f} "
+            f"novelty_f1={fold['novelty_metrics']['f1_attack']:.4f}"
         )
     fit_seconds = round(time.time() - started, 1)
     predictions = pd.concat(test_chunks, ignore_index=True)
     cal_predictions = pd.concat(cal_chunks, ignore_index=True)
-    deployment_threshold = mc.best_f1_threshold(
-        np.asarray(cal_predictions["y"].to_numpy()),
-        np.asarray(cal_predictions["prob_model"].to_numpy()),
-    )
-    test_y = np.asarray(predictions["y"].to_numpy())
-    test_prob = np.asarray(predictions["prob_model"].to_numpy())
-    pooled = mc.metrics_block(
-                test_y, np.where(test_prob >= deployment_threshold, 1, 0), test_prob, deployment_threshold
-            )
-    prior_prob = np.asarray(predictions["prob_prior_baseline"].to_numpy())
-    prior_threshold = mc.best_f1_threshold(
-        np.asarray(cal_predictions["y"].to_numpy()),
-        np.asarray(cal_predictions["prob_prior_baseline"].to_numpy()),
-    )
-    pooled_prior = mc.metrics_block(test_y, np.where(prior_prob >= prior_threshold, 1, 0), prior_prob, prior_threshold)
     per_fold_thresholds = {fold["fold"]: fold["threshold_model"] for fold in fold_reports}
+    per_fold_novelty = {fold["fold"]: fold.get("threshold_novelty") for fold in fold_reports}
+    test_share = len(predictions) / max(len(df), 1)
+    pooled_all = mc.pooled_stream_metrics(predictions, cal_predictions, test_share)
+    deployment_threshold = pooled_all["thresholds"]["model"]
+    prior_threshold = pooled_all["thresholds"]["prior"]
+    novelty_threshold = pooled_all["thresholds"]["novelty"]
+    pooled = pooled_all["blocks"]["model"]
+    pooled_prior = pooled_all["blocks"]["prior_baseline"]
+    pooled_lgb = pooled_all["blocks"]["model_lgb"]
+    pooled_novelty = pooled_all["blocks"]["novelty"]
+    pooled_budgets = pooled_all["budgets"]
     return {
         "protocol": "leave_one_scenario_out",
         "config": cfg_name,
@@ -96,8 +93,13 @@ def run_los(df: Any, prepared: dict[str, Any], cfg_name: str) -> result_type:
         "deployment_threshold": round(deployment_threshold, 6),
         "prior_baseline_threshold": round(prior_threshold, 6),
         "per_fold_thresholds": per_fold_thresholds,
+        "per_fold_novelty_thresholds": per_fold_novelty,
+        "novelty_threshold": round(novelty_threshold, 6),
         "aggregate_model": pooled,
+        "aggregate_model_budgets": pooled_budgets,
         "aggregate_prior_baseline": pooled_prior,
+        "aggregate_model_lgb": pooled_lgb,
+        "aggregate_novelty": pooled_novelty,
         "folds": fold_reports,
         "_predictions": predictions,
     }
@@ -162,19 +164,26 @@ def run_chrono(df: Any, prepared: dict[str, Any], cfg_name: str) -> result_type:
     fit_seconds = round(time.time() - started, 1)
     predictions = pd.concat(test_chunks, ignore_index=True)
     cal_predictions = pd.concat(cal_chunks, ignore_index=True)
-    threshold = mc.best_f1_threshold(
-        np.asarray(cal_predictions["y"].to_numpy()), np.asarray(cal_predictions["prob_model"].to_numpy())
-    )
-    test_y = np.asarray(predictions["y"].to_numpy())
-    test_prob = np.asarray(predictions["prob_model"].to_numpy())
-    pooled = mc.metrics_block(test_y, np.where(test_prob >= threshold, 1, 0), test_prob, threshold)
+    test_share = len(predictions) / max(len(df), 1)
+    pooled_all = mc.pooled_stream_metrics(predictions, cal_predictions, test_share)
+    threshold = pooled_all["thresholds"]["model"]
+    per_fold_thresholds = {step["fold"]: step["threshold_model"] for step in steps}
+    per_fold_novelty = {step["fold"]: step.get("threshold_novelty") for step in steps}
     return {
         "protocol": "chronologic_expanding_window",
         "config": cfg_name,
         "seed": mc.SEED,
         "fit_total_seconds": fit_seconds,
         "deployment_threshold": round(threshold, 6),
-        "aggregate_model": pooled,
+        "prior_baseline_threshold": round(pooled_all["thresholds"]["prior"], 6),
+        "novelty_threshold": round(pooled_all["thresholds"]["novelty"], 6),
+        "per_fold_thresholds": per_fold_thresholds,
+        "per_fold_novelty_thresholds": per_fold_novelty,
+        "aggregate_model": pooled_all["blocks"]["model"],
+        "aggregate_model_budgets": pooled_all["budgets"],
+        "aggregate_model_lgb": pooled_all["blocks"]["model_lgb"],
+        "aggregate_prior_baseline": pooled_all["blocks"]["prior_baseline"],
+        "aggregate_novelty": pooled_all["blocks"]["novelty"],
         "steps": steps,
         "_predictions": predictions,
     }
@@ -239,8 +248,23 @@ def deploy_model(df: Any, prepared: dict[str, Any], cfg_name: str, threshold: fl
     interim_seconds = time.time() - began_interim
     best_iteration_value: Any = getattr(interim, "best_iteration_", None)
     best_iteration = int(best_iteration_value) if best_iteration_value else int(cfg["params"]["n_estimators"])
+    novelty_cols = [column for column in prepared["numeric_cols"] if column in fit_df.columns]
+    novelty_forest = mc.fit_novelty_forest(fit_df[y_fit == 0], novelty_cols)
+    novelty_scores_fit = mc.novelty_scores(novelty_forest, fit_df, novelty_cols)
+    novelty_threshold = mc.calibrate_novelty_threshold(novelty_scores_fit[y_fit == 0])
+    hold_novelty = mc.novelty_scores(novelty_forest, holdout_df, novelty_cols)
+    pred_hold_novelty = (hold_novelty >= novelty_threshold).astype(np.int8)
+    novelty_metrics = mc.metrics_block(y_hold, pred_hold_novelty, hold_novelty, novelty_threshold)
     hold_prob = mc.positive_probabilities(interim, x_hold)
-    hold_metrics = mc.metrics_block(y_hold, np.where(hold_prob >= threshold, 1, 0), hold_prob, threshold)
+    pred_hold_lgb = np.where(hold_prob >= threshold, 1, 0)
+    pred_hold_fused = np.maximum(pred_hold_lgb, pred_hold_novelty)
+    fused_prob = mc.fuse_with_novelty(hold_prob, pred_hold_fused)
+    hold_metrics = mc.metrics_block(y_hold, pred_hold_fused, fused_prob, threshold)
+    hold_metrics["background_filtered_2nd"] = mc.two_pass_background_share(y_hold, fused_prob, threshold, 0.10)
+    hold_metrics["fp_per_million_alerts"] = round(
+        int(hold_metrics["fp"]) / max(len(y_hold), 1) * 1_000_000, 1
+    )
+    novelty_metrics = mc.metrics_block(y_hold, pred_hold_novelty, hold_novelty, novelty_threshold)
     final_params = dict(cfg["params"])
     final_params["n_estimators"] = max(50, best_iteration)
     final_model = lgb.LGBMClassifier(**final_params)
@@ -258,6 +282,11 @@ def deploy_model(df: Any, prepared: dict[str, Any], cfg_name: str, threshold: fl
         "interim_fit_seconds": round(interim_seconds, 2),
         "final_fit_seconds": round(final_seconds, 2),
         "threshold_deploy": round(threshold, 6),
+        "novelty_threshold": round(novelty_threshold, 6),
+        "novelty_cols": novelty_cols,
+        "novelty_forest": novelty_forest,
+        "holdout_metrics_lgb": mc.metrics_block(y_hold, pred_hold_lgb, hold_prob, threshold),
+        "holdout_metrics_novelty": novelty_metrics,
     }
 
 
@@ -267,6 +296,7 @@ def save_bundle(
     text_model: dict[str, Any] | None,
     manifest: dict[str, Any],
     primary: bool,
+    novelty: dict[str, Any] | None = None,
 ) -> None:
     """Write `model/model_<config>.zip` (and `model/model.zip` for the primary config).
 
@@ -278,7 +308,12 @@ def save_bundle(
     model_dir.mkdir(exist_ok=True)
     artifact_dir.mkdir(exist_ok=True)
     model_path = artifact_dir / f"deployed_model_{cfg_name}.joblib"
-    joblib.dump({"model": model, "text_model": text_model}, model_path)
+    payload: dict[str, Any] = {"model": model, "text_model": text_model}
+    if novelty is not None:
+        payload["novelty_forest"] = novelty["forest"]
+        payload["novelty_threshold"] = novelty["threshold"]
+        payload["novelty_cols"] = novelty["columns"]
+    joblib.dump(payload, model_path)
     manifest_path = artifact_dir / f"model_manifest_{cfg_name}.json"
     manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     plan_path = artifact_dir / "feature_plan.json"
@@ -372,6 +407,7 @@ def main() -> None:
                         "fold": fold["fold"],
                         "threshold_model": fold["threshold_model"],
                         "threshold_prior_baseline": fold["threshold_prior_baseline"],
+                        "threshold_novelty": fold.get("threshold_novelty"),
                         "best_iteration": fold["best_iteration"],
                     }
                 )
@@ -380,6 +416,7 @@ def main() -> None:
                     "fold": f"deployment_{protocol}_{cfg_name}",
                     "threshold_model": result["deployment_threshold"],
                     "threshold_prior_baseline": result.get("prior_baseline_threshold"),
+                    "threshold_novelty": result.get("novelty_threshold"),
                     "best_iteration": None,
                 }
             )
@@ -391,6 +428,9 @@ def main() -> None:
                 f"  AGGREGATE {protocol} {cfg_name}: f1={aggregate['f1_attack']:.4f} "
                 f"prauc={aggregate.get('pr_auc_attack', 0.0):.4f} arr={aggregate['alert_reduction_rate']:.4f} "
                 f"bg_filtered={aggregate['background_filtered_pct']:.2f}% "
+                f"bg_2nd={aggregate.get('background_filtered_2nd', 0.0):.4f} "
+                f"novelty_f1={result['aggregate_novelty']['f1_attack']:.4f} "
+                f"prior_f1={result['aggregate_prior_baseline']['f1_attack']:.4f} "
                 f"fp_per_m={aggregate['false_positives_per_million_alerts']:.0f} "
                 f"bg_filtered_2nd={aggregate['background_filtered_share']:.4f}"
             )
@@ -401,6 +441,9 @@ def main() -> None:
                     "deployment_threshold": result["deployment_threshold"],
                     "aggregate_model": aggregate,
                     "aggregate_prior_baseline": result.get("aggregate_prior_baseline"),
+                    "aggregate_novelty": result.get("aggregate_novelty"),
+                    "novelty_threshold": result.get("novelty_threshold"),
+                    "prior_baseline_threshold": result.get("prior_baseline_threshold"),
                     "fit_total_seconds": result["fit_total_seconds"],
                 }
             )
@@ -458,6 +501,12 @@ def main() -> None:
                 "n_rows_holdout": deploy_result["n_rows_holdout"],
                 "deployment_threshold": round(threshold_value, 6),
                 "thresholds": bundle_thresholds,
+                "novelty": {
+                    "threshold": deploy_result["novelty_threshold"],
+                    "features": len(deploy_result["novelty_cols"]),
+                    "target_fp_rate": mc.NOVELTY_FP_RATE,
+                    "fusion_rule": "model alarm OR novelty score above threshold",
+                },
                 "best_iteration_full_data": deploy_result["best_iteration_full_data"],
                 "interim_fit_seconds": deploy_result["interim_fit_seconds"],
                 "final_fit_seconds": deploy_result["final_fit_seconds"],
@@ -472,6 +521,8 @@ def main() -> None:
                     "categorical": list(prepared["categorical_cols"]),
                 },
                 "holdout_metrics_same_distribution": holdout,
+                "holdout_metrics_lgb": deploy_result["holdout_metrics_lgb"],
+                "holdout_metrics_novelty": deploy_result["holdout_metrics_novelty"],
                 "budgets": {
                     key: value for key, value in holdout.items() if str(key).startswith("budget_")
                 },
@@ -487,12 +538,26 @@ def main() -> None:
             }
             save_bundle(
                 cfg_name,
-                deploy_result["final_model"],
+                deploy_result["final_model"].booster_,
                 deploy_result["text_model"],
                 manifest,
                 primary=(cfg_name == args.deploy_primary),
+                novelty={
+                "forest": deploy_result["novelty_forest"],
+                "threshold": deploy_result["novelty_threshold"],
+                "columns": deploy_result["novelty_cols"],
+            },
             )
-            deployed.append({"config": cfg_name, "sha256": manifest.get("sha256", ""), "threshold": threshold_value})
+            deployed.append(
+                {
+                    "config": cfg_name,
+                    "sha256": manifest.get("sha256", ""),
+                    "threshold": threshold_value,
+                    "novelty_threshold": deploy_result["novelty_threshold"],
+                    "fp_per_million_alerts": holdout.get("fp_per_million_alerts"),
+                    "background_filtered_2nd": holdout.get("background_filtered_2nd"),
+                }
+            )
             results["deployed"] = deployed
     results["total_seconds"] = round(time.time() - began, 1)
     results["feature_plan_summary"] = {

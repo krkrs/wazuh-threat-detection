@@ -1,8 +1,7 @@
 {
-  "pythonPath": ".venv/bin/python",
   "venvPath": ".",
   "venv": ".venv",
-  "include": ["research"],
+  "include": ["research", "model", "model_assets"],
   "useLibraryCodeForTypes": true,
   "pythonVersion": "3.12",
   "extraPaths": [".venv/lib/python3.12/site-packages"]
