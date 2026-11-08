@@ -463,9 +463,9 @@ def main() -> None:
         order = [args.deploy_primary] + [item for item in mc.MODEL_CONFIGS if item != args.deploy_primary]
         deployed: list[dict[str, Any]] = []
         for cfg_name in order:
-            metrics_path = mc.ARTIFACT_DIR / f"metrics_los_{cfg_name}.json"
+            metrics_path = mc.ARTIFACT_DIR / f"metrics_chrono_{cfg_name}.json"
             if not metrics_path.exists():
-                log(f"deploy skipped: {cfg_name} (no LOS threshold reference)")
+                log(f"deploy skipped: {cfg_name} (no chrono threshold reference)")
                 continue
             try:
                 reference = json.loads(metrics_path.read_text(encoding="utf-8"))
@@ -477,7 +477,7 @@ def main() -> None:
             began_deploy = time.time()
             deploy_result = deploy_model(df, prepared, cfg_name, threshold_value)
             holdout = deploy_result["holdout_metrics"]
-            bundle_thresholds: dict[str, Any] = {"los_deployment_threshold": threshold_value}
+            bundle_thresholds: dict[str, Any] = {"chrono_deployment_threshold": threshold_value}
             for protocol in ("los", "chrono"):
                 path = mc.ARTIFACT_DIR / f"thresholds_{protocol}_{cfg_name}.json"
                 if path.exists():
