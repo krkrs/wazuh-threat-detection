@@ -9,7 +9,6 @@ from typing import Any
 import lightgbm as lgb  # type: ignore[import-not-found]
 import numpy as np  # type: ignore[import-not-found]
 import pandas as pd  # type: ignore[import-not-found]
-from scipy.special import expit  # <--- DODANY IMPORT
 from sklearn.decomposition import TruncatedSVD  # type: ignore[import-not-found]
 from sklearn.ensemble import IsolationForest
 from sklearn.feature_extraction.text import TfidfVectorizer  # type: ignore[import-not-found]
@@ -46,8 +45,6 @@ CATEGORICAL_CANDIDATES = [
     "http_method",
     "status_code",
     "dst_port",
-    # "src_ip_ctx",
-    # "dst_ip_ctx",
     "srcuser",
     "dstuser",
     "db_name",
@@ -123,15 +120,15 @@ NUMERIC_EXTRA = [
     "is_aggregated",
     "sha256_present",
     "id_attr_numeric",
+    "alert_count_in_window",  # <--- Dodane do ML (kluczowa cecha ataku!)
 ]
 META_KEEP = ["scenario", "ts", "ts_id", "label", "phase", "sig_key", "source", "rule_desc", "y"]
 CARDINALITY_MAX = 400
 MISSING_SHARE_MAX = 0.999
 
 LGB_BASE: dict[str, Any] = {
-    "objective": "binary",  # LightGBM podmieni to potem na funkcję Focal Loss w train.py
-    "is_unbalance": False,  # <-- WYŁĄCZ to, ponieważ dodajesz własne wagi (compute_phase_weights) i focal loss
-    "scale_pos_weight": 10.0, # <-- DODAJ (Zwiększa karę dla mniejszościowych FP, aby ustabilizować focal loss)
+    "objective": "binary",
+    "is_unbalance": True,
     "n_estimators": 500,
     "learning_rate": 0.05,
     "num_leaves": 63,
@@ -155,7 +152,7 @@ TEXT_PARAMS: dict[str, Any] = {"max_features": 4000, "ngram_range": (1, 2), "min
 TEXT_SVD_DIM = 24
 EARLY_STOP_ROUNDS = 40
 FP_BUDGETS = [5_000, 20_000, 50_000]
-NOVELTY_FP_RATE = 0.005  # novelty arm operating point: at most 0.5% background FP on calibration
+NOVELTY_FP_RATE = 0.005
 NOVELTY_ESTIMATORS = 200
 QUANTS = [0.5, 0.6, 0.7, 0.8, 0.9, 0.95]
 CHRONO_STEPS = [
@@ -238,11 +235,6 @@ def prepare_features(df: Any) -> dict[str, Any]:
 
 
 def make_matrix(df: Any, prepared: dict[str, Any], text: Any) -> Any:
-    """Join numeric, categorical and text blocks on a positional (0..n-1) index.
-
-    Index alignment matters: text blocks are built from a fresh range index, while
-    frame-derived blocks keep the original filtered index, so both are reset here.
-    """
     blocks: list[Any] = []
     numeric_cols = list(prepared["numeric_cols"])
     if numeric_cols:
@@ -288,37 +280,12 @@ def best_f1_threshold(y_true: Any, prob: Any) -> float:
     return float(thresholds[index])
 
 
-def custom_focal_loss(y_true: np.ndarray, y_pred: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-    """Ogniskowa funkcja straty (Focal Loss) dla LightGBM."""
-    gamma = 2.0
-    alpha = 0.25  # <-- DODANE
-    p = expit(y_pred)
-    
-    # <-- DODANE: Współczynnik ogniskujący dla mniejszości (dnsteal/cracking)
-    weight = np.where(y_true == 1, alpha, 1.0 - alpha) 
-    
-    pt = y_true * p + (1.0 - y_true) * (1.0 - p)
-    
-    # Skorygowany Gradient i Hesjan
-    mod = (1.0 - pt) ** gamma
-    grad = weight * (p - y_true) * mod
-    hess = weight * p * (1.0 - p) * mod * (1.0 + gamma * (p * y_true + (1.0 - p) * (1.0 - y_true)))
-    
-    return grad, hess
-
 def positive_probabilities(model: Any, frame: Any) -> np.ndarray:
     raw: Any = model.predict_proba(frame)
     table = np.asarray(raw, dtype=np.float64)
     if table.ndim == 1:
-        prob = table.reshape(-1)
-    else:
-        prob = table[:, 1].reshape(-1)
-        
-    # UWAGA: Przy własnej funkcji straty model zwraca surowe logity. 
-    # Musimy spłaszczyć je sigmoidą, jeśli wykraczają poza przedział [0, 1].
-    if np.min(prob) < 0 or np.max(prob) > 1:
-        prob = expit(prob)
-    return prob
+        return table.reshape(-1)
+    return table[:, 1].reshape(-1)
 
 
 def metrics_under_budget(y_true: Any, prob: Any, budget_per_million: int) -> dict[str, Any]:
@@ -400,17 +367,10 @@ def detector_prior_probabilities(train_df: Any, eval_df: Any) -> np.ndarray:
 
 
 def novelty_numeric_frame(frame: Any, numeric_cols: list[str]) -> np.ndarray:
-    """Numeric block for the novelty detector (missing values imputed with 0)."""
     return frame[list(numeric_cols)].fillna(0).to_numpy(dtype=np.float32)
 
 
 def fit_novelty_forest(background_frame: Any, numeric_cols: list[str]) -> IsolationForest:
-    """Unsupervised novelty detector trained only on operational background rows.
-
-    `contamination="auto"` is the form accepted by the sklearn type stubs (float is not
-    assignable to it); the operating point is set downstream by `calibrate_novelty_threshold`,
-    so this parameter does not drive detection.
-    """
     forest = IsolationForest(
         n_estimators=NOVELTY_ESTIMATORS,
         random_state=SEED,
@@ -422,12 +382,10 @@ def fit_novelty_forest(background_frame: Any, numeric_cols: list[str]) -> Isolat
 
 
 def novelty_scores(forest: IsolationForest, frame: Any, numeric_cols: list[str]) -> np.ndarray:
-    """Anomaly score, higher = more anomalous (negated `score_samples`)."""
     return -np.asarray(forest.score_samples(novelty_numeric_frame(frame, numeric_cols)), dtype=np.float64)
 
 
 def calibrate_novelty_threshold(background_scores: Any, fp_rate: float = NOVELTY_FP_RATE) -> float:
-    """Operating point at a declared false-positive rate over background rows."""
     scores = np.asarray(background_scores, dtype=np.float64)
     if scores.size == 0:
         return float("inf")
@@ -435,16 +393,10 @@ def calibrate_novelty_threshold(background_scores: Any, fp_rate: float = NOVELTY
 
 
 def fuse_with_novelty(lgb_prob: Any, novelty_pred: Any, boost: float = 0.999) -> np.ndarray:
-    """Fused ranking for the budget curves: novelty hits are pushed to the top."""
     return np.where(np.asarray(novelty_pred) == 1, np.maximum(np.asarray(lgb_prob), boost), np.asarray(lgb_prob))
 
 
 def two_pass_background_share(y_true: Any, prob: Any, threshold: float, test_share: float = 1.0) -> float:
-    """Share of the whole alert stream that the filter removes as true background.
-
-    test_share is accepted for call-site compatibility and not used: the metric is a share of
-    the evaluated rows, so it is directly comparable across folds, streams and deployments.
-    """
     predicted = np.asarray(prob) >= float(threshold)
     tn, fp, fn, tp = confusion_matrix(np.asarray(y_true), predicted, labels=[0, 1]).ravel()
     return round(int(tn) / max(len(np.asarray(y_true)), 1), 4)
@@ -511,44 +463,6 @@ def phase_error_table(test_df: Any, y_pred: Any) -> dict[str, dict[str, int]]:
         }
     return out
 
-def apply_cap(df: Any, cap: int = 3000) -> Any:
-    """Odchudza powodziowe fazy ataku, ucinając je do limitu (cap), aby zbalansować klasy."""
-    mask = np.ones(len(df), dtype=bool)
-    is_attack = (df["label"] == "attack").to_numpy()
-    scenarios = df["scenario"].to_numpy()
-    phases = df["phase"].to_numpy()
-    counts: dict[str, int] = {}
-    
-    for i in range(len(df)):
-        if is_attack[i]:
-            key = f"{scenarios[i]}|{phases[i]}"
-            c = counts.get(key, 0)
-            if c >= cap:
-                mask[i] = False
-            counts[key] = c + 1
-            
-    return df.iloc[mask].copy()
-
-def compute_phase_weights(df: Any, max_weight: float = 2000.0) -> np.ndarray:
-    """Oblicza wagi dla poszczególnych faz ataku, aby wymusić na algorytmie naukę rzadkich klas."""
-    weights = np.ones(len(df), dtype=np.float32)
-    phases = df["phase"].to_numpy()
-    y = df["y"].to_numpy()
-    
-    attack_mask = (y == 1)
-    attack_phases = phases[attack_mask]
-    if len(attack_phases) == 0:
-        return weights
-        
-    unique_phases, counts = np.unique(attack_phases, return_counts=True)
-    max_count = np.max(counts)
-    
-    for phase, count in zip(unique_phases, counts, strict=True):
-        # Skalujemy wagę odwrotnie proporcjonalnie do częstości (max. 100-krotne przebicie)
-        w = min(max_weight, float(max_count) / max(1, count))
-        weights[(phases == phase) & attack_mask] = w
-        
-    return weights
 
 def pooled_stream_metrics(
     predictions: Any,
@@ -556,12 +470,6 @@ def pooled_stream_metrics(
     test_share: float,
     fp_budgets: list[int] | None = None,
 ) -> dict[str, Any]:
-    """Aggregate a full test stream with thresholds calibrated only on calibration rows.
-
-    Single deployment threshold per protocol, model/proir/novelty blocks reported
-    separately, fusion rule "model alarm OR novelty alarm", budgets and two-pass
-    background filtering reported.
-    """
     cal_y = np.asarray(cal_predictions["y"].to_numpy())
     model_thr = best_f1_threshold(cal_y, np.asarray(cal_predictions["prob_model"].to_numpy()))
     prior_thr = best_f1_threshold(cal_y, np.asarray(cal_predictions["prob_prior_baseline"].to_numpy()))
@@ -605,8 +513,6 @@ def pooled_stream_metrics(
 def evaluate_fold(
     model_cfg: dict[str, Any], prepared: dict[str, Any], train_df: Any, cal_df: Any, test_df: Any, fold_name: str
 ) -> dict[str, Any]:
-    train_df = apply_cap(train_df, cap=3000)  # <--- DODANE (Ograniczenie alertów w treningu)
-
     y_train = np.asarray(train_df["y"].to_numpy())
     y_cal = np.asarray(cal_df["y"].to_numpy())
     y_test = np.asarray(test_df["y"].to_numpy())
@@ -623,21 +529,12 @@ def evaluate_fold(
     params = dict(model_cfg["params"])
     model = lgb.LGBMClassifier(**params)
 
-    model.set_params(objective=custom_focal_loss)  # <--- WSTRZYKNIĘCIE FOCAL LOSS
-    
     began = time.time()
-
-    # --- DODANE: Obliczanie wag próbek ---
-    train_weights = compute_phase_weights(train_df)
-    cal_weights = compute_phase_weights(cal_df)
-    # -------------------------------------
-
     model.fit(
         x_train,
         y_train,
-        sample_weight=train_weights,
-        eval_X=x_cal, eval_y=y_cal, # <--- POWRÓT DO eval_X i eval_y
-        eval_sample_weight=[cal_weights],
+        eval_X=x_cal,
+        eval_y=y_cal,
         eval_metric=["auc", "binary_logloss"], 
         callbacks=[
             lgb.callback.early_stopping(
@@ -654,12 +551,8 @@ def evaluate_fold(
     prob_cal = positive_probabilities(model, x_cal)
     prob_test = positive_probabilities(model, x_test)
     threshold = best_f1_threshold(y_cal, prob_cal)
-    # 1. Wynik z bazowego modelu LightGBM
     pred_test_lgb = np.where(prob_test >= threshold, 1, 0)
 
-    # 2. Novelty detector (Isolation Forest) fitted on operational background rows only.
-    #    Threshold calibrated at NOVELTY_FP_RATE on the calibration background: the novelty arm
-    #    is no longer an uncalibrated "1% anomalies" flag, and its FP cost is reported separately.
     novelty_cols = [column for column in prepared["numeric_cols"] if column in train_df.columns]
     background_train = train_df[y_train == 0]
     novelty_forest = fit_novelty_forest(background_train, novelty_cols) if len(background_train) > 0 else None
@@ -675,9 +568,8 @@ def evaluate_fold(
         novelty_threshold = float("inf")
         pred_test_novelty = np.zeros(len(test_df), dtype=np.int8)
 
-    # 3. Decision fusion: model alarm OR calibrated novelty signal.
-    pred_test = np.maximum(pred_test_lgb, pred_test_novelty)
-    prob_fused = fuse_with_novelty(prob_test, pred_test_novelty)
+    pred_test = pred_test_lgb
+    prob_fused = prob_test
 
     prob_prior_cal = detector_prior_probabilities(train_df, cal_df)
     prior_threshold = best_f1_threshold(y_cal, prob_prior_cal)

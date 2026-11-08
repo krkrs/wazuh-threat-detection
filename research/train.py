@@ -192,12 +192,6 @@ def run_chrono(df: Any, prepared: dict[str, Any], cfg_name: str) -> result_type:
 def deploy_model(df: Any, prepared: dict[str, Any], cfg_name: str, threshold: float) -> result_type:
     cfg = dict(mc.MODEL_CONFIGS[cfg_name])
     cfg["params"] = dict(cfg["params"])
-    # --- DODANE: Wymuszenie focal loss i scale_pos_weight ---
-    cfg["params"]["is_unbalance"] = False # Wyłącz wbudowane, jeśli używamy custom objective lub scale_pos_weight
-    cfg["params"]["scale_pos_weight"] = 10.0 # Dostosuj wstępną wartość do dnsteal (jeśli Focal Loss wyłączone)
-    # Włączenie niestandardowej straty Focal Loss w hiperparametrach
-    cfg["params"]["objective"] = mc.custom_focal_loss if hasattr(mc, "custom_focal_loss") else "binary"
-    # ---------------------------------------------------------
     rng = np.random.default_rng(mc.SEED)
     order = rng.permutation(len(df))
     holdout_size = int(0.1 * len(df))
@@ -207,8 +201,6 @@ def deploy_model(df: Any, prepared: dict[str, Any], cfg_name: str, threshold: fl
     fit_ids = np.arange(len(df), dtype=np.int64)[fit_positions]
     holdout_df = df.iloc[holdout_ids].copy()
     fit_df = df.iloc[fit_ids].copy()
-
-    fit_df = mc.apply_cap(fit_df, cap=3000)  # <--- DODANE (Ograniczenie powodzi przed deployem)
 
     if cfg["use_text"]:
         text_frames, vectorizer, reducer = mc.fit_text_transform(fit_df, [fit_df, holdout_df])
@@ -224,18 +216,11 @@ def deploy_model(df: Any, prepared: dict[str, Any], cfg_name: str, threshold: fl
     y_fit = np.asarray(fit_df["y"].to_numpy())
     y_hold = np.asarray(holdout_df["y"].to_numpy())
 
-    # --- DODANE: Obliczanie wag próbek dla deploy_model ---
-    fit_weights = mc.compute_phase_weights(fit_df)
-    holdout_weights = mc.compute_phase_weights(holdout_df)
-    # ------------------------------------------------------
-
     interim = lgb.LGBMClassifier(**cfg["params"])
     began_interim = time.time()
     interim.fit(
         x_fit, y_fit,
-        sample_weight=fit_weights,                    
-        eval_X=x_hold, eval_y=y_hold, # <--- POWRÓT DO eval_X i eval_y
-        eval_sample_weight=[holdout_weights],           
+        eval_X=x_hold, eval_y=y_hold,
         eval_metric=["auc", "binary_error"], 
         callbacks=[
             lgb.callback.early_stopping(
@@ -257,8 +242,8 @@ def deploy_model(df: Any, prepared: dict[str, Any], cfg_name: str, threshold: fl
     novelty_metrics = mc.metrics_block(y_hold, pred_hold_novelty, hold_novelty, novelty_threshold)
     hold_prob = mc.positive_probabilities(interim, x_hold)
     pred_hold_lgb = np.where(hold_prob >= threshold, 1, 0)
-    pred_hold_fused = np.maximum(pred_hold_lgb, pred_hold_novelty)
-    fused_prob = mc.fuse_with_novelty(hold_prob, pred_hold_fused)
+    pred_hold_fused = pred_hold_lgb  # <--- ZMIENIONE (tylko LGBM)
+    fused_prob = hold_prob           # <--- ZMIENIONE (tylko LGBM)
     hold_metrics = mc.metrics_block(y_hold, pred_hold_fused, fused_prob, threshold)
     hold_metrics["background_filtered_2nd"] = mc.two_pass_background_share(y_hold, fused_prob, threshold, 0.10)
     hold_metrics["fp_per_million_alerts"] = round(
@@ -269,7 +254,7 @@ def deploy_model(df: Any, prepared: dict[str, Any], cfg_name: str, threshold: fl
     final_params["n_estimators"] = max(50, best_iteration)
     final_model = lgb.LGBMClassifier(**final_params)
     began_final = time.time()
-    final_model.fit(x_fit, y_fit, sample_weight=fit_weights)  # <--- Wagi dla finalnego modelu    
+    final_model.fit(x_fit, y_fit)
     final_seconds = time.time() - began_final
     return {
         "config": cfg_name,
@@ -298,11 +283,6 @@ def save_bundle(
     primary: bool,
     novelty: dict[str, Any] | None = None,
 ) -> None:
-    """Write `model/model_<config>.zip` (and `model/model.zip` for the primary config).
-
-    The bundle is self-contained: pickled model + text encoders, the feature plan, the
-    metadata manifest, the inference script, requirements and a usage README.
-    """
     model_dir = mc.MODEL_DIR
     artifact_dir = mc.ARTIFACT_DIR
     model_dir.mkdir(exist_ok=True)

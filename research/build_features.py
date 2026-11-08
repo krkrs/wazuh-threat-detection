@@ -11,15 +11,14 @@ from collections import Counter, deque
 from collections.abc import Iterator
 from datetime import UTC, datetime
 from pathlib import Path
+import pandas as pd
+import numpy as np
 
 import pyarrow as pa
 import pyarrow.parquet as pq
 
 SCENARIOS = ["fox", "harrison", "russellmitchell", "santos", "shaw", "wardbeck", "wheeler", "wilson"]
 
-# Wazuh-only stream: only these tool tokens are observed in full_log/http_user_agent.
-# nikto/sqlmap/curl/python/golang/apt/java/openvas/masscan/zmap/scrapy/apachebench/persistent
-# have 0 rows in this dataset (apt rows exist only in Suricata, which is not part of this stream).
 UA_PATTERNS = {
     "ua_dirb": "dirb",
     "ua_wpscan": "wpscan",
@@ -239,7 +238,6 @@ def url_features(url: object, scan_text: str) -> dict[str, float]:
         out[flag] = float(needle in lowered)
     low_scan = (scan_text or "").lower()
     for flag, needle in UA_PATTERNS.items():
-        # needles are case-insensitive here; low_scan is already lowercased
         out[flag] = float(needle.lower() in low_scan)
     return out
 
@@ -304,9 +302,9 @@ def wazuh_row(obj: dict, scenario: str) -> dict | None:
     http_method = as_str(data.get("protocol") or http_block.get("http_method")) or auto_method
 
     row: dict[str, object] = {
-        "source": "wazuh",  # only Wazuh stream is used in this pipeline
-        "scenario": scenario,  # scenariusz nie wystąpi IRL
-        "ts": ts,  # nie ma co uczyć czasu ataku
+        "source": "wazuh",
+        "scenario": scenario,
+        "ts": ts,
         "rule_id": as_str(to_num(rule.get("id")) or rule.get("id")),
         "rule_level": to_num(rule.get("level")),
         "rule_desc": description,
@@ -321,9 +319,6 @@ def wazuh_row(obj: dict, scenario: str) -> dict | None:
         "decoder": as_str(decoder.get("name")),
         "decoder_parent": as_str(decoder.get("parent")),
         "location": norm_path(obj.get("location")),
-        #        "agent_id": as_str(agent.get("id")),  # host leakage
-        #        "agent_name": as_str(agent.get("name")),  # host leakage
-        #        "agent_ip": as_str(agent.get("ip")),  # host leakage
         "http_method": http_method,
         "status_code": status_code,
         "src_port": src_port,
@@ -386,6 +381,7 @@ COLS_NUM = (
         "group_audit",
         "group_mitre",
         "is_aggregated",
+        "alert_count_in_window",  # <--- Dodana kolumna z zagregowanym ruchem
     ]
     + list(URL_FLAGS)
     + list(UA_PATTERNS)
@@ -433,12 +429,45 @@ def scenario_start(data_dir: Path, scenario: str) -> float:
     return min(found) if found else 0.0
 
 
+def aggregate_into_windows(df: pd.DataFrame, window_seconds: int = 30) -> pd.DataFrame:
+    """Grupuje pojedyncze logi w okna czasowe (meta-alerty), redukując szum i RAM."""
+    if df.empty:
+        return df
+        
+    df['time_window'] = df['ts'] // window_seconds
+    
+    aggs = {
+        'ts': 'min',
+        'label': lambda x: 'attack' if (x == 'attack').any() else 'background',
+        'phase': lambda x: x[x != 'background'].iloc[0] if (x != 'background').any() else 'background'
+    }
+    
+    # Automatyczne budowanie logiki agregacji (max dla liczb, pierwszy element dla stringów)
+    for col in df.columns:
+        if col in aggs or col in ['time_window']:
+            continue
+        if pd.api.types.is_numeric_dtype(df[col]):
+            aggs[col] = 'max'
+        else:
+            aggs[col] = 'first'
+            
+    window_sizes = df.groupby('time_window').size().rename('alert_count_in_window')
+    grouped = df.groupby('time_window').agg(aggs)
+    
+    if isinstance(grouped.columns, pd.MultiIndex):
+        grouped.columns = ['_'.join(col).strip() if col[1] else col[0] for col in grouped.columns]
+        
+    grouped = grouped.rename(columns={'label_<lambda>': 'label', 'phase_<lambda>': 'phase'})
+    grouped = grouped.join(window_sizes).reset_index(drop=True)
+    
+    return grouped
+
+
 def enrich(row: dict, scenario: str, phases: dict, windows: dict, start_ts: float) -> None:
     ts = row["ts"]
     phase = phase_of(phases[scenario], ts)
     row["label"] = LABEL_BACKGROUND if phase == "background" else LABEL_ATTACK
     row["phase"] = phase
-    #    key = f"{row['source']}|{row['rule_desc']}"
     key = f"{row['rule_desc']}"
     row["sig_key"] = key
     entry = windows.get(key)
@@ -462,36 +491,37 @@ def enrich(row: dict, scenario: str, phases: dict, windows: dict, start_ts: floa
 
 def build_scenario(data_dir: Path, out_dir: Path, phases: dict, scenario: str) -> int:
     schema = make_schema()
-    writer = pq.ParquetWriter(out_dir / f"{scenario}.features.parquet", schema, compression="zstd")
     windows: dict[str, tuple[deque, deque]] = {}
     buffer: list[dict] = []
-    total = 0
     start_ts = 0.0
     last_ts = 0.0
+    
+    # Zbieramy wszystkie wiersze dla danego scenariusza
+    for row in merged_rows(data_dir, scenario):
+        if not buffer and start_ts == 0.0:
+            start_ts = row_ts(row)
+        enrich(row, scenario, phases, windows, start_ts)
+        current_ts = row_ts(row)
+        row["time_since_last_event"] = 0.0 if last_ts == 0.0 else max(0.0, current_ts - float(last_ts))
+        last_ts = current_ts
+        buffer.append(row)
+        
+    if not buffer:
+        return 0
+        
+    # Zamieniamy wszystkie pojedyncze alerty w Meta-Alerty (okna 120s)
+    df = pd.DataFrame(buffer)
+    df = aggregate_into_windows(df, window_seconds=30)
+    
+    # Zapisujemy odchudzone dane
+    records = df.to_dict('records')
+    writer = pq.ParquetWriter(out_dir / f"{scenario}.features.parquet", schema, compression="zstd")
     try:
-        for row in merged_rows(data_dir, scenario):
-            if total == 0 and start_ts == 0.0:
-                start_ts = row_ts(row)
-            enrich(row, scenario, phases, windows, start_ts)
-            # --- Obliczanie czasu między zdarzeniami
-            current_ts = row_ts(row)  # Gwarantuje float, co usunie błędy operatora '-' w Pylance
-            if last_ts == 0.0:
-                row["time_since_last_event"] = 0.0
-            else:
-                row["time_since_last_event"] = max(0.0, current_ts - float(last_ts))  # Rzutowanie do pewności
-            last_ts = current_ts
-            # ---
-            buffer.append(row)
-            if len(buffer) >= BATCH_ROWS:
-                writer.write_batch(batch_from_rows(buffer, schema))
-                total += len(buffer)
-                buffer = []
-        if buffer:
-            writer.write_batch(batch_from_rows(buffer, schema))
-            total += len(buffer)
+        writer.write_batch(batch_from_rows(records, schema))
     finally:
         writer.close()
-    return total
+        
+    return len(records)
 
 
 def main() -> None:
@@ -506,10 +536,10 @@ def main() -> None:
         count = build_scenario(data_dir, out_dir, phases, scenario)
         total += count
         print(
-            f"{scenario}: rows={count} cols={len(COLS_STR) + len(COLS_NUM)} seconds={time.time() - began:.1f}",
+            f"{scenario}: zgrupowane alerty={count} cols={len(COLS_STR) + len(COLS_NUM)} seconds={time.time() - began:.1f}",
             flush=True,
         )
-    print(f"TOTAL rows={total} cols={len(COLS_STR) + len(COLS_NUM)}", flush=True)
+    print(f"TOTAL okien (meta-alertów)={total} cols={len(COLS_STR) + len(COLS_NUM)}", flush=True)
 
 
 if __name__ == "__main__":
