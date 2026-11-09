@@ -565,7 +565,14 @@ def pooled_stream_metrics(
     cal_y = np.asarray(cal_predictions["y"].to_numpy())
     model_thr = best_f1_threshold(cal_y, np.asarray(cal_predictions["prob_model"].to_numpy()))
     prior_thr = best_f1_threshold(cal_y, np.asarray(cal_predictions["prob_prior_baseline"].to_numpy()))
-    novelty_thr = best_f1_threshold(cal_y, np.asarray(cal_predictions["score_novelty"].to_numpy()))
+    
+    # --- POPRAWKA: Zabezpieczenie przed samymi zerami po usunięciu Isolation Forest ---
+    novelty_cal_scores = np.asarray(cal_predictions["score_novelty"].to_numpy())
+    if np.all(novelty_cal_scores == 0.0):
+        novelty_thr = float("inf")
+    else:
+        novelty_thr = best_f1_threshold(cal_y, novelty_cal_scores)
+    # --------------------------------------------------------------------------------
     test_y = np.asarray(predictions["y"].to_numpy())
     model_prob = np.asarray(predictions["prob_model"].to_numpy())
     prior_prob = np.asarray(predictions["prob_prior_baseline"].to_numpy())
@@ -657,27 +664,17 @@ def evaluate_fold(
     # 1. Wynik z bazowego modelu LightGBM
     pred_test_lgb = np.where(prob_test >= threshold, 1, 0)
 
-    # 2. Novelty detector (Isolation Forest) fitted on operational background rows only.
-    #    Threshold calibrated at NOVELTY_FP_RATE on the calibration background: the novelty arm
-    #    is no longer an uncalibrated "1% anomalies" flag, and its FP cost is reported separately.
-    novelty_cols = [column for column in prepared["numeric_cols"] if column in train_df.columns]
-    background_train = train_df[y_train == 0]
-    novelty_forest = fit_novelty_forest(background_train, novelty_cols) if len(background_train) > 0 else None
-    if novelty_forest is not None:
-        score_cal = novelty_scores(novelty_forest, cal_df, novelty_cols)
-        score_test = novelty_scores(novelty_forest, test_df, novelty_cols)
-        background_cal_scores = score_cal[y_cal == 0]
-        novelty_threshold = calibrate_novelty_threshold(background_cal_scores)
-        pred_test_novelty = (score_test >= novelty_threshold).astype(np.int8)
-    else:
-        score_cal = np.zeros(len(cal_df), dtype=np.float64)
-        score_test = np.zeros(len(test_df), dtype=np.float64)
-        novelty_threshold = float("inf")
-        pred_test_novelty = np.zeros(len(test_df), dtype=np.int8)
-
-    # 3. Decision fusion: model alarm OR calibrated novelty signal.
-    pred_test = np.maximum(pred_test_lgb, pred_test_novelty)
-    prob_fused = fuse_with_novelty(prob_test, pred_test_novelty)
+    # 2. i 3. Zmodyfikowano na prośbę agenta. Isolation Forest został całkowicie usunięty 
+    # z powodu generowania FP bez dodawania zysku w recall. Opieramy się na samym LightGBM.
+    
+    score_cal = np.zeros(len(cal_df), dtype=np.float64)
+    score_test = np.zeros(len(test_df), dtype=np.float64)
+    novelty_threshold = float("inf")
+    pred_test_novelty = np.zeros(len(test_df), dtype=np.int8)
+    
+    # Skutkiem usunięcia fuzji przewidywania ostateczne to po prostu przewidywania LightGBM
+    pred_test = pred_test_lgb
+    prob_fused = prob_test
 
     prob_prior_cal = detector_prior_probabilities(train_df, cal_df)
     prior_threshold = best_f1_threshold(y_cal, prob_prior_cal)
@@ -750,8 +747,8 @@ def evaluate_fold(
         "predictions": test_predictions,
         "model": {
             "booster": model,
-            "novelty_forest": novelty_forest,
-            "novelty_threshold": None if not np.isfinite(novelty_threshold) else round(novelty_threshold, 6),
-            "novelty_cols": novelty_cols,
+            "novelty_forest": None, # Isolation forest usunięty na rzecz LightGBM
+            "novelty_threshold": None,
+            "novelty_cols": [],
         },
     }
