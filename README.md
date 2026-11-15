@@ -1,92 +1,181 @@
-# Klasyfikacja alertow AIT-ADS (strumien Wazuh)
+# Wazuh Threat Detection — instrukcja uruchomienia i odtworzenia treningu
 
-Repozytorium laboratoryjne: model ML do filtrowania alertow ataku versus tlo na publicznym
-zbiorze AIT Alert Data Set (AIT-ADS, DOI 10.5281/zenodo.8263181). Sprawozdanie jest w Markdownie.
+## 1. Cel projektu
 
-**Zakres tej edycji laboratorium:** modelowanie **tylko strumienia Wazuh**
-(`data/ait_ads/{scenario}_wazuh.json` + `labels.csv`). Pliki Suricata EVE i AMiner
-ze zbioru referencyjnego nie sa pobierane do `data/` i nie wchodza do feature buildu
-(m.in. usunete zostaly kolumny `sig_id`, `sig_severity`, `sid_rev`, `src/dst_port`,
-`ac_type`, `attr_value_*`, `probability_threshold`, `is_training_mode`, `group_suricata`).
+Prototyp klasyfikacji faz ataków na podstawie **alertów Wazuh** ze zbioru AIT-ADS.
+Nie używamy alertów Suricata ani AMiner jako danych wejściowych modelu.
 
-## Jak odtworzyc
+Model GRU analizuje sześć kolejnych 10-sekundowych okien (łącznie 60 s),
+po 27 cech w każdym. Klasy: `background`, `cracking`, `dirb`, `dnsteal`,
+`network_scans`, `privilege_escalation`, `reverse_shell`, `service_scans`,
+`webshell`, `wpscan`. Faza `service_stop` nie jest rozpoznawana, ponieważ
+w wykorzystanych oknach nie było dla niej przykładów uczących.
 
-```bash
-bash run_all.sh            # caly pipeline, logi w logs/run_all.log
+**To prototyp badawczy, nie gotowy produkcyjny system wykrywania włamań.**
+Wynik `predicted_score` pochodzi z softmax i nie jest skalibrowanym
+prawdopodobieństwem rzeczywistego ataku.
+
+## 2. Minimalny zestaw plików do uruchomienia API
+
+```text
+wazuh-threat-detection/
+├── README.md
+├── api.py                       # FastAPI z walidacją i limitami żądań
+├── wazuh_predictor.py           # GRU + konwersja alertów + budowanie sekwencji
+└── models/
+    └── wazuh_gru_multiclass.pt  # zweryfikowany checkpoint referencyjny
 ```
 
-Poszczegolne etapy (kolejnosc jest calosciowa, dane wejsciowe to `data/ait_ads/*.json` plus `labels.csv`):
+**Ważne:** `api.py`, `wazuh_predictor.py` i `.pt` trzeba skopiować
+z działającego projektu. Sama dokumentacja ani notatnik treningowy
+nie zastępują tych plików.
 
-```bash
-.venv/bin/python -u research/build_features.py data/features      # JSON -> Parquet (2 293 628 wierszy, 78 kolumny)
-.venv/bin/python -u research/report_stats.py                       # statystyki do tabel raportu
-.venv/bin/python -u research/compute_stats.py                      # statystyki zrodlowe (research/ads_stats.json)
-.venv/bin/python -u research/train.py --protocols los,chrono \
-    --configs lgb_structured,lgb_text --deploy                     # trening i pakiet modelu
-.venv/bin/python -u research/analyze_predictions.py                # analizy poreplikowe (OOF)
-.venv/bin/python -u research/figures.py                            # ryciny PNG
-.venv/bin/python -u research/finalize_bundle.py                    # metadata, podsumowania, checksumy
-.venv/bin/python -u report/build_report.py                         # report/sprawozdanie.md
+API nie wymaga pobrania dwóch milionów alertów, pliku `labels.csv`,
+Jupytera ani ponownego treningu.
+
+## 3. Uruchomienie API w Windows PowerShell
+
+Instrukcja sprawdzona w Windows, Python 3.13.18 i `uv`. Polecenia
+wykonuj w głównym katalogu projektu. **Nie przenoś checkpointu**:
+`api.py` szuka `models/wazuh_gru_multiclass.pt` względem własnego katalogu.
+
+Do uruchomienia API służy `requirements.txt`. Plik
+`requirements-training.txt` dodaje biblioteki potrzebne do Jupytera.
+Nie kopiuj folderów `.venv*` od innego członka zespołu.
+
+```powershell
+# 1. Utwórz nowe środowisko, jeśli jeszcze nie istnieje.
+uv venv .venv-gru --python 3.13
+
+# 2. PyTorch CPU z właściwego indeksu — ważne dla wersji 2.15.0+cpu.
+uv pip install --python .venv-gru\Scripts\python.exe "torch==2.15.0+cpu" --index https://download.pytorch.org/whl/cpu
+
+# 3. Zainstaluj pozostałe biblioteki.
+uv pip install --python .venv-gru\Scripts\python.exe -r requirements.txt
+
+# 4. Uruchom usługę lokalnie.
+.venv-gru\Scripts\python.exe -m uvicorn api:app --host 127.0.0.1 --port 8000
 ```
 
-Wymagane pakiety w srodowisku `.venv`: pandas, pyarrow, scikit-learn, lightgbm, matplotlib, joblib, numpy.
+**Dlaczego instalacja jest dwuetapowa?** Samo `uv pip install -r
+requirements.txt` w czystym środowisku nie znalazło wersji
+`torch==2.15.0+cpu`. Wskazanie indeksu PyTorch w pierwszym kroku
+rozwiązało ten problem. Po instalacji zgłoszono `IMPORTY OK`
+i `PyTorch: 2.15.0+cpu`, a nowe środowisko uruchomiło API z odpowiedzią
+`GET /health` — HTTP 200.
 
-## Artefakty
+Sprawdź:
+- `http://127.0.0.1:8000/health` — stan usługi i lista klas;
+- `http://127.0.0.1:8000/docs` — interaktywna dokumentacja HTTP.
 
-| Sciezka | Zawartosc |
-| --- | --- |
-| `report/sprawozdanie.md` | sprawozdanie laboratoryjne (Markdown, 8 sekcji, 5 rycin PNG) |
-| `report/figures/*.png` | ryciny: F1 per scenariusz, skan progu, krzywe PR, bledy detektorow, recall faz |
-| `model/model.zip` | **pakiet modelu do oddania**: `deployed_model.joblib`, `feature_plan.json`, `metadata.json`, `README.md`, `predict.py`, `requirements.txt` |
-| `model/model_lgb_structured.zip`, `model/model_lgb_text.zip` | warianty konfiguracyjne tego samego pakietu |
-| `model/metadata.json`, `model/thresholds.json` | plaska metadata i progi (do generatora raportu) |
-| `artifacts/` | metryki per protokol i konfiguracja, progi, predykcje OOF, plan cech, analizy, checksumy |
-| `research/RESEARCH.md` | research zrodlowy (publikacje, cechy, metryki, protokoly, literatura) |
-| `logs/` | logi wykonania (`run_all.log`, `train.log`, `build_features.log`) |
-| `data/ait_ads/`, `data/features/` | surowe JSON + cechy Parquet (duze, nie w repo) |
+API działa lokalnie na `127.0.0.1`. Nie udostępniaj go publicznie:
+nie ma uwierzytelniania. Ma prototypowe ograniczenia: maksymalnie
+20 000 alertów i 20 MiB treści żądania. Poprawne małe żądania
+i odrzucanie deklarowanego nadmiarowego rozmiaru przeszły testy;
+pełne testy transferu dużych danych strumieniowych nie są zakończone.
 
-## Skrot wynikow (LAS = Leave-One-Scenario-Out, 8 foldow, model `lgb_structured`)
+## 4. Jak wysłać predykcję
 
-Pooled out-of-fold, przy progu wdrozeniowym 0.730463:
+`POST http://127.0.0.1:8000/predict`
 
-| Metryka | Model | Prior detektora | Zawsze-atak |
-| --- | --- | --- | --- |
-| F1 ataku | 0.9961 | 0.9960 | 0.8547 |
-| PR-AUC | 0.9990 | 0.9983 | 0.6644 |
-| Redukcja alertow (ARR) | 99.41 % | 99.41 % | 74.62 % |
-| Odfiltrowane tlo | 99.95 % | 99.94 % | 0.00 % |
-| FP na 1 mln alertow | 116.0 | 155.6 | 253 800 |
-| Recall ataku | 0.9923 | 0.9923 | 1.0000 |
+Żądanie JSON ma cztery pola:
 
-Per-scenariuszowo (F1 modelu / F1 prioru w tymze foldzie):
-fox 0.9985 / 0.9985, harrison 0.9949 / 0.9948, russellmitchell 0.9608 / 0.9616,
-santos 0.9171 / 0.9166, shaw 0.9329 / 0.9428, wardbeck 0.9377 / 0.9306,
-wheeler 0.9989 / 0.9989, wilson 0.9959 / 0.9958.
-Model rowna sie lub bije baseline w 6 na 8 foldow; przegrywa w `russellmitchell` i `shaw`.
+- `alerts` — wszystkie dostępne alerty w historii 60 sekund,
+  każdy z polami `@timestamp`, `rule.id`, `rule.level`;
+- `target_start` — początek **ostatniego zamkniętego okna** 10 s,
+  wyrównany do 10 s, ze strefą czasową;
+- `history_complete` — `true` wyłącznie wtedy, gdy klient
+  rzeczywiście dostarczył pełną historię;
+- `scenario` — opcjonalny identyfikator strumienia; **nie jest cechą modelu**.
 
-Protokol chronologiczny (walk-forward, expanding window):
+Przykład **formatu** (zakłada, że w podanym okresie naprawdę
+nie było innych alertów; serwer nie może tego sprawdzić):
 
-| Konfiguracja | F1 | ARR | Odfiltrowane tlo | FP / 1 mln |
-| --- | --- | --- | --- | --- |
-| `lgb_structured` | 0.9879 | 98.02 % | 93.49 % | 12 020 |
-| `lgb_text` | 0.9901 | 98.39 % | 95.44 % | 8 414 |
+```json
+{
+  "alerts": [
+    {
+      "@timestamp": "2026-11-15T12:00:01Z",
+      "rule": {"id": "9701", "level": 3},
+      "decoder": {"name": "dovecot"}
+    }
+  ],
+  "target_start": "2026-11-15T12:00:00Z",
+  "history_complete": true,
+  "scenario": "demo"
+}
+```
 
-Pakiet wdrozeniowy (`lgb_structured`): `model/model_lgb_structured.zip`
-(141 912 B, SHA-256 `3a6aeff47e121ed9...`), `deployed_model.joblib` (19 drzew,
-wczesne zatrzymanie na trzymanych 10 %), prog decyzyjny 0.730463,
-budzety FP: 0.345534 (5 FP/1 mln), 0.309182 (20), 0.301409 (50).
+Serwer zwraca przewidywaną fazę `predicted_phase`, wynik softmax
+`predicted_score`, `scores` dla 10 klas, informację o deklarowanej
+kompletności historii i początek okna. Niepełne/niepoprawne żądania
+otrzymują kod HTTP 422; obecnie nie klasyfikujemy okien docelowych
+bez żadnych alertów.
 
-## Uwagi metodyczne
+Serwer nie pobiera jeszcze alertów automatycznie z działającego
+Wazuh Managera: dane trzeba wysłać do API.
 
-- Etykiety sa slabe: `attack` z przedzialow czasu z `labels.csv`, fazy ataku jako etkiety wewnetrzne.
-- Progi decyzyjne sa kalibrowane na zbiorze trzymanym, nie na tescie.
-- Cechy to znane pola strumienia Wazuh (m.in. `rule_id`, `rule_desc`, `rule_groups`,
-  `rule_level`, `decoder`, `location`, liczniki okien `-60/-600 s`, flagi grup reguly
-  i MITRE, metryki HTTP, metryki logu i sciezek).
-- Cecha `is_training_mode` (AMiner) jest artefiktem zbioru — w tej edycji nie wchodzi do planu cech.
-- Cecha `event_source_id` jest niedostepna, wiec nie ma agregacji po ID zdarzenia.
-- Uwaga o rzetelnosci: model jest mocny w scenariuszach z duzym naplywem atakow
-  (fox, wheeler, wilson, harrison); najtrudniejsze sa scenariusze z przewaga tla
-  (santos, shaw, wardbeck, russellmitchell) — tam FP i F1 sa najblizej progu decyzyjnego.
-- Model ocenia kazdy alert indywidualnie, nie sekcje logow — w zrodle (Wazuh API)
-  ten sam model ocenia alerty strumieniowo, a okna czasowe licza sie biezaco.
+## 5. Odtworzenie treningu — tylko dla osób rozwijających model
+
+Dodatkowe pliki:
+
+```text
+wazuh_trening_gru_poprawiony.ipynb  # w katalogu głównym; zachowuje działające ścieżki
+data/
+└── ait_ads/
+    ├── labels.csv
+    ├── fox_wazuh.json
+    ├── harrison_wazuh.json
+    └── ...  # pozostałe sześć plików *_wazuh.json
+```
+
+Do odtworzenia treningu użyj dodatkowo `requirements-training.txt`
+(po instalacji PyTorch CPU, jak w sekcji 3). Uruchom notatnik
+po kolei w środowisku Jupyter. W razie potrzeby dostosuj `DATA_DIR` w pierwszej
+komórce do faktycznej lokalizacji danych.
+
+Notatnik:
+1. Filtruje dane do alertów Wazuh i nadaje etykiety na podstawie
+   przedziałów czasowych z `labels.csv`.
+2. Agreguje alerty w okna 10 s i usuwa okna graniczne.
+3. Buduje sekwencje sześciu okien i 27 cech wejściowych.
+4. Trenuje GRU na siedmiu scenariuszach, pozostawiając Harrison
+   poza treningiem.
+5. Zapisuje `models/wazuh_gru_reproduced.pt`, **bez nadpisywania**
+   `wazuh_gru_multiclass.pt`.
+
+Weryfikowane wyniki przygotowania danych:
+- 1 986 905 alertów po filtracji;
+- 63 262 okna zawierające alerty, 30 odrzuconych, 63 232 końcowe;
+- 55 672 okna w treningu końcowym, 7560 odłożonych dla Harrisona;
+- macierz sekwencji `(63232, 6, 27)`;
+- 12 epok, końcowa strata treningowa `0.5025`.
+
+**Odtwarzalność potwierdzona 15.11.2026:** uruchomienie
+uporządkowanego notatnika dało checkpoint o identycznych wagach
+jak model referencyjny (maksymalna różnica wag `0.0`,
+ta sama kolejność cech i klas).
+
+## 6. Wyniki i ograniczenia
+
+W jednorazowym końcowym teście na odłożonym Harrisonie
+(7560 okien, 562 oznaczone jako faza ataku):
+- dokładność `0.9481`;
+- macro F1 dla dziesięciu klas `0.4872`;
+- recall oznaczonych okien ataku `0.3043`;
+- recall poprawnie rozpoznanego typu `0.3025`;
+- 0 fałszywych alarmów w 6998 oknach oznaczonych jako tło;
+- na poziomie epizodów: 6/9 wykrytych, 5/9 z poprawnym typem
+  (dla epizodów mających przynajmniej jedno pełne okno).
+
+Model słabo wykrywa część faz, zwłaszcza `cracking`, `dnsteal`
+i `network_scans`; `service_stop` nie jest klasą wyjściową.
+Etykiety dotyczą **przedziałów czasowych ataków**, a nie zawsze
+bezspornie złośliwych pojedynczych alertów.
+
+## 7. Archiwum eksperymentów
+
+Oryginalny `wazuh_etap1_audyt(1).ipynb` należy zachować w `archiwum/`:
+audyt, modele RF/GRU/LSTM, walidacje między scenariuszami,
+diagnostykę danych i testy integracyjne. Nie jest to instrukcja
+uruchamiania aplikacji i nie trzeba go wykonywać podczas pracy z API.

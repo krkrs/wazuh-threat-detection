@@ -234,3 +234,28 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+
+
+# Środowiska Pythona
+.venv/
+.venv-gru/
+.venv-test/
+
+# Pliki tymczasowe
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Dane AIT-ADS — nie przesyłamy dużego zbioru do repozytorium
+data/
+*_wazuh.json
+labels.csv
+
+# Archiwum eksperymentów
+archiwum/
+
+# Lokalne pliki i ustawienia
+.env
+.env.*
+!.env.example
