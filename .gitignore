@@ -9,6 +9,7 @@ artifacts/*
 *.joblib
 *.err
 session.txt
+ludzkie_starania/smetnik.ipynb
 
 ## Do Not Track
 dnt-*/
